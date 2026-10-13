@@ -8,11 +8,11 @@ window.EVENTOS = (window.EVENTOS || []).concat([
 // ───────── PRÓLOGO ─────────
 { id:"pentecostes", era:"prologo", a:33, f:"c. 33", t:"Pentecostés: nace la Iglesia",
   clase:"", comp:"La Iglesia nace en Jerusalén con la venida del Espíritu Santo sobre los discípulos; Pedro predica y se añaden unas tres mil personas.",
-  vers:["Hch 2:1-41"], fuentes:[["Biblia, Hechos 2 (RVR1960)","https://www.biblegateway.com/passage/?search=Hechos+2&version=RVR1960"]], tags:["biblia"] },
+  vers:["Hch 2:1-41"], fuentes:[["Biblia, Hechos 2 (RVR1960)","https://www.biblegateway.com/passage/?search=Hechos+2&version=RVR1960"]], img:"prologo_jerusalen_modelo", tags:["biblia"] },
 { id:"concilio-jerusalen", era:"prologo", a:49, f:"c. 49", t:"Concilio de Jerusalén",
   clase:"Concilio → libro de Hechos: el antecedente de los concilios está en la Biblia.", nota:"Tanda 1, p. 1",
   comp:"Apóstoles y ancianos se reúnen para decidir si los gentiles debían guardar la ley de Moisés; es el modelo de los concilios posteriores.",
-  vers:["Hch 15"], fuentes:[["Biblia, Hechos 15 (RVR1960)","https://www.biblegateway.com/passage/?search=Hechos+15&version=RVR1960"]], tags:["concilio"] },
+  vers:["Hch 15"], fuentes:[["Biblia, Hechos 15 (RVR1960)","https://www.biblegateway.com/passage/?search=Hechos+15&version=RVR1960"]], img:"prologo_escalinata_templo", tags:["concilio"] },
 { id:"obispos", era:"prologo", a:100, f:"100 – 303", t:"Diócesis y la figura del obispo",
   clase:"Año 100–303 (diócesis). Papado ← obispo: nació del contexto cristiano. Figura de autoridad religiosa que toma decisiones.", nota:"Tanda 1, p. 1",
   comp:"", fuentes:[], tags:[] },
