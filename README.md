@@ -1,12 +1,14 @@
 # Historia II · Iglesia medieval, reformada y moderna
 
-Línea del tiempo de estudio para el curso **Historia II (Presencial)**. Va desde la Iglesia antigua (contexto breve) hasta hoy, con un enfoque especial en la Iglesia evangélica en Colombia.
+Trabajo realizado en la materia **Historia II (Presencial): Iglesia medieval, reformada y moderna**, Escuela BEREA — El Lugar de Su Presencia. Docente: Andrés Fonseca Ibáñez. Más referencia: https://sites.google.com/supresencia.com/historia2 (acceso con cuenta institucional).
+
+Línea del tiempo de estudio. Va desde la Iglesia antigua (contexto breve) hasta hoy, con un enfoque especial en la Iglesia evangélica en Colombia.
 
 ## Cómo se construyó
 - **Material mandante: las notas de clase.** Cada hito que viene de las notas muestra el bloque "Notas de clase", con la tanda y la página.
 - **Precisión histórica:** cuando un dato de las notas no coincide con la historia documentada, la nota se conserva y se agrega la corrección con su fuente.
 - **Complemento:** todo lo que no está en las notas. Cada complemento enlaza a fuentes abiertas, se revisó contra ellas y los enlaces se comprueban con `herramientas/verificar-enlaces.js`.
-- Perspectiva protestante reformada.
+- Las secciones "Lectura reformada" son una interpretación desde la tradición protestante reformada, no dato histórico ni posición oficial del curso.
 
 ## Estructura
 - `index.html`, `css/`, `js/app.js`: sitio estático, sin dependencias. Funciona en GitHub Pages y también abriéndolo con doble clic.

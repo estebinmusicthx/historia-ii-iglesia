@@ -39,7 +39,7 @@
           <div><h3>${esc(e.t)}</h3><div class="marcas">${chipsOrigen(e)}${(e.tags || []).filter(t => ETIQ[t]).map(t => `<span class="chip">${ETIQ[t]}</span>`).join("")}</div></div></div>
         <div class="t-cuerpo${fig ? "" : " sin-foto"}">
           <div class="t-textos">
-            ${e.clase ? `<div class="bloque b-clase"><div class="et">Notas de clase <small>Historia II (Presencial)${e.nota ? " · " + esc(e.nota) : ""}</small></div><p>${fmt(e.clase)}</p></div>` : ""}
+            ${e.clase ? `<div class="bloque b-clase"><div class="et">Notas de clase <small>Historia II · Escuela BEREA${e.nota ? " · " + esc(e.nota) : ""}</small></div><p>${fmt(e.clase)}</p></div>` : ""}
             ${e.prec ? `<div class="bloque b-prec"><div class="et">Precisión histórica <small>la nota se mantiene; esto la corrige o aclara</small></div><p>${esc(e.prec)}</p></div>` : ""}
             ${e.comp ? `<div class="bloque b-comp"><div class="et">Complemento <small>no está en las notas · ver fuentes</small></div><p>${fmt(e.comp)}</p></div>` : ""}
             ${(e.vers || []).length ? `<div class="vers"><b>Biblia:</b> ${e.vers.map(versiculo).join(" ")}</div>` : ""}
@@ -81,7 +81,8 @@
     $main.innerHTML = `
       <section class="hero"><div class="k">${esc(window.CURSO.titulo)}</div>
         <h1>Historia de la Iglesia<span>${esc(window.CURSO.subtitulo)}</span></h1>
-        <p>${esc(window.CURSO.nota)}</p></section>
+        <p>${esc(window.CURSO.nota)}</p>
+        <p class="curso">Trabajo realizado en la materia <b>${esc(window.CURSO.titulo)}: ${esc(window.CURSO.subtitulo)}</b>, de la ${esc(window.CURSO.escuela)}.<br>Docente: <b>${esc(window.CURSO.docente)}</b> · Más referencia: ${ext(window.CURSO.url, "sitio del curso")} <small>(acceso con cuenta institucional)</small></p></section>
       <section class="leyenda" aria-label="Cómo leer esta línea del tiempo">
         <div class="ley" style="--b:var(--clase-borde);--c:var(--clase)"><b>Notas de clase</b>Es el material que manda. Se transcribe tal como se tomó en clase, con su página.</div>
         <div class="ley" style="--b:var(--prec-borde);--c:var(--prec)"><b>Precisión</b>Cuando la historia difiere de la nota, se aclara aquí con su fuente, y se sigue con la nota.</div>
@@ -168,10 +169,11 @@
       <h1>Fuentes y créditos</h1>
       <h2>Cómo se construyó</h2>
       <ul>
-        <li><b>Material mandante:</b> las notas de clase de <i>Historia II (Presencial) — Iglesia medieval, reformada y moderna</i>. Se transcribieron tal como fueron tomadas; cada hito indica la tanda y la página de las notas. ${nClase} de ${EVENTOS.length} hitos vienen de las notas.</li>
+        <li><b>Curso:</b> Historia II (Presencial): Iglesia medieval, reformada y moderna. ${esc(window.CURSO.escuela)}. Docente: ${esc(window.CURSO.docente)}. Más referencia: ${ext(window.CURSO.url, "sitio del curso")} (acceso con cuenta institucional).</li>
+        <li><b>Material mandante:</b> las notas de clase tomadas en ese curso. Se transcribieron tal como fueron tomadas; cada hito indica la tanda y la página de las notas. ${nClase} de ${EVENTOS.length} hitos vienen de las notas.</li>
         <li><b>Precisiones (${nPrec}):</b> cuando una fecha o un dato de las notas no coincide con la historia documentada, la nota se conserva y se añade la corrección con su fuente.</li>
         <li><b>Complementos:</b> lo que no está en las notas se tomó de fuentes abiertas (Wikipedia, archivos históricos, prensa y estudios académicos). Cada complemento se verificó contra su fuente y cada enlace se comprobó.</li>
-        <li><b>Perspectiva:</b> protestante reformada, con respeto por las demás tradiciones. Las notas marcadas como lectura reformada son interpretación, no dato.</li>
+        <li><b>Perspectiva:</b> las secciones "Lectura reformada" son una interpretación desde la tradición protestante reformada, con respeto por las demás tradiciones; no son dato histórico ni posición oficial del curso o de la escuela.</li>
       </ul>
       <h2>Licencias</h2>
       <ul>

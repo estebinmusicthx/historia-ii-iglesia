@@ -2,7 +2,10 @@
 window.CURSO = {
   titulo: "Historia II (Presencial)",
   subtitulo: "Iglesia medieval, reformada y moderna",
-  nota: "Línea del tiempo de estudio construida a partir de las notas de clase y complementada con fuentes abiertas y verificables. Perspectiva protestante reformada."
+  escuela: "Escuela BEREA — El Lugar de Su Presencia",
+  docente: "Andrés Fonseca Ibáñez",
+  url: "https://sites.google.com/supresencia.com/historia2",
+  nota: "Línea del tiempo de estudio construida a partir de las notas de clase y complementada con fuentes abiertas y verificables. Las lecturas de cada era se hacen desde una perspectiva protestante reformada."
 };
 
 window.ERAS = [
