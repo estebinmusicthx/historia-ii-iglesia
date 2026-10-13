@@ -153,6 +153,7 @@
         <div class="controles-era"><label class="filtro-era"><input type="checkbox" id="solo-clase"> Ver solo los hitos que están en las notas de clase</label>
           <span class="abrir-todo"><button type="button" data-todo="1">Abrir todos</button><button type="button" data-todo="0">Cerrar todos</button></span></div>
       </section>
+      ${(window.LAMINAS || {})[id] ? `<section class="lamina" id="lamina" aria-label="Lámina interactiva"></section>` : ""}
       <section class="linea" id="linea">${evs.map(tarjeta).join("")}</section>
       <h2 class="seccion-t">Reflexión de fe</h2>
       <div class="bloque b-ref"><div class="et">Desde la fe de El Lugar de Su Presencia <small>${ext(window.CURSO.creemos, "ver «Qué creemos»")}</small></div><p>${citas(era.fe)}</p></div>
@@ -165,6 +166,7 @@
         ${sig ? `<a class="sig" href="#/era/${sig.id}"><small>Siguiente →</small>${esc(sig.nombre)}</a>` : "<span></span>"}
       </nav>`;
     juegos($main.querySelector("#juegos"), era, evs);
+    if ($main.querySelector("#lamina") && window.pintarLamina) window.pintarLamina($main.querySelector("#lamina"), id);
     $main.querySelector("#solo-clase").addEventListener("change", ev => {
       $main.querySelectorAll(".hito.solo-comp").forEach(h => h.classList.toggle("oculto", ev.target.checked));
     });
@@ -385,6 +387,24 @@
     pintar();
   }
 
+  function vistaGlosario() {
+    const G = (window.GLOSARIO || []).slice().sort((a, b) => a.t.localeCompare(b.t, "es"));
+    const EVI = Object.fromEntries(EVENTOS.map(e => [e.id, e]));
+    const letras = [...new Set(G.map(g => g.t[0].toUpperCase()))];
+    $main.innerHTML = `<div class="doc"><h1>Conceptos clave</h1><p>Glosario entregado con el material del curso. Cada concepto enlaza al hito donde se trata en la línea del tiempo.</p></div>
+      <div class="filtros"><input class="buscar" type="search" placeholder="Buscar un concepto…" aria-label="Buscar en el glosario">
+        <div class="chips">${letras.map(l => `<button type="button" data-l="${l}">${l}</button>`).join("")}</div></div>
+      <dl class="glosario">${G.map(g => { const e = g.h && EVI[g.h]; return `<div class="g-item" id="g-${esc(g.t[0].toUpperCase())}" data-txt="${esc((g.t + " " + g.d).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase())}">
+        <dt>${esc(g.t)}</dt><dd><p>${citas(g.d)}</p>
+        ${g.prec ? `<div class="bloque b-prec"><div class="et">Precisión</div><p>${esc(g.prec)} ${g.fuente ? ext(g.fuente[1], esc(g.fuente[0])) : ""}</p></div>` : ""}
+        ${g.v ? `<div class="vers"><b>Biblia:</b> ${versiculo(g.v)}</div>` : ""}
+        ${e ? `<a class="g-hito" href="#/era/${e.era}/${e.id}">Ver en la línea: ${esc(e.f)} · ${esc(e.t)} →</a>` : ""}</dd></div>`; }).join("")}</dl>`;
+    const $b = $main.querySelector(".buscar");
+    $b.addEventListener("input", () => { const q = $b.value.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+      $main.querySelectorAll(".g-item").forEach(x => x.classList.toggle("oculto", !!q && !x.dataset.txt.includes(q))); });
+    $main.querySelectorAll(".chips button").forEach(b => b.addEventListener("click", () => { const x = document.getElementById("g-" + b.dataset.l); if (x) x.scrollIntoView({ block: "start", behavior: "smooth" }); }));
+  }
+
   function vistaFuentes() {
     const todas = new Map();
     EVENTOS.forEach(e => (e.fuentes || []).forEach(([n, u]) => { if (!todas.has(u)) todas.set(u, { n, ids: [] }); todas.get(u).ids.push(e); }));
@@ -406,6 +426,7 @@
         <li><b>Contenido reservado a El Lugar de Su Presencia — Escuela Bíblica BEREA.</b> Los resúmenes son redacción propia; las fuentes complementarias se citan y enlazan, no se copian, y pertenecen a sus respectivos autores.</li>
         <li>Imágenes: Wikimedia Commons, solo dominio público, CC0, CC BY o CC BY-SA; conservan la licencia de sus autores. Abajo están el autor, la licencia y el enlace de cada una.</li>
         <li>Biblia: al hacer clic en una cita se abre el pasaje en la Reina-Valera 1909 (dominio público), servido por ${ext("https://getbible.net/", "getbible.net")}; cada ventana enlaza también a la Reina-Valera 1960 en BibleGateway (© Sociedades Bíblicas en América Latina), cuyo texto no se reproduce.</li>
+        <li>Mapas: datos geográficos de ${ext("https://www.naturalearthdata.com/", "Natural Earth")} (dominio público), vía world-atlas; dibujados con las librerías d3-geo y topojson-client (licencia ISC). Las rutas son aproximadas y resumen hitos ya verificados.</li>
         <li>Tipografías Cinzel y EB Garamond (Google Fonts, licencia SIL Open Font License).</li>
       </ul>
       <h2>Bibliografía del curso</h2>
@@ -453,6 +474,7 @@
     if (p[0] === "era") { vistaEra(p[1], p[2]); actual = ""; }
     else if (p[0] === "linea") { vistaLinea(); actual = "linea"; }
     else if (p[0] === "fuentes") { vistaFuentes(); actual = "fuentes"; }
+    else if (p[0] === "glosario") { vistaGlosario(); actual = "glosario"; }
     else if (!p[0]) vistaInicio();
     else vistaNoEncontrada();
     document.querySelectorAll(".menu a").forEach(a => { if (a.dataset.ruta === actual) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
