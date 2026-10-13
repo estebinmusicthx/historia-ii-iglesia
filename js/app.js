@@ -29,15 +29,19 @@
       <figcaption>${esc(im.titulo)}${im.anio ? " (" + esc(im.anio) + ")" : ""}. ${esc(im.autor)} · ${esc(im.licencia)} · ${ext(im.pagina, "Wikimedia Commons")}</figcaption></figure>`;
   }
   const chipsOrigen = e => [e.clase ? '<span class="chip c-clase">Notas de clase</span>' : "", e.prec ? '<span class="chip c-prec">Precisión</span>' : "", e.comp ? '<span class="chip c-comp">Complemento</span>' : ""].join("");
+  // En la tarjeta, los chips de origen son botones que resaltan su bloque.
+  const botonesOrigen = e => [e.clase ? '<button type="button" class="chip c-clase" data-bloque="b-clase" aria-pressed="false">Notas de clase</button>' : "", e.prec ? '<button type="button" class="chip c-prec" data-bloque="b-prec" aria-pressed="false">Precisión</button>' : "", e.comp ? '<button type="button" class="chip c-comp" data-bloque="b-comp" aria-pressed="false">Complemento</button>' : ""].join("");
 
   function tarjeta(e) {
     const fig = figura(e.img);
     const fuentes = (e.fuentes || []).length ? `<div class="fuentes-hito"><b>Fuentes del complemento:</b><ol>${e.fuentes.map(([n, u]) => `<li>${ext(u, esc(n))}</li>`).join("")}</ol></div>` : "";
     return `<article class="hito revela${e.clase ? "" : " solo-comp"}" id="h-${esc(e.id)}">
       <div class="tarjeta">
-        <div class="t-cab"><div class="t-fecha">${esc(e.f)}</div>
-          <div><h3>${esc(e.t)}</h3><div class="marcas">${chipsOrigen(e)}${(e.tags || []).filter(t => ETIQ[t]).map(t => `<span class="chip">${ETIQ[t]}</span>`).join("")}</div></div></div>
-        <div class="t-cuerpo${fig ? "" : " sin-foto"}">
+        <div class="t-cab">
+          <button type="button" class="t-abrir" aria-expanded="false" aria-controls="c-${esc(e.id)}"><span class="t-fecha">${esc(e.f)}</span><h3>${esc(e.t)}</h3><span class="t-flecha" aria-hidden="true">▾</span></button>
+          <div class="marcas"><div class="m-temas">${(e.tags || []).filter(t => ETIQ[t]).map(t => `<span class="chip">${ETIQ[t]}</span>`).join("")}</div><div class="m-origen">${botonesOrigen(e)}</div></div>
+        </div>
+        <div class="t-cuerpo${fig ? "" : " sin-foto"}" id="c-${esc(e.id)}" hidden>
           <div class="t-textos">
             ${e.clase ? `<div class="bloque b-clase"><div class="et">Notas de clase <small>Historia II · Escuela Bíblica BEREA${e.nota ? " · " + esc(e.nota) : ""}</small></div><p>${fmt(e.clase)}</p></div>` : ""}
             ${e.prec ? `<div class="bloque b-prec"><div class="et">Precisión histórica <small>la nota se mantiene; esto la corrige o aclara</small></div><p>${esc(e.prec)}</p></div>` : ""}
@@ -107,7 +111,8 @@
           ${era.clase ? `<div class="bloque b-clase"><div class="et">Notas de clase <small>resumen de la etapa</small></div><p>${esc(era.clase)}</p></div>` : `<div class="bloque b-clase"><div class="et">Notas de clase</div><p>Este enfoque no está en las notas de clase: todo su contenido es complemento con fuentes.</p></div>`}
           <div class="bloque b-comp"><div class="et">Complemento</div><p>${esc(era.comp)}</p></div>
         </div>
-        <label class="filtro-era"><input type="checkbox" id="solo-clase"> Ver solo los hitos que están en las notas de clase</label>
+        <div class="controles-era"><label class="filtro-era"><input type="checkbox" id="solo-clase"> Ver solo los hitos que están en las notas de clase</label>
+          <span class="abrir-todo"><button type="button" data-todo="1">Abrir todos</button><button type="button" data-todo="0">Cerrar todos</button></span></div>
       </section>
       <section class="linea" id="linea">${evs.map(tarjeta).join("")}</section>
       <h2 class="seccion-t">Reflexión de fe</h2>
@@ -125,7 +130,19 @@
       $main.querySelectorAll(".hito.solo-comp").forEach(h => h.classList.toggle("oculto", ev.target.checked));
     });
     reglaFija(era, evs);
-    if (hitoId) requestAnimationFrame(() => { const h = document.getElementById("h-" + hitoId); if (h) { h.classList.add("visible"); h.scrollIntoView({ block: "start" }); } });
+    const abrir = (h, si) => { const b = h.querySelector(".t-abrir"), c = h.querySelector(".t-cuerpo"); b.setAttribute("aria-expanded", String(si)); c.hidden = !si; h.classList.toggle("abierto", si); };
+    $main.querySelectorAll(".hito").forEach(h => {
+      h.querySelector(".t-abrir").addEventListener("click", () => abrir(h, h.querySelector(".t-cuerpo").hidden));
+      h.querySelectorAll(".m-origen button").forEach(b => b.addEventListener("click", () => {
+        const on = b.getAttribute("aria-pressed") !== "true";
+        b.setAttribute("aria-pressed", String(on));
+        abrir(h, true);
+        const bl = h.querySelector("." + b.dataset.bloque);
+        if (bl) { bl.classList.toggle("resaltado", on); if (on) bl.scrollIntoView({ block: "nearest", behavior: "smooth" }); }
+      }));
+    });
+    $main.querySelectorAll(".abrir-todo button").forEach(b => b.addEventListener("click", () => $main.querySelectorAll(".hito").forEach(h => abrir(h, b.dataset.todo === "1"))));
+    if (hitoId) requestAnimationFrame(() => { const h = document.getElementById("h-" + hitoId); if (h) { abrir(h, true); h.classList.add("visible"); h.scrollIntoView({ block: "start" }); } });
   }
 
   function vistaLinea() {
