@@ -148,9 +148,6 @@
         <div class="ley" style="--b:var(--prec-borde);--c:var(--prec)"><b>Precisión</b>Aclaración con su fuente cuando un dato de las notas difiere de la historia documentada. La nota se conserva.</div>
         <div class="ley" style="--b:var(--comp-borde);--c:var(--comp)"><b>Investigación</b>Información que amplía las notas, tomada de fuentes abiertas, enlazadas y verificadas.</div>
       </section>
-      <h2 class="ley-t">Temas clave del curso</h2>
-      <section class="temas-clave">${TEMAS.map(t => { const n = t.ids.filter(id => EVENTOS.some(e => e.id === id)).length;
-        return `<a class="tema-card revela" href="#/tema/${t.id}" style="--c:${t.color}">${window.escudoEra ? window.escudoEra({ id: t.icono, color: t.color, nombre: t.titulo }, "escudo-tema") : ""}<span class="tema-t">${esc(t.titulo)}</span><span class="tema-n">${n} hitos · ver el tema →</span></a>`; }).join("")}</section>
       <section class="regla"><h2>De Pentecostés a hoy</h2>
         <div class="regla-barra">${bloques.map(b => `<a href="${b.r}" title="${b.t} (${b.d}–${b.h === MAX ? "hoy" : b.h})" aria-label="${b.t}" style="width:${pct(b.h) - pct(b.d)}%;background:${b.c}"></a>`).join("")}</div>
         <div class="regla-marcas">${marcas.map(m => `<span style="left:${pct(m)}%">${m === MAX ? "hoy" : m}</span>`).join("")}</div>
@@ -432,6 +429,11 @@
       r.forEach(e => {
         const era = eraPorId[e.era], s = Math.max(1, Math.ceil(e.a / 100));
         if (s !== siglo) { siglo = s; html += `<div class="lt-siglo"><span>Siglo ${romano(s)}</span></div>`; }
+        const tm = TEMAS.find(t => t.ancla === e.id);
+        if (tm && !estado.era && !q) { const n = tm.ids.filter(id => EVENTOS.some(x => x.id === id)).length;
+          html += `<a class="lt-tema revela" href="#/tema/${tm.id}" style="--c:${tm.color}">${window.escudoEra ? window.escudoEra({ id: tm.icono, color: tm.color, nombre: tm.titulo }, "escudo-tema") : ""}
+            <span class="lt-tema-t">${esc(tm.titulo)}</span><span class="lt-tema-p">${esc(tm.clase.split(". ").slice(0, 2).join(". ").replace(/\.?$/, "."))}</span>
+            <span class="lt-tema-ir">Ver todo el tema · ${n} hitos →</span></a>`; }
         const im = e.img && IMG[e.img];
         if (e.id === "lugar-presencia") {
           html += `<button type="button" class="lt-estrella revela" aria-expanded="false" aria-controls="sp-panel">
@@ -494,8 +496,8 @@
     const t = TEMAS.find(x => x.id === id); if (!t) return vistaNoEncontrada();
     const evs = t.ids.map(i => EVENTOS.find(e => e.id === i)).filter(Boolean).sort((a, b) => a.a - b.a);
     document.documentElement.style.setProperty("--era", t.color);
-    $main.innerHTML = migas([["Temas clave", "#/"], [t.titulo]]) + `
-      <section class="era-cab"><div class="era-tit">${window.escudoEra ? window.escudoEra({ id: t.icono, color: t.color, nombre: t.titulo }, "escudo") : ""}<div><div class="k">Tema clave del curso</div><h1>${esc(t.titulo)}</h1>
+    $main.innerHTML = migas([["Línea completa", "#/linea"], [t.titulo]]) + `
+      <section class="era-cab"><div class="era-tit">${window.escudoEra ? window.escudoEra({ id: t.icono, color: t.color, nombre: t.titulo }, "escudo") : ""}<div><div class="k">Tema del curso</div><h1>${esc(t.titulo)}</h1>
         <div class="rango">${esc(evs[0] ? evs[0].f : "")} – ${esc(evs.length ? evs[evs.length - 1].f : "")}</div><div class="grupo-n">${evs.length} hitos de distintas eras</div></div></div>
         <div class="resumenes" style="grid-template-columns:1fr"><div class="bloque b-clase"><div class="et">Notas de clase <small>síntesis del tema</small></div><p>${esc(t.clase)}</p></div></div>
         <div class="controles-era"><span></span><span class="abrir-todo"><button type="button" data-todo="1">Abrir todos</button><button type="button" data-todo="0">Cerrar todos</button></span></div>
