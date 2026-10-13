@@ -14,7 +14,7 @@
   EVENTOS.forEach(e => { if (SPX[e.id] && !(e.tags || []).includes("supresencia")) e.tags = ["supresencia"].concat(e.tags || []); });
   const TEMAS = window.TEMAS || [];
   TEMAS.forEach(t => t.ids.forEach(id => { const e = EVENTOS.find(x => x.id === id); if (e && !(e.tags || []).includes("t-" + t.id)) e.tags = (e.tags || []).concat("t-" + t.id); }));
-  const ETIQ = { "t-musulmanes": "Los musulmanes", "t-lutero": "Martín Lutero", "t-calvinismo": "El calvinismo", "t-corrientes": "Las nuevas corrientes", supresencia: "El Lugar de Su Presencia", colombia: "Colombia", avivamiento: "Avivamientos", martir: "Mártires", mision: "Misiones", biblia: "Biblia", persona: "Personas", concilio: "Concilios", iglesias: "Iglesias grandes", reflexion: "Reflexión" };
+  const ETIQ = { "t-musulmanes": "Los musulmanes", "t-lutero": "Martín Lutero", "t-calvinismo": "El calvinismo", "t-arminianismo": "El arminianismo", "t-corrientes": "Las nuevas corrientes", supresencia: "El Lugar de Su Presencia", colombia: "Colombia", avivamiento: "Avivamientos", martir: "Mártires", mision: "Misiones", biblia: "Biblia", persona: "Personas", concilio: "Concilios", iglesias: "Iglesias grandes", reflexion: "Reflexión" };
 
   /* ---------- Biblia: ventana con el pasaje (Reina-Valera 1909, dominio público) ---------- */
   // [nombre, número de libro]
