@@ -444,6 +444,13 @@
             <span class="lt-txt"><span class="lt-f">${esc(e.f)}</span><span class="lt-t">${esc(e.t)}</span>
             <span class="lt-meta"><span class="lt-era">${esc(era.nombre)}</span>${chipsOrigen(e)}</span></span></span></a>`;
       });
+      html += `<div class="lt-fin revela">
+        <span class="lt-fin-linea" aria-hidden="true"></span>
+        <div class="lt-fin-k">Hechos 29</div>
+        <div class="lt-fin-t">La historia se sigue escribiendo.</div>
+        <div class="lt-fin-p">Su obra con la Iglesia aún no ha terminado.</div>
+        <blockquote class="lt-fin-v">«El que comenzó en vosotros la buena obra, la perfeccionará hasta el día de Jesucristo.» <cite>Filipenses 1:6</cite></blockquote>
+        <small class="lt-fin-n">El libro de Hechos tiene 28 capítulos; el capítulo 29 lo sigue escribiendo la Iglesia hoy.</small></div>`;
       $l.innerHTML = html;
       const $est = $l.querySelector(".lt-estrella");
       if ($est) {

@@ -725,3 +725,13 @@ body{background-image:radial-gradient(ellipse at 50% 0%,rgba(216,180,90,.10),tra
 @media (prefers-reduced-motion:reduce){.es-cruz-sutil{animation:none;opacity:.13}.rc-redencion::after{animation:none;display:none}}
 
 .es-pez{opacity:.55}
+
+/* Cierre de la línea: Hechos 29 */
+.lt-fin{position:relative;z-index:2;max-width:640px;margin:10px auto 20px;padding:30px 24px 22px;text-align:center;border-radius:20px;background:var(--panel);border:2px solid var(--oro);box-shadow:0 0 0 6px color-mix(in srgb,var(--oro) 15%,transparent),var(--sombra)}
+.lt-fin-linea{position:absolute;left:50%;top:-60px;width:4px;height:60px;transform:translateX(-50%);background:repeating-linear-gradient(var(--oro) 0 8px,transparent 8px 14px)}
+.lt-fin-k{display:inline-block;font-family:var(--cap);font-weight:700;font-size:13px;letter-spacing:.24em;text-transform:uppercase;padding:5px 14px;border-radius:999px;background:var(--oro);color:var(--bg)}
+.lt-fin-t{font-family:var(--cap);font-weight:700;font-size:clamp(24px,3.2vw,36px);line-height:1.15;margin-top:12px;color:var(--oro2)}
+.lt-fin-p{font-size:clamp(18px,2vw,22px);margin-top:6px}
+.lt-fin-v{margin:16px auto 0;max-width:46ch;font-style:italic;color:var(--ink2)}
+.lt-fin-v cite{display:block;margin-top:4px;font-style:normal;font-family:var(--cap);font-size:12px;letter-spacing:.12em;color:var(--oro)}
+.lt-fin-n{display:block;margin-top:12px;color:var(--ink3);font-size:13px}
