@@ -160,7 +160,8 @@
       <div class="bloque b-ref"><div class="et">Desde la fe de El Lugar de Su Presencia <small>${ext(window.CURSO.creemos, "ver «Qué creemos»")}</small></div><p>${citas(era.fe)}</p></div>
       ${(() => { const libros = (window.BIBLIOGRAFIA || []).filter(b => b.eras.includes(era.id)); return libros.length ? `<h2 class="seccion-t">Para profundizar</h2>
       <div class="biblio"><p class="j-ayuda">Bibliografía del curso que cubre esta era (según el alcance de cada obra):</p><ul>${libros.map(b => `<li>${esc(b.ref)}${b.nota ? ` <small>${esc(b.nota)}</small>` : ""}</li>`).join("")}</ul></div>` : ""; })()}
-      <h2 class="seccion-t">Repaso</h2>
+      <h2 class="seccion-t">Comprueba tus conocimientos</h2>
+      <p class="seccion-sub">Selecciona el juego de tu preferencia</p>
       <section class="juegos" id="juegos" aria-label="Juegos de repaso"></section>
       <nav class="nav-eras" aria-label="Eras vecinas">
         ${ant ? `<a href="#/era/${ant.id}"><small>← Anterior</small>${esc(ant.nombre)}</a>` : "<span></span>"}

@@ -374,3 +374,4 @@ details.desp[open]{padding-bottom:14px}
 .hito.fuera-filtro{display:none}
 .filtro-lamina{position:sticky;top:64px;z-index:12;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0 0;padding:10px 14px;border-radius:12px;background:var(--era);color:#fff;box-shadow:var(--sombra)}
 .filtro-lamina button{font-family:var(--cap);font-size:12px;letter-spacing:.06em;padding:5px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.7);color:#fff}
+.seccion-sub{color:var(--ink3);font-style:italic;margin:-6px 0 12px}
