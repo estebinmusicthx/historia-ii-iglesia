@@ -675,3 +675,7 @@ body{background-image:radial-gradient(ellipse at 50% 0%,rgba(216,180,90,.10),tra
 .fondo-latin p.fl-la{font-family:"IM Fell English","EB Garamond",serif;font-style:italic}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .fondo-latin{opacity:.035}}
 :root[data-theme="dark"] .fondo-latin{opacity:.035}
+/* Glosario: nombre centrado en la tarjeta */
+.g-frente{justify-content:center;align-items:center;text-align:center;position:relative}
+.g-frente .g-term{flex:1;display:flex;align-items:center;justify-content:center}
+.g-frente small{position:absolute;left:0;right:0;bottom:12px;text-align:center}
