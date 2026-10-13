@@ -31,7 +31,7 @@
     ["1856", "Bogotá", "Llega a Colombia el primer misionero presbiteriano.", "colombia_bogota_xix"],
     ["1948 – 1958", "Colombia", "La Violencia: templos quemados y creyentes evangélicos asesinados.", null],
     ["1981", "Bogotá", "Chet Bitterman, traductor de la Biblia, da su vida.", null],
-    ["Hoy", "Bogotá", "Su sangre te dio libertad…", null]
+    ["Hoy", "Bogotá", "Su sangre te dió libertad…", null]
   ];
 
   function recorrido(alTerminar) {
