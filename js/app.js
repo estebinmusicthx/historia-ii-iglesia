@@ -213,7 +213,12 @@
         if (bl) { bl.classList.toggle("resaltado", on); if (on) bl.scrollIntoView({ block: "nearest", behavior: "smooth" }); }
       }));
     });
-    $main.querySelectorAll(".abrir-todo button").forEach(b => b.addEventListener("click", () => $main.querySelectorAll(".hito").forEach(h => abrir(h, b.dataset.todo === "1"))));
+    const estadoTodos = () => { const hs = [...$main.querySelectorAll(".hito:not(.fuera-filtro)")], ab = hs.filter(h => !h.querySelector(".t-cuerpo").hidden).length;
+      const bs = $main.querySelectorAll(".controles-era .abrir-todo button");
+      bs.forEach(b => b.setAttribute("aria-pressed", String(b.dataset.todo === "1" ? ab === hs.length && hs.length > 0 : ab === 0))); };
+    $main.querySelectorAll(".controles-era .abrir-todo button").forEach(b => b.addEventListener("click", () => { $main.querySelectorAll(".hito").forEach(h => abrir(h, b.dataset.todo === "1")); estadoTodos(); }));
+    $main.querySelectorAll(".t-abrir").forEach(b => b.addEventListener("click", () => setTimeout(estadoTodos)));
+    estadoTodos();
     if (hitoId) requestAnimationFrame(() => { const h = document.getElementById("h-" + hitoId); if (h) { abrir(h, true); h.classList.add("visible"); h.scrollIntoView({ block: "start" }); } });
   }
 
@@ -519,7 +524,7 @@
     // Cada sección (h2 + su contenido) queda como desplegable; la primera abierta.
     const doc = $main.querySelector(".doc");
     [...doc.querySelectorAll(":scope > h2")].forEach((h, k) => {
-      const d = document.createElement("details"); d.className = "desp"; if (k === 0) d.open = true;
+      const d = document.createElement("details"); d.className = "desp";
       const sm = document.createElement("summary"); sm.innerHTML = h.innerHTML; d.appendChild(sm);
       h.replaceWith(d);
       while (d.nextSibling && !(d.nextSibling.nodeType === 1 && d.nextSibling.tagName === "H2")) d.appendChild(d.nextSibling);
@@ -527,7 +532,12 @@
     const ctl = document.createElement("div"); ctl.className = "abrir-todo desp-ctl";
     ctl.innerHTML = '<button type="button" data-todo="1">Abrir todo</button><button type="button" data-todo="0">Cerrar todo</button>';
     doc.querySelector("h1").after(ctl);
-    ctl.querySelectorAll("button").forEach(b => b.addEventListener("click", () => doc.querySelectorAll("details.desp").forEach(d => d.open = b.dataset.todo === "1")));
+    const estadoDesp = () => { const ds = [...doc.querySelectorAll("details.desp")], abiertos = ds.filter(d => d.open).length;
+      ctl.querySelector('[data-todo="1"]').setAttribute("aria-pressed", String(abiertos === ds.length));
+      ctl.querySelector('[data-todo="0"]').setAttribute("aria-pressed", String(abiertos === 0)); };
+    ctl.querySelectorAll("button").forEach(b => b.addEventListener("click", () => { doc.querySelectorAll("details.desp").forEach(d => d.open = b.dataset.todo === "1"); estadoDesp(); }));
+    doc.querySelectorAll("details.desp").forEach(d => d.addEventListener("toggle", estadoDesp));
+    estadoDesp();
   }
 
   function vistaNoEncontrada() { $main.innerHTML = `<div class="doc"><h1>No encontrado</h1><p><a href="#/">Volver a las eras</a></p></div>`; }

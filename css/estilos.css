@@ -481,3 +481,10 @@ details.desp[open]{padding-bottom:14px}
 #h-lugar-presencia .tarjeta{border:3px solid #d8b45a;box-shadow:0 0 0 8px color-mix(in srgb,#d8b45a 25%,transparent),0 16px 40px rgba(120,80,0,.35)}
 #h-lugar-presencia .sp-banda{font-size:16px;padding:10px 16px;background:radial-gradient(circle at 20% 0%,#f6dd8f,#d8b45a 70%)}
 #h-lugar-presencia .t-cab h3{font-size:clamp(22px,2.4vw,30px)}
+
+/* Botones Abrir/Cerrar todo más visibles y con estado */
+.abrir-todo button{font-size:13px!important;padding:8px 16px!important;border:2px solid var(--oro)!important;color:var(--oro2)!important;background:var(--panel);font-weight:700}
+.abrir-todo button:hover{background:color-mix(in srgb,var(--oro) 18%,var(--panel))}
+.abrir-todo button[aria-pressed="true"]{background:var(--oro)!important;color:var(--bg)!important;box-shadow:0 4px 12px color-mix(in srgb,var(--oro) 40%,transparent)}
+.abrir-todo button::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;border:2px solid currentColor;margin-right:6px;vertical-align:middle}
+.abrir-todo button[aria-pressed="true"]::before{background:currentColor}
