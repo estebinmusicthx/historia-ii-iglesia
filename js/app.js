@@ -12,7 +12,9 @@
   const SP = window.SUPRESENCIA || { historia: [], fe: [] };
   const SPX = Object.fromEntries([...SP.historia.map(x => [x.id, { ...x, tipo: "historia" }]), ...SP.fe.map(x => [x.id, { ...x, tipo: "fe" }])]);
   EVENTOS.forEach(e => { if (SPX[e.id] && !(e.tags || []).includes("supresencia")) e.tags = ["supresencia"].concat(e.tags || []); });
-  const ETIQ = { supresencia: "El Lugar de Su Presencia", colombia: "Colombia", avivamiento: "Avivamientos", martir: "Mártires", mision: "Misiones", biblia: "Biblia", persona: "Personas", concilio: "Concilios", iglesias: "Iglesias grandes", reflexion: "Reflexión" };
+  const TEMAS = window.TEMAS || [];
+  TEMAS.forEach(t => t.ids.forEach(id => { const e = EVENTOS.find(x => x.id === id); if (e && !(e.tags || []).includes("t-" + t.id)) e.tags = (e.tags || []).concat("t-" + t.id); }));
+  const ETIQ = { "t-musulmanes": "Los musulmanes", "t-lutero": "Martín Lutero", "t-calvinismo": "El calvinismo", "t-corrientes": "Las nuevas corrientes", supresencia: "El Lugar de Su Presencia", colombia: "Colombia", avivamiento: "Avivamientos", martir: "Mártires", mision: "Misiones", biblia: "Biblia", persona: "Personas", concilio: "Concilios", iglesias: "Iglesias grandes", reflexion: "Reflexión" };
 
   /* ---------- Biblia: ventana con el pasaje (Reina-Valera 1909, dominio público) ---------- */
   // [nombre, número de libro]
@@ -146,6 +148,9 @@
         <div class="ley" style="--b:var(--prec-borde);--c:var(--prec)"><b>Precisión</b>Aclaración con su fuente cuando un dato de las notas difiere de la historia documentada. La nota se conserva.</div>
         <div class="ley" style="--b:var(--comp-borde);--c:var(--comp)"><b>Investigación</b>Información que amplía las notas, tomada de fuentes abiertas, enlazadas y verificadas.</div>
       </section>
+      <h2 class="ley-t">Temas clave del curso</h2>
+      <section class="temas-clave">${TEMAS.map(t => { const n = t.ids.filter(id => EVENTOS.some(e => e.id === id)).length;
+        return `<a class="tema-card revela" href="#/tema/${t.id}" style="--c:${t.color}">${window.escudoEra ? window.escudoEra({ id: t.icono, color: t.color, nombre: t.titulo }, "escudo-tema") : ""}<span class="tema-t">${esc(t.titulo)}</span><span class="tema-n">${n} hitos · ver el tema →</span></a>`; }).join("")}</section>
       <section class="regla"><h2>De Pentecostés a hoy</h2>
         <div class="regla-barra">${bloques.map(b => `<a href="${b.r}" title="${b.t} (${b.d}–${b.h === MAX ? "hoy" : b.h})" aria-label="${b.t}" style="width:${pct(b.h) - pct(b.d)}%;background:${b.c}"></a>`).join("")}</div>
         <div class="regla-marcas">${marcas.map(m => `<span style="left:${pct(m)}%">${m === MAX ? "hoy" : m}</span>`).join("")}</div>
@@ -485,6 +490,23 @@
   }
 
 
+  function vistaTema(id) {
+    const t = TEMAS.find(x => x.id === id); if (!t) return vistaNoEncontrada();
+    const evs = t.ids.map(i => EVENTOS.find(e => e.id === i)).filter(Boolean).sort((a, b) => a.a - b.a);
+    document.documentElement.style.setProperty("--era", t.color);
+    $main.innerHTML = migas([["Temas clave", "#/"], [t.titulo]]) + `
+      <section class="era-cab"><div class="era-tit">${window.escudoEra ? window.escudoEra({ id: t.icono, color: t.color, nombre: t.titulo }, "escudo") : ""}<div><div class="k">Tema clave del curso</div><h1>${esc(t.titulo)}</h1>
+        <div class="rango">${esc(evs[0] ? evs[0].f : "")} – ${esc(evs.length ? evs[evs.length - 1].f : "")}</div><div class="grupo-n">${evs.length} hitos de distintas eras</div></div></div>
+        <div class="resumenes" style="grid-template-columns:1fr"><div class="bloque b-clase"><div class="et">Notas de clase <small>síntesis del tema</small></div><p>${esc(t.clase)}</p></div></div>
+        <div class="controles-era"><span></span><span class="abrir-todo"><button type="button" data-todo="1">Abrir todos</button><button type="button" data-todo="0">Cerrar todos</button></span></div>
+      </section>
+      <section class="linea">${evs.map(e => tarjeta(e).replace('<div class="t-cab">', `<div class="t-cab"><div class="tema-era">${esc(eraPorId[e.era].nombre)}</div>`)).join("")}</section>`;
+    const abrir = (h, si) => { const b = h.querySelector(".t-abrir"), c = h.querySelector(".t-cuerpo"); b.setAttribute("aria-expanded", String(si)); c.hidden = !si; h.classList.toggle("abierto", si); };
+    $main.querySelectorAll(".hito").forEach(h => { h.querySelector(".t-abrir").addEventListener("click", () => abrir(h, h.querySelector(".t-cuerpo").hidden));
+      h.querySelectorAll(".m-origen button").forEach(b => b.addEventListener("click", () => { const on = b.getAttribute("aria-pressed") !== "true"; b.setAttribute("aria-pressed", String(on)); abrir(h, true); const bl = h.querySelector("." + b.dataset.bloque); if (bl) bl.classList.toggle("resaltado", on); })); });
+    $main.querySelectorAll(".abrir-todo button").forEach(b => b.addEventListener("click", () => $main.querySelectorAll(".hito").forEach(h => abrir(h, b.dataset.todo === "1"))));
+  }
+
   function vistaGlosario() {
     const G = (window.GLOSARIO || []).slice().sort((a, b) => a.t.localeCompare(b.t, "es"));
     const EVI = Object.fromEntries(EVENTOS.map(e => [e.id, e]));
@@ -600,6 +622,7 @@
     else if (p[0] === "linea") { vistaLinea(); actual = "linea"; }
     else if (p[0] === "fuentes") { vistaFuentes(); actual = "fuentes"; }
     else if (p[0] === "glosario") { vistaGlosario(); actual = "glosario"; }
+    else if (p[0] === "tema") { vistaTema(p[1]); actual = ""; }
     else if (!p[0]) vistaInicio();
     else vistaNoEncontrada();
     document.querySelectorAll(".menu a").forEach(a => { if (a.dataset.ruta === actual) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
