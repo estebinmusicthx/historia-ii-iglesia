@@ -291,3 +291,8 @@ dialog.biblia::backdrop{background:rgba(10,8,5,.6);backdrop-filter:blur(3px)}
 .j-regla{font-size:12px;color:var(--ink3);margin-top:8px}
 .j-mejor{font-size:13px;color:var(--ink3);margin-top:6px}
 .hero h1 .modalidad{display:block;font-family:var(--cap);font-size:.2em;letter-spacing:.18em;color:var(--ink3);font-weight:500;margin-top:.6em;text-transform:uppercase}
+.modalidad-pie{font-size:.82em;letter-spacing:.06em;color:var(--ink3)}
+.biblio{background:var(--bg2);border:1px solid var(--linea);border-radius:12px;padding:12px 16px}
+.biblio ul,.biblio-lista{padding-left:22px}
+.biblio li,.biblio-lista li{margin:4px 0;font-size:16px}
+.biblio small,.biblio-lista small{color:var(--ink3)}

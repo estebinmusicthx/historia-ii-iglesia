@@ -156,6 +156,8 @@
       <section class="linea" id="linea">${evs.map(tarjeta).join("")}</section>
       <h2 class="seccion-t">Reflexión de fe</h2>
       <div class="bloque b-ref"><div class="et">Desde la fe de El Lugar de Su Presencia <small>${ext(window.CURSO.creemos, "ver «Qué creemos»")}</small></div><p>${citas(era.fe)}</p></div>
+      ${(() => { const libros = (window.BIBLIOGRAFIA || []).filter(b => b.eras.includes(era.id)); return libros.length ? `<h2 class="seccion-t">Para profundizar</h2>
+      <div class="biblio"><p class="j-ayuda">Bibliografía del curso que cubre esta era (según el alcance de cada obra):</p><ul>${libros.map(b => `<li>${esc(b.ref)}${b.nota ? ` <small>${esc(b.nota)}</small>` : ""}</li>`).join("")}</ul></div>` : ""; })()}
       <h2 class="seccion-t">Repaso</h2>
       <section class="juegos" id="juegos" aria-label="Juegos de repaso"></section>
       <nav class="nav-eras" aria-label="Eras vecinas">
@@ -406,6 +408,9 @@
         <li>Biblia: al hacer clic en una cita se abre el pasaje en la Reina-Valera 1909 (dominio público), servido por ${ext("https://getbible.net/", "getbible.net")}; cada ventana enlaza también a la Reina-Valera 1960 en BibleGateway (© Sociedades Bíblicas en América Latina), cuyo texto no se reproduce.</li>
         <li>Tipografías Cinzel y EB Garamond (Google Fonts, licencia SIL Open Font License).</li>
       </ul>
+      <h2>Bibliografía del curso</h2>
+      <p>Obras indicadas en la materia. Tienen derechos de sus autores y editoriales: se citan como referencia y no se reproducen.</p>
+      <ul class="biblio-lista">${(window.BIBLIOGRAFIA || []).map(b => `<li>${esc(b.ref)} <small>— ${esc(b.alcance)}${b.nota ? " " + esc(b.nota) : ""}</small></li>`).join("")}</ul>
       <h2>Fuentes de los complementos (${todas.size})</h2>
       <ol>${[...todas.entries()].map(([u, v]) => `<li>${ext(u, esc(v.n))} — usada en: ${v.ids.map(e => `<a href="#/era/${e.era}/${e.id}">${esc(e.t)}</a>`).join(", ")}</li>`).join("")}</ol>
       <h2>Créditos de imágenes (${imgs.length})</h2>
