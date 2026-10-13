@@ -9,7 +9,10 @@
   const fmt = s => esc(s).replace(/(^|[\s.;:])(\d{1,2})([.)])\s(?=[A-ZÁÉÍÓÚ¿¡&])/g, (m, a, n, p, i) => (i === 0 ? "" : a.trim() + "\n") + n + p + " ");
   const ext = (u, t) => `<a href="${esc(u)}" target="_blank" rel="noopener">${t}</a>`;
 
-  const ETIQ = { colombia: "Colombia", avivamiento: "Avivamientos", martir: "Mártires", mision: "Misiones", biblia: "Biblia", persona: "Personas", concilio: "Concilios", iglesias: "Iglesias grandes", reflexion: "Reflexión" };
+  const SP = window.SUPRESENCIA || { historia: [], fe: [] };
+  const SPX = Object.fromEntries([...SP.historia.map(x => [x.id, { ...x, tipo: "historia" }]), ...SP.fe.map(x => [x.id, { ...x, tipo: "fe" }])]);
+  EVENTOS.forEach(e => { if (SPX[e.id] && !(e.tags || []).includes("supresencia")) e.tags = ["supresencia"].concat(e.tags || []); });
+  const ETIQ = { supresencia: "El Lugar de Su Presencia", colombia: "Colombia", avivamiento: "Avivamientos", martir: "Mártires", mision: "Misiones", biblia: "Biblia", persona: "Personas", concilio: "Concilios", iglesias: "Iglesias grandes", reflexion: "Reflexión" };
 
   /* ---------- Biblia: ventana con el pasaje (Reina-Valera 1909, dominio público) ---------- */
   // [nombre, número de libro]
@@ -74,8 +77,9 @@
   function tarjeta(e) {
     const fig = figura(e.img);
     const fuentes = (e.fuentes || []).length ? `<div class="fuentes-hito"><b>Fuentes de la investigación:</b><ol>${e.fuentes.map(([n, u]) => `<li>${ext(u, esc(n))}</li>`).join("")}</ol></div>` : "";
-    return `<article class="hito revela${e.clase ? "" : " solo-comp"}" id="h-${esc(e.id)}">
-      <div class="tarjeta">
+    const sp = SPX[e.id];
+    return `<article class="hito revela${e.clase ? "" : " solo-comp"}${sp ? " sp" : ""}" id="h-${esc(e.id)}">
+      <div class="tarjeta">${sp ? `<div class="sp-banda"><b>El Lugar de Su Presencia</b> · ${sp.tipo === "historia" ? "Su historia" : "Raíces de su fe"}: ${esc(sp.porque)}</div>` : ""}
         <div class="t-cab">
           <button type="button" class="t-abrir" aria-expanded="false" aria-controls="c-${esc(e.id)}"><span class="t-fecha">${esc(e.f)}</span><h3>${esc(e.t)}</h3><span class="t-flecha" aria-hidden="true">▾</span></button>
           <div class="marcas"><div class="m-temas">${(e.tags || []).filter(t => ETIQ[t]).map(t => `<span class="chip">${ETIQ[t]}</span>`).join("")}</div><div class="m-origen">${botonesOrigen(e)}</div></div>
@@ -140,6 +144,11 @@
         <div class="ley" style="--b:var(--prec-borde);--c:var(--prec)"><b>Precisión</b>Aclaración con su fuente cuando un dato de las notas difiere de la historia documentada. La nota se conserva.</div>
         <div class="ley" style="--b:var(--comp-borde);--c:var(--comp)"><b>Investigación</b>Información que amplía las notas, tomada de fuentes abiertas, enlazadas y verificadas.</div>
       </section>
+      ${(() => { const EVI = Object.fromEntries(EVENTOS.map(e => [e.id, e])); const fila = x => { const e = EVI[x.id]; return e ? `<li><a href="#/era/${e.era}/${e.id}"><span class="sp-f">${esc(e.f)}</span><span><b>${esc(e.t)}</b><small>${esc(x.porque)}</small></span></a></li>` : ""; };
+        return `<section class="sp-portada" aria-label="El Lugar de Su Presencia en esta historia">
+        <div class="sp-cab"><div class="sp-sello">✦</div><div><h2>El Lugar de Su Presencia en esta historia</h2><p>Este trabajo es para la Escuela Bíblica BEREA. Aquí están los hitos de la propia iglesia y aquellos donde nace o se recupera lo que ella confiesa (${ext(window.CURSO.creemos, "Qué creemos")}).</p></div></div>
+        <div class="sp-cols"><div><h3>Su historia</h3><ol>${SP.historia.map(fila).join("")}</ol></div><div><h3>Raíces de su fe</h3><ol>${SP.fe.map(fila).join("")}</ol></div></div>
+        <a class="sp-todo" href="#/linea" data-tema="supresencia">Ver todos en la línea completa →</a></section>`; })()}
       <section class="regla"><h2>De Pentecostés a hoy</h2>
         <div class="regla-barra">${bloques.map(b => `<a href="${b.r}" title="${b.t} (${b.d}–${b.h === MAX ? "hoy" : b.h})" aria-label="${b.t}" style="width:${pct(b.h) - pct(b.d)}%;background:${b.c}"></a>`).join("")}</div>
         <div class="regla-marcas">${marcas.map(m => `<span style="left:${pct(m)}%">${m === MAX ? "hoy" : m}</span>`).join("")}</div>
@@ -381,6 +390,8 @@
     completar();
   }
 
+  let temaInicial = null;
+  document.addEventListener("click", ev => { const a = ev.target.closest("[data-tema]"); if (a) temaInicial = a.dataset.tema; });
   function vistaLinea() {
     const estado = { q: "", era: "", tag: "", soloClase: false };
     const romano = n => { const v = [[1000, "M"], [900, "CM"], [500, "D"], [400, "CD"], [100, "C"], [90, "XC"], [50, "L"], [40, "XL"], [10, "X"], [9, "IX"], [5, "V"], [4, "IV"], [1, "I"]]; let r = ""; for (const [a, s] of v) while (n >= a) { r += s; n -= a; } return r; };
@@ -409,7 +420,7 @@
         const era = eraPorId[e.era], s = Math.max(1, Math.ceil(e.a / 100));
         if (s !== siglo) { siglo = s; html += `<div class="lt-siglo"><span>Siglo ${romano(s)}</span></div>`; }
         const im = e.img && IMG[e.img];
-        html += `<a class="lt-item revela ${lado++ % 2 ? "der" : "izq"}" href="#/era/${e.era}/${e.id}" style="--c:${era.color}">
+        html += `<a class="lt-item revela ${lado++ % 2 ? "der" : "izq"}${SPX[e.id] ? " sp" : ""}" href="#/era/${e.era}/${e.id}" style="--c:${era.color}">
           <span class="lt-punto" aria-hidden="true"></span>
           <span class="lt-tarjeta">${im ? `<img loading="lazy" src="${esc(im.src)}" alt="">` : ""}
             <span class="lt-txt"><span class="lt-f">${esc(e.f)}</span><span class="lt-t">${esc(e.t)}</span>
@@ -427,6 +438,7 @@
     }
     menu("#f-era", v => estado.era = v);
     menu("#f-tag", v => { estado.soloClase = v === "__clase"; estado.tag = v === "__clase" ? "" : v; });
+    if (temaInicial) { const b = $main.querySelector(`#f-tag .f-ops button[data-v="${temaInicial}"]`); if (b) b.click(); temaInicial = null; }
     // cerrar un menú al abrir el otro
     $main.querySelectorAll(".f-menu").forEach(d => d.addEventListener("toggle", () => { if (d.open) $main.querySelectorAll(".f-menu").forEach(o => { if (o !== d) o.open = false; }); }));
     pintar();
@@ -440,15 +452,25 @@
     $main.innerHTML = migas([["Glosario"]]) + `<div class="doc"><h1>Conceptos clave</h1><p>Glosario entregado con el material del curso. Cada concepto enlaza al hito donde se trata en la línea del tiempo.</p></div>
       <div class="filtros"><input class="buscar" type="search" placeholder="Buscar un concepto…" aria-label="Buscar en el glosario">
         <div class="chips">${letras.map(l => `<button type="button" data-l="${l}">${l}</button>`).join("")}</div></div>
-      <dl class="glosario">${G.map(g => { const e = g.h && EVI[g.h]; return `<div class="g-item" id="g-${esc(g.t[0].toUpperCase())}" data-txt="${esc((g.t + " " + g.d).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase())}">
-        <dt>${esc(g.t)}</dt><dd><p>${citas(g.d)}</p>
-        ${g.prec ? `<div class="bloque b-prec"><div class="et">Precisión</div><p>${esc(g.prec)} ${g.fuente ? ext(g.fuente[1], esc(g.fuente[0])) : ""}</p></div>` : ""}
-        ${g.v ? `<div class="vers"><b>Biblia:</b> ${versiculo(g.v)}</div>` : ""}
-        ${e ? `<a class="g-hito" href="#/era/${e.era}/${e.id}">Ver en la línea: ${esc(e.f)} · ${esc(e.t)} →</a>` : ""}</dd></div>`; }).join("")}</dl>`;
+      <div class="glosario">${G.map(g => { const e = g.h && EVI[g.h]; return `<div class="g-item" data-letra="${esc(g.t[0].toUpperCase())}" data-txt="${esc((g.t + " " + g.d).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase())}">
+        <div class="g-giro">
+          <div class="g-cara g-frente"><span class="g-term">${esc(g.t)}</span><small>Toque para ver el significado</small></div>
+          <div class="g-cara g-reves"><span class="g-term-mini">${esc(g.t)}</span><p>${citas(g.d)}</p>
+            ${g.prec ? `<div class="bloque b-prec"><div class="et">Precisión</div><p>${esc(g.prec)} ${g.fuente ? ext(g.fuente[1], esc(g.fuente[0])) : ""}</p></div>` : ""}
+            ${g.v ? `<div class="vers"><b>Biblia:</b> ${versiculo(g.v)}</div>` : ""}
+            ${e ? `<a class="g-hito" href="#/era/${e.era}/${e.id}">Ver en la línea: ${esc(e.f)} · ${esc(e.t)} →</a>` : ""}
+            <small class="g-volver">↺ Toque para voltear</small></div>
+        </div></div>`; }).join("")}</div>`;
     const $b = $main.querySelector(".buscar");
     $b.addEventListener("input", () => { const q = $b.value.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
       $main.querySelectorAll(".g-item").forEach(x => x.classList.toggle("oculto", !!q && !x.dataset.txt.includes(q))); });
-    $main.querySelectorAll(".chips button").forEach(b => b.addEventListener("click", () => { const x = document.getElementById("g-" + b.dataset.l); if (x) x.scrollIntoView({ block: "start", behavior: "smooth" }); }));
+    $main.querySelectorAll(".chips button").forEach(b => b.addEventListener("click", () => { const x = $main.querySelector(`.g-item[data-letra="${b.dataset.l}"]:not(.oculto)`); if (x) x.scrollIntoView({ block: "start", behavior: "smooth" }); }));
+    $main.querySelectorAll(".g-item").forEach(it => {
+      it.tabIndex = 0; it.setAttribute("role", "button"); it.setAttribute("aria-label", it.querySelector(".g-term").textContent + ": ver el significado");
+      const girar = () => it.classList.toggle("girada");
+      it.addEventListener("click", ev => { if (ev.target.closest("a, .vers-btn")) return; girar(); });
+      it.addEventListener("keydown", ev => { if ((ev.key === "Enter" || ev.key === " ") && ev.target === it) { ev.preventDefault(); girar(); } });
+    });
   }
 
   function vistaFuentes() {

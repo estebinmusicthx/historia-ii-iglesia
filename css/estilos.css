@@ -340,7 +340,7 @@ dialog.biblia::backdrop{background:rgba(10,8,5,.6);backdrop-filter:blur(3px)}
 
 /* ===== Glosario ===== */
 .glosario{margin-top:14px;display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
-.g-item{background:var(--panel);border:1px solid var(--linea);border-radius:12px;padding:12px 14px;scroll-margin-top:170px}
+.g-item{scroll-margin-top:170px;perspective:1000px;cursor:pointer}
 .g-item dt{font-family:var(--cap);font-weight:700;font-size:18px;color:var(--oro2);margin-bottom:4px}
 .g-item dd p{font-size:17px}
 .g-item .bloque{margin-top:8px;font-size:15px}
@@ -430,3 +430,40 @@ details.desp[open]{padding-bottom:14px}
   .lt-item .lt-punto,.lt-item.izq .lt-punto,.lt-item.der .lt-punto{left:8px;right:auto}
   .lt-item::after,.lt-item.izq::after,.lt-item.der::after{left:22px;right:auto;width:14px}
 }
+
+/* ===== El Lugar de Su Presencia ===== */
+:root{--sp:#8a6a1f;--sp2:#d8b45a}
+.sp-portada{margin:6px 0 36px;padding:18px;border-radius:16px;border:2px solid var(--sp2);background:linear-gradient(135deg,color-mix(in srgb,var(--sp2) 18%,var(--panel)),var(--panel));box-shadow:var(--sombra)}
+.sp-cab{display:flex;gap:14px;align-items:flex-start;margin-bottom:12px}
+.sp-sello{width:52px;height:52px;border-radius:50%;background:var(--sp2);color:#fff;display:grid;place-items:center;font-size:26px;flex-shrink:0;box-shadow:0 0 0 4px color-mix(in srgb,var(--sp2) 35%,transparent)}
+.sp-cab h2{font-size:clamp(20px,2.4vw,28px);color:var(--oro2)}
+.sp-cab p{color:var(--ink2);font-size:16px}
+.sp-cols{display:grid;grid-template-columns:1fr 1.6fr;gap:16px}
+@media (max-width:760px){.sp-cols{grid-template-columns:1fr}}
+.sp-cols h3{font-family:var(--cap);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px}
+.sp-cols ol{list-style:none;display:flex;flex-direction:column;gap:6px}
+.sp-cols a{display:flex;gap:10px;text-decoration:none;color:var(--ink);background:var(--panel);border:1px solid var(--linea);border-left:4px solid var(--sp2);border-radius:10px;padding:8px 10px;transition:transform .2s}
+.sp-cols a:hover{transform:translateX(3px)}
+.sp-cols b{display:block;font-size:16px}
+.sp-cols small{display:block;color:var(--ink3);font-size:14px;line-height:1.35}
+.sp-f{font-family:var(--cap);font-weight:700;font-size:13px;color:var(--sp);min-width:62px}
+.sp-todo{display:inline-block;margin-top:12px;font-size:15px}
+.hito.sp .tarjeta{border:2px solid var(--sp2);box-shadow:0 0 0 4px color-mix(in srgb,var(--sp2) 18%,transparent),var(--sombra)}
+.hito.sp::before{border-color:var(--sp2);background:var(--sp2)}
+.sp-banda{background:linear-gradient(90deg,var(--sp2),color-mix(in srgb,var(--sp2) 55%,var(--panel)));color:#2a1e05;font-size:14px;padding:6px 16px}
+.lt-item.sp .lt-tarjeta{border:2px solid var(--sp2);border-top-width:4px;background:linear-gradient(135deg,color-mix(in srgb,var(--sp2) 14%,var(--panel)),var(--panel))}
+.lt-item.sp .lt-punto{background:var(--sp2);box-shadow:0 0 0 3px var(--sp2),0 0 12px var(--sp2)}
+.chip.c-sp{border-color:var(--sp2);color:var(--sp)}
+
+/* Glosario: tarjetas que se dan vuelta */
+.g-giro{display:grid;transition:transform .6s;transform-style:preserve-3d;min-height:170px}
+.g-item.girada .g-giro{transform:rotateY(180deg)}
+.g-cara{grid-area:1/1;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:14px;border:1px solid var(--linea);padding:14px 16px;box-shadow:var(--sombra)}
+.g-frente{display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;background:linear-gradient(140deg,var(--panel),color-mix(in srgb,var(--oro) 14%,var(--panel)));border-top:5px solid var(--oro)}
+.g-term{font-family:var(--cap);font-weight:700;font-size:clamp(20px,2vw,24px);color:var(--oro2);line-height:1.2}
+.g-frente small,.g-volver{font-family:var(--cap);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3)}
+.g-reves{transform:rotateY(180deg);background:var(--panel);border-top:5px solid var(--comp-borde);display:flex;flex-direction:column;gap:6px}
+.g-term-mini{font-family:var(--cap);font-weight:700;font-size:15px;color:var(--comp)}
+.g-reves p{font-size:17px}
+.g-item:focus-visible{outline:none}.g-item:focus-visible .g-cara{outline:2px solid var(--oro);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.g-giro{transition:none}}
