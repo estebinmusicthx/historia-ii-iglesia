@@ -79,7 +79,7 @@
         return `<a class="era-card revela" href="#/era/${era.id}" style="--c:${era.color}">
           <div class="foto" style="background-image:url('${esc(imagenEra(era))}')"><span class="num">${esc(era.n)}</span></div>
           <div class="cuerpo"><h3>${esc(era.nombre)}</h3><div class="rango">${rango(era)}</div>
-          <div class="cuenta">${evs.length} hitos · <b>${nC} de notas de clase</b></div></div></a>`;
+          <div class="cuenta">${evs.length} hitos · <b>${nC ? nC + " de notas de clase" : "Aportes de investigación"}</b></div></div></a>`;
       }).join("") + `</div>`;
     });
     $main.innerHTML = `
@@ -108,7 +108,7 @@
       <section class="era-cab"><div class="k">${esc(era.n)}</div><h1>${esc(era.nombre)}</h1>
         <div class="rango">${rango(era)}</div><div class="grupo-n">${esc(era.grupo)}</div>
         <div class="resumenes">
-          ${era.clase ? `<div class="bloque b-clase"><div class="et">Notas de clase <small>resumen de la etapa</small></div><p>${esc(era.clase)}</p></div>` : `<div class="bloque b-clase"><div class="et">Notas de clase</div><p>Este enfoque no está en las notas de clase: todo su contenido es complemento con fuentes.</p></div>`}
+          ${era.clase ? `<div class="bloque b-clase"><div class="et">Notas de clase <small>resumen de la etapa</small></div><p>${esc(era.clase)}</p></div>` : `<div class="bloque b-clase"><div class="et">Aportes de investigación</div><p>Este enfoque no hace parte de las notas de clase: es un aporte de investigación, con cada dato referenciado a su fuente.</p></div>`}
           <div class="bloque b-comp"><div class="et">Complemento</div><p>${esc(era.comp)}</p></div>
         </div>
         <div class="controles-era"><label class="filtro-era"><input type="checkbox" id="solo-clase"> Ver solo los hitos que están en las notas de clase</label>
