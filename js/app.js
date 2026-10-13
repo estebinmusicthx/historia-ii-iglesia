@@ -136,8 +136,10 @@
       }).join("") + `</div>`;
     });
     $main.innerHTML = `
-      <section class="hero"><div class="k">${esc(window.CURSO.escuela)}</div>
-        <h1>Historia II<span>${esc(window.CURSO.subtitulo.replace(" (Materia Presencial)", ""))}</span><small class="modalidad">(Materia Presencial)</small></h1></section>
+      <section class="hero hero-gran">${(() => { const imgs = [...new Set(EVENTOS.map(e => e.img).filter(k => k && IMG[k]))].map(k => IMG[k].src.replace("/960px-", "/500px-"));
+        return `<div class="hero-collage" aria-hidden="true">${imgs.slice(0, 24).map((src, i) => `<span style="--i:${i};background-image:url('${esc(src)}')"></span>`).join("")}</div><div class="hero-velo" aria-hidden="true"></div><div class="hero-luz" aria-hidden="true"></div>`; })()}
+        <div class="hero-txt"><div class="k">${esc(window.CURSO.escuela)}</div>
+        <h1>Historia II<span>${esc(window.CURSO.subtitulo.replace(" (Materia Presencial)", ""))}</span><small class="modalidad">(Materia Presencial)</small></h1><div class="hero-verso">«Jesucristo es el mismo ayer, y hoy, y por los siglos.» <cite>Hebreos 13:8</cite></div><a class="hero-ver" href="#/linea">Recorrer la línea completa →</a></div></section>
       <h2 class="ley-t">Material de consulta de la línea de tiempo con base en:</h2>
       <section class="leyenda" aria-label="Material de la línea de tiempo">
         <div class="ley" style="--b:var(--clase-borde);--c:var(--clase)"><b>Notas de clase</b>Transcripción fiel de lo tomado en cada lección, con la referencia de la página del cuaderno.</div>
