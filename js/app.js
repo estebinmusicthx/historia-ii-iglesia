@@ -441,6 +441,18 @@
         ${imgs.map(([, v]) => `<tr><td><img loading="lazy" src="${esc(v.src)}" alt=""></td><td>${esc(v.titulo)}${v.anio ? " (" + esc(v.anio) + ")" : ""}</td><td>${esc(v.autor)}</td><td>${esc(v.licencia)}</td><td>${ext(v.pagina, "Commons")}</td></tr>`).join("")}
       </tbody></table></div>
     </div>`;
+    // Cada sección (h2 + su contenido) queda como desplegable; la primera abierta.
+    const doc = $main.querySelector(".doc");
+    [...doc.querySelectorAll(":scope > h2")].forEach((h, k) => {
+      const d = document.createElement("details"); d.className = "desp"; if (k === 0) d.open = true;
+      const sm = document.createElement("summary"); sm.innerHTML = h.innerHTML; d.appendChild(sm);
+      h.replaceWith(d);
+      while (d.nextSibling && !(d.nextSibling.nodeType === 1 && d.nextSibling.tagName === "H2")) d.appendChild(d.nextSibling);
+    });
+    const ctl = document.createElement("div"); ctl.className = "abrir-todo desp-ctl";
+    ctl.innerHTML = '<button type="button" data-todo="1">Abrir todo</button><button type="button" data-todo="0">Cerrar todo</button>';
+    doc.querySelector("h1").after(ctl);
+    ctl.querySelectorAll("button").forEach(b => b.addEventListener("click", () => doc.querySelectorAll("details.desp").forEach(d => d.open = b.dataset.todo === "1")));
   }
 
   function vistaNoEncontrada() { $main.innerHTML = `<div class="doc"><h1>No encontrado</h1><p><a href="#/">Volver a las eras</a></p></div>`; }

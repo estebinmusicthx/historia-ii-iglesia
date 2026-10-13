@@ -350,3 +350,12 @@ dialog.biblia::backdrop{background:rgba(10,8,5,.6);backdrop-filter:blur(3px)}
 .lam-linea-t{font-family:var(--cap);font-weight:700;font-size:16px;fill:var(--era);text-anchor:middle}
 .lam-pasos li{display:flex;flex-direction:column;gap:2px}
 .lam-p-ir{font-size:13px;padding-left:40px}
+
+/* ===== Desplegables (Fuentes) ===== */
+details.desp{background:var(--panel);border:1px solid var(--linea);border-radius:12px;margin:10px 0;padding:0 16px;box-shadow:var(--sombra)}
+details.desp>summary{cursor:pointer;list-style:none;font-family:var(--cap);font-weight:700;font-size:20px;color:var(--oro2);padding:14px 0;display:flex;justify-content:space-between;align-items:center}
+details.desp>summary::-webkit-details-marker{display:none}
+details.desp>summary::after{content:"▾";color:var(--ink3);transition:transform .25s}
+details.desp[open]>summary::after{transform:rotate(180deg)}
+details.desp[open]{padding-bottom:14px}
+.desp-ctl{margin:6px 0 4px}
