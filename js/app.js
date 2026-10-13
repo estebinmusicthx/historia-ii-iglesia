@@ -129,21 +129,22 @@
     const marcas = [33, 476, 1054, 1453, 1517, 1648, 1901, 2026];
     let grupos = "";
     [...new Set(ERAS.map(e => e.grupo))].forEach(g => {
-      grupos += `<div class="grupo"><h2>${esc(g)}</h2></div><div class="eras">` + ERAS.filter(e => e.grupo === g).map(era => {
+      const tarjetaEra = era => {
         const evs = EVENTOS.filter(e => e.era === era.id), nC = evs.filter(e => e.clase).length;
         return `<a class="era-card revela" href="#/era/${era.id}" style="--c:${era.color}">
           <div class="foto" style="background-image:url('${esc(imagenEra(era))}')">${window.escudoEra ? window.escudoEra(era, "escudo-mini") : ""}<span class="num">${esc(era.n)}</span></div>
           <div class="cuerpo"><h3>${esc(era.nombre)}</h3><div class="rango">${rango(era)}</div>
-          <div class="cuenta">${evs.length} hitos · <b>${nC ? nC + " de notas de clase" : "Aportes de investigación"}</b></div></div></a>`;
-      }).join("") + TEMAS.filter(t => t.grupo === g).map(t => {
+          <div class="cuenta">${evs.length} hitos · <b>${nC ? nC + " de notas de clase" : "Aportes de investigación"}</b></div></div></a>`; };
+      const tarjetaTema = t => {
         const evs = t.ids.map(id => EVENTOS.find(e => e.id === id)).filter(Boolean), nC = evs.filter(e => e.clase).length;
         const conImg = evs.find(e => e.img && IMG[e.img]), anios = evs.map(e => e.a).sort((x, y) => x - y);
-        const falsaEra = { id: t.icono, color: t.color, nombre: t.titulo };
         return `<a class="era-card tema-en-eras revela" href="#/tema/${t.id}" style="--c:${t.color}">
-          <div class="foto" style="background-image:url('${esc(conImg ? IMG[conImg.img].src : "")}')">${window.escudoEra ? window.escudoEra(falsaEra, "escudo-mini") : ""}<span class="num">Tema</span></div>
+          <div class="foto" style="background-image:url('${esc(conImg ? IMG[conImg.img].src : "")}')">${window.escudoEra ? window.escudoEra({ id: t.icono, color: t.color, nombre: t.titulo }, "escudo-mini") : ""}<span class="num">Tema</span></div>
           <div class="cuerpo"><h3>${esc(t.titulo)}</h3><div class="rango">${anios[0]} – ${anios[anios.length - 1] >= 2026 ? "hoy" : anios[anios.length - 1]}</div>
-          <div class="cuenta">${evs.length} hitos · <b>${nC} de notas de clase</b></div></div></a>`;
-      }).join("") + `</div>`;
+          <div class="cuenta">${evs.length} hitos · <b>${nC} de notas de clase</b></div></div></a>`; };
+      const inicioTema = t => Math.min(...t.ids.map(id => (EVENTOS.find(e => e.id === id) || { a: 9999 }).a));
+      grupos += `<div class="grupo"><h2>${esc(g)}</h2></div><div class="eras">` + ERAS.filter(e => e.grupo === g).map(era =>
+        tarjetaEra(era) + TEMAS.filter(t => t.despues === era.id).sort((a, b) => inicioTema(a) - inicioTema(b)).map(tarjetaTema).join("")).join("") + `</div>`;
     });
     $main.innerHTML = `
       <section class="hero hero-gran">${(() => { const imgs = [...new Set(EVENTOS.map(e => e.img).filter(k => k && IMG[k]))].map(k => IMG[k].src.replace("/960px-", "/500px-"));
