@@ -85,7 +85,7 @@
     $main.innerHTML = `
       <section class="hero"><div class="k">${esc(window.CURSO.escuela)}</div>
         <h1>Historia II<span>${esc(window.CURSO.subtitulo)}</span></h1></section>
-      <h2 class="ley-t">Material de la línea de tiempo basado en</h2>
+      <h2 class="ley-t">Material de consulta de la línea de tiempo con base en:</h2>
       <section class="leyenda" aria-label="Material de la línea de tiempo">
         <div class="ley" style="--b:var(--clase-borde);--c:var(--clase)"><b>Notas de clase</b>Transcripción fiel de lo tomado en cada lección, con la referencia de la página del cuaderno.</div>
         <div class="ley" style="--b:var(--prec-borde);--c:var(--prec)"><b>Precisión</b>Aclaración con su fuente cuando un dato de las notas difiere de la historia documentada. La nota se conserva.</div>
