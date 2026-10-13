@@ -1,14 +1,15 @@
 /* Escenas animadas propias (SVG dibujado para este sitio) para el recorrido de apertura. */
 (function () {
   "use strict";
+  // Jinete mirando hacia la derecha (hacia donde avanza): cabeza adelante, cola atrás.
   const caballo = (x, d) => `<g class="es-jinete" style="--d:${d}s;transform:translateX(${x}px)">
-      <g class="es-galope">
-        <path d="M0 0 C20 -18 70 -22 100 -10 L118 -34 L132 -30 L124 -6 C126 6 116 14 104 12 L96 40 M18 6 L6 42 M30 8 L34 42 M84 12 L80 42" fill="none" stroke="#0d0a07" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
-        <ellipse cx="55" cy="0" rx="50" ry="16" fill="#0d0a07"/>
-        <path d="M118 -34 L140 -28 L134 -20 Z" fill="#0d0a07"/>
-        <path d="M44 -16 L48 -52 L62 -52 L64 -16 Z" fill="#0d0a07"/><circle cx="55" cy="-62" r="10" fill="#0d0a07"/>
-        <path d="M58 -40 L190 -86" stroke="#0d0a07" stroke-width="5" stroke-linecap="round"/>
-        <path d="M34 -46 h-14 v22 c0 8 7 12 7 12 s7-4 7-12 z" fill="#0d0a07"/>
+      <g class="es-galope" fill="#0d0a07">
+        <path d="M0 -6 C10 -22 40 -24 70 -20 C90 -18 104 -24 112 -40 L124 -62 C128 -68 136 -68 140 -64 L160 -46 C164 -40 158 -34 152 -36 L134 -44 C126 -34 120 -18 116 -6 C114 6 108 12 104 14 L112 40 L103 40 L95 17 L88 17 L86 40 L77 40 L78 14 C60 16 40 16 28 12 L30 40 L21 40 L18 12 L12 10 L4 40 L-5 40 L2 6 C-4 4 -6 -2 0 -6 Z"/>
+        <path d="M2 -4 C-16 0 -28 18 -24 38 C-14 22 -8 10 4 0 Z"/>
+        <path d="M112 -40 C116 -52 122 -62 128 -66 C122 -56 120 -48 120 -40 Z" fill="#1c140d"/>
+        <path d="M56 -20 L60 -54 L74 -54 L76 -20 Z"/><circle cx="67" cy="-63" r="10"/>
+        <path d="M70 -46 L214 -98" stroke="#0d0a07" stroke-width="5" stroke-linecap="round"/>
+        <path d="M60 -50 h-15 v22 c0 9 7.5 13 7.5 13 s7.5-4 7.5-13 z"/>
       </g></g>`;
   window.ESCENAS_SVG = {
     // Tres cruces en el monte, tormenta y relámpagos
@@ -57,7 +58,7 @@
       <rect width="1600" height="900" fill="url(#es-tunel)"/>
       <path d="M560 900 L560 420 C560 250 1040 250 1040 420 L1040 900 Z" fill="#0b0805"/>
       <g fill="#2a1d10">${[120, 300, 1300, 1480].map(x => `<rect x="${x - 70}" y="300" width="140" height="60" rx="8"/><rect x="${x - 70}" y="420" width="140" height="60" rx="8"/><rect x="${x - 70}" y="540" width="140" height="60" rx="8"/>`).join("")}</g>
-      <path class="es-pez" d="M690 360 C760 300 860 300 920 360 L960 330 L960 390 L920 360 C860 420 760 420 690 360 Z" fill="none" stroke="#d8b45a" stroke-width="6"/>
+      <path class="es-pez" d="M690 360 C760 300 860 300 920 360 L960 330 L960 390 L920 360 C860 420 760 420 690 360 Z" fill="none" stroke="#6e5220" stroke-width="6"/>
       ${[[420, 480], [1180, 480], [800, 640]].map(([x, y], i) => `<g class="es-llamita" style="--d:${i * .4}s"><circle cx="${x}" cy="${y}" r="90" fill="url(#es-lampara)"/><path d="M${x} ${y - 22} C${x + 10} ${y - 8} ${x + 8} ${y + 4} ${x} ${y + 8} C${x - 8} ${y + 4} ${x - 10} ${y - 8} ${x} ${y - 22} Z" fill="#ffd36b"/></g>`).join("")}
       ${Array.from({ length: 7 }, (_, i) => { const x = 610 + i * 64; return `<g fill="#050302"><circle cx="${x}" cy="760" r="22"/><path d="M${x - 34} 900 C${x - 34} 790 ${x + 34} 790 ${x + 34} 900 Z"/></g>`; }).join("")}
     </svg>`,
@@ -134,4 +135,16 @@
   mejorar("papas", ['<g class="es-cupula"', rayos(800, "rgba(246,221,143,.35)")], niebla(840, "#0d0a07", .8));
   mejorar("cruzadas", ['<path d="M0 900 L0 690', niebla(560, "#e9a04a", .45)], polvo());
   mejorar("puerta", null, rayos(1300, "rgba(255,226,160,.25)"));
+})();
+
+/* Escena final: cruz muy sutil detrás de REDENCIÓN */
+(function () {
+  if (!window.ESCENAS_SVG) return;
+  window.ESCENAS_SVG.final = `<svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" class="es es-final">
+    <defs><radialGradient id="es-aura" cx="50%" cy="46%" r="40%"><stop offset="0" stop-color="#f6dd8f" stop-opacity=".22"/><stop offset="1" stop-color="#f6dd8f" stop-opacity="0"/></radialGradient>
+      <linearGradient id="es-cruz-oro" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3c9"/><stop offset="1" stop-color="#b8862b"/></linearGradient></defs>
+    <rect width="1600" height="900" fill="#0d0a07"/>
+    <rect width="1600" height="900" fill="url(#es-aura)"/>
+    <g class="es-cruz-sutil" fill="url(#es-cruz-oro)"><rect x="782" y="90" width="36" height="720" rx="4"/><rect x="620" y="260" width="360" height="34" rx="4"/></g>
+  </svg>`;
 })();

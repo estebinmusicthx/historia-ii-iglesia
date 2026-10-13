@@ -31,7 +31,7 @@
     ["1856", "Bogotá", "Llega a Colombia el primer misionero presbiteriano.", "colombia_bogota_xix"],
     ["1948 – 1958", "Colombia", "La Violencia: templos quemados y creyentes evangélicos asesinados.", null],
     ["1981", "Bogotá", "Chet Bitterman, traductor de la Biblia, da su vida.", null],
-    ["Hoy", "Bogotá", "Su sangre te dió libertad…", null]
+    ["Hoy", "Bogotá", "Su sangre te dió redención", null, "final"]
   ];
 
   function recorrido(alTerminar) {
@@ -56,6 +56,10 @@
       $e.classList.remove("in");
       setTimeout(() => {
         $r.querySelector(".rc-anio").textContent = anio; $r.querySelector(".rc-lugar").textContent = lugar; $r.querySelector(".rc-texto").textContent = texto;
+        if (k === ESCENAS.length - 1) {
+          const gotas = [21, 52, 80].map((x, i) => `<i class="rc-gota" style="left:${x}%;--d:${(1.4 + i * 0.35).toFixed(2)}s;--h:${[14, 22, 12][i]}px"></i>`).join("");
+          $r.querySelector(".rc-texto").innerHTML = `<span class="rc-pre">Su sangre te dió</span><span class="rc-redencion" data-t="REDENCIÓN">REDENCIÓN${gotas}</span><cite class="rc-cita">«En el cual tenemos redención por su sangre, la remisión de pecados.» Efesios 1:7</cite>`;
+        }
         const src = img && IMG[img] ? IMG[img].src.replace("/960px-", "/500px-") : "";
         $f.style.backgroundImage = src ? `url('${src}')` : "none"; $f.classList.remove("kb"); void $f.offsetWidth; $f.classList.add("kb");
         const $s = $r.querySelector(".rc-svg"); $s.innerHTML = svg && window.ESCENAS_SVG ? window.ESCENAS_SVG[svg] : ""; $r.classList.toggle("con-svg", !!svg);
@@ -64,7 +68,7 @@
         $luz.style.left = (k / (ESCENAS.length - 1)) * 100 + "%";
         $li.forEach((li, i) => li.classList.toggle("ok", i <= k));
       }, 350);
-      t = setTimeout(siguiente, k === ESCENAS.length - 1 ? 2600 : (ESCENAS[k][4] === "velo" ? 4600 : ESCENAS[k][4] === "cruz" ? 4000 : ESCENAS[k][4] ? 3400 : 2400));
+      t = setTimeout(siguiente, k === ESCENAS.length - 1 ? 5600 : (ESCENAS[k][4] === "velo" ? 4600 : ESCENAS[k][4] === "cruz" ? 4000 : ESCENAS[k][4] ? 3400 : 2400));
     }
     $r.querySelector(".rc-saltar").addEventListener("click", terminar);
     document.addEventListener("keydown", function k2(ev) { if (ev.key === "Escape") { document.removeEventListener("keydown", k2); terminar(); } });
