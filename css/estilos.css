@@ -668,3 +668,10 @@ body.con-portada{overflow:hidden}
 body{background-image:radial-gradient(ellipse at 50% 0%,rgba(216,180,90,.10),transparent 60%),radial-gradient(ellipse at 100% 100%,rgba(140,100,40,.08),transparent 55%)}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .fondo-latin{color:#efd38f;opacity:.05}}
 :root[data-theme="dark"] .fondo-latin{color:#efd38f;opacity:.05}
+
+/* Fondo: menos visible; griego koiné y latín */
+.fondo-latin{opacity:.045}
+.fondo-latin p.fl-el{font-family:"GFS Didot","EB Garamond",serif;font-style:normal;letter-spacing:.04em}
+.fondo-latin p.fl-la{font-family:"IM Fell English","EB Garamond",serif;font-style:italic}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .fondo-latin{opacity:.035}}
+:root[data-theme="dark"] .fondo-latin{opacity:.035}

@@ -521,7 +521,7 @@
         <li>Imágenes: Wikimedia Commons, solo dominio público, CC0, CC BY o CC BY-SA; conservan la licencia de sus autores. Abajo están el autor, la licencia y el enlace de cada una.</li>
         <li>Biblia: al hacer clic en una cita se abre el pasaje en la Reina-Valera 1909 (dominio público), servido por ${ext("https://getbible.net/", "getbible.net")}; cada ventana enlaza también a la Reina-Valera 1960 en BibleGateway (© Sociedades Bíblicas en América Latina), cuyo texto no se reproduce.</li>
         <li>Mapas: datos geográficos de ${ext("https://www.naturalearthdata.com/", "Natural Earth")} (dominio público), vía world-atlas; dibujados con las librerías d3-geo y topojson-client (licencia ISC). Las rutas son aproximadas y resumen hitos ya verificados.</li>
-        <li>Tipografías Cinzel, EB Garamond e IM Fell English (Google Fonts, licencia SIL Open Font License). El fondo muestra versículos de la Vulgata latina (dominio público).</li>
+        <li>Tipografías Cinzel, EB Garamond e IM Fell English (Google Fonts, licencia SIL Open Font License). El fondo muestra palabras de Jesús en griego koiné (texto del Nuevo Testamento griego) y en latín (Vulgata), ambos de dominio público.</li>
       </ul>
       <h2>Bibliografía del curso</h2>
       <p>Obras indicadas en la materia. Tienen derechos de sus autores y editoriales: se citan como referencia y no se reproducen.</p>
@@ -596,17 +596,23 @@
   }
   window.addEventListener("hashchange", ev => { rutaAnterior = ev.oldURL; ruta(); });
 
-  /* ---------- Fondo: versículos de la Vulgata latina (dominio público), desvanecidos ---------- */
-  (function fondoLatin() {
-    const V = ["In principio erat Verbum, et Verbum erat apud Deum, et Deus erat Verbum.", "Iustus autem ex fide vivit.",
-      "Sic enim Deus dilexit mundum, ut Filium suum unigenitum daret.", "Ego sum via, et veritas, et vita.", "Verbum autem Domini manet in aeternum.",
-      "Iesus Christus heri, et hodie: ipse et in saecula.", "Et repleti sunt omnes Spiritu Sancto.", "Consummatum est.",
-      "Et velum templi scissum est in duas partes a summo usque deorsum.", "Gratia enim estis salvati per fidem.",
-      "Dominus regit me, et nihil mihi deerit.", "Lucerna pedibus meis verbum tuum."];
+  /* ---------- Fondo: palabras de Jesús en griego koiné y en latín (Vulgata), dominio público, muy desvanecidas ---------- */
+  (function fondoPalabras() {
+    const V = [
+      ["Ἐγώ εἰμι ἡ ὁδὸς καὶ ἡ ἀλήθεια καὶ ἡ ζωή", "el"], ["Ego sum via, et veritas, et vita.", "la"],
+      ["Τετέλεσται", "el"], ["Consummatum est.", "la"],
+      ["Ἐγώ εἰμι τὸ φῶς τοῦ κόσμου", "el"], ["Ego sum lux mundi.", "la"],
+      ["Ἐγώ εἰμι ἡ ἀνάστασις καὶ ἡ ζωή", "el"], ["Ego sum resurrectio et vita.", "la"],
+      ["Δεῦτε πρός με πάντες οἱ κοπιῶντες καὶ πεφορτισμένοι, κἀγὼ ἀναπαύσω ὑμᾶς", "el"], ["Venite ad me omnes qui laboratis et onerati estis, et ego reficiam vos.", "la"],
+      ["ἵνα ἀγαπᾶτε ἀλλήλους", "el"], ["Ut diligatis invicem.", "la"],
+      ["Ἐγώ εἰμι ὁ ἄρτος τῆς ζωῆς", "el"], ["Ego sum panis vitae.", "la"],
+      ["ἐπὶ ταύτῃ τῇ πέτρᾳ οἰκοδομήσω μου τὴν ἐκκλησίαν", "el"], ["Super hanc petram aedificabo ecclesiam meam.", "la"],
+      ["πορευθέντες μαθητεύσατε πάντα τὰ ἔθνη", "el"], ["Euntes ergo docete omnes gentes.", "la"]
+    ];
     const f = document.createElement("div"); f.className = "fondo-latin"; f.setAttribute("aria-hidden", "true");
     let html = "";
-    for (let i = 0; i < 46; i++) { const t = V[i % V.length], z = [22, 28, 34, 26, 40][i % 5], x = (i * 37) % 60 - 10;
-      html += `<p style="font-size:${z}px;margin-left:${x}%;--r:${((i % 3) - 1) * .6}deg">${t}</p>`; }
+    for (let i = 0; i < 44; i++) { const [t, l] = V[(i * 7) % V.length], z = [22, 28, 34, 26, 38][i % 5], x = (i * 37) % 60 - 10;
+      html += `<p lang="${l}" class="fl-${l}" style="font-size:${z}px;margin-left:${x}%;--r:${((i % 3) - 1) * .6}deg">${t}</p>`; }
     f.innerHTML = html; document.body.prepend(f);
   })();
 
