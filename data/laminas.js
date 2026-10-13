@@ -11,7 +11,7 @@ window.LUGARES = {
 
 window.LAMINAS = {
   cruzadas: {
-    titulo: "Las Cruzadas en el mapa",
+    titulo: "Las Cruzadas en el mapa", prefijo: "Cruzada",
     sub: "Seleccione una cruzada: cambian la ruta, los protagonistas y el resultado.",
     vista: [[-2, 28], [42, 50]],
     items: [

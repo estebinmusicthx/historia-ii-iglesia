@@ -271,9 +271,11 @@
     function completar() {
       const palabras = e => e.t.split(/\s+/).map(w => w.replace(/[(),:;'"«»¿?¡!.]/g, ""));
       const esClave = (w, k) => k > 0 && w.length >= 4 && /^[A-ZÁÉÍÓÚÑ]/.test(w) && !NO_CLAVE.has(w);
-      const pool = [...new Set(evs.flatMap(e => palabras(e).filter(esClave)))];
-      const items = barajar(base.filter(e => palabras(e).some(esClave))).slice(0, 5);
-      if (pool.length < 4 || !items.length) { $p.innerHTML = "<p>No hay suficientes datos para este juego en esta era.</p>"; return; }
+      let pool = [...new Set(evs.flatMap(e => palabras(e).filter(esClave)))];
+      if (pool.length < 8) pool = [...new Set(pool.concat(barajar(EVENTOS.flatMap(e => palabras(e).filter(esClave)))).slice(0, 40))]; // completa opciones con otras eras
+      let items = barajar(base.filter(e => palabras(e).some(esClave))).slice(0, 5);
+      if (items.length < 3) items = barajar(evs.filter(e => palabras(e).some(esClave))).slice(0, 5);
+      if (!items.length) { $j.querySelector('.j-tabs button[data-j="vf"]').click(); return; }
       $p.innerHTML = `<p class="j-ayuda">Elija la palabra que completa cada hito. Tiene hasta 3 intentos.</p>` + items.map(e => {
         const ws = palabras(e), cand = ws.filter(esClave), resp = cand[Math.floor(Math.random() * cand.length)];
         const frase = esc(e.t).replace(new RegExp("(^|[^\\wÁÉÍÓÚáéíóúÑñ])" + escRe(esc(resp)) + "(?![\\wÁÉÍÓÚáéíóúÑñ])"), '$1<span class="j-hueco">______</span>');

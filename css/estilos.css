@@ -345,3 +345,8 @@ dialog.biblia::backdrop{background:rgba(10,8,5,.6);backdrop-filter:blur(3px)}
 .g-item dd p{font-size:17px}
 .g-item .bloque{margin-top:8px;font-size:15px}
 .g-hito{display:inline-block;margin-top:8px;font-size:14px}
+.lam-fronteras path{fill:none;stroke:color-mix(in srgb,#8a7650 55%,transparent);stroke-width:.7;stroke-dasharray:3 2}
+.lam-linea{fill:none;stroke:var(--era);stroke-width:2.5;stroke-dasharray:8 6;opacity:.8}
+.lam-linea-t{font-family:var(--cap);font-weight:700;font-size:16px;fill:var(--era);text-anchor:middle}
+.lam-pasos li{display:flex;flex-direction:column;gap:2px}
+.lam-p-ir{font-size:13px;padding-left:40px}
