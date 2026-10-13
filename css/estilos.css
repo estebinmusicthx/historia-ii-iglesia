@@ -750,3 +750,6 @@ body{background-image:radial-gradient(ellipse at 50% 0%,rgba(216,180,90,.10),tra
 .lt-venida-v cite,.lt-venida-m cite{display:block;margin-top:4px;font-style:normal;font-family:var(--cap);font-size:12px;letter-spacing:.12em;color:#f6dd8f}
 .lt-venida-m{margin-top:16px;font-family:var(--cap);font-weight:700;font-size:clamp(16px,1.8vw,20px);letter-spacing:.04em;color:#fff3c9}
 @media (prefers-reduced-motion:reduce){.lt-venida-luz{animation:none}}
+/* La línea termina en la II Venida de Cristo */
+.lt{padding-bottom:0;margin-bottom:30px}
+.lt-venida{margin-bottom:0}
