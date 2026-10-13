@@ -735,3 +735,18 @@ body{background-image:radial-gradient(ellipse at 50% 0%,rgba(216,180,90,.10),tra
 .lt-fin-v{margin:16px auto 0;max-width:46ch;font-style:italic;color:var(--ink2)}
 .lt-fin-v cite{display:block;margin-top:4px;font-style:normal;font-family:var(--cap);font-size:12px;letter-spacing:.12em;color:var(--oro)}
 .lt-fin-n{display:block;margin-top:12px;color:var(--ink3);font-size:13px}
+
+/* El final de la línea: II Venida de Cristo */
+.lt-venida{position:relative;z-index:2;max-width:760px;margin:90px auto 30px;padding:46px 26px 30px;text-align:center;border-radius:24px;overflow:hidden;color:#fff7e6;
+  background:radial-gradient(ellipse at 50% 0%,#fff3c9 0%,#d8b45a 22%,#5a3f17 60%,#1a130d 100%);border:3px solid #fff3c9;
+  box-shadow:0 0 0 8px rgba(216,180,90,.25),0 0 60px rgba(246,221,143,.45),var(--sombra)}
+.lt-venida-linea{position:absolute;left:50%;top:-90px;width:4px;height:90px;transform:translateX(-50%);background:repeating-linear-gradient(var(--oro) 0 8px,transparent 8px 14px)}
+.lt-venida-luz{position:absolute;left:50%;top:-140px;width:520px;height:520px;transform:translateX(-50%);background:radial-gradient(circle,rgba(255,250,230,.75),rgba(255,250,230,0) 60%);pointer-events:none;animation:venida 4s ease-in-out infinite alternate}
+@keyframes venida{from{opacity:.55;transform:translateX(-50%) scale(.95)}to{opacity:1;transform:translateX(-50%) scale(1.05)}}
+.lt-venida>*:not(.lt-venida-luz):not(.lt-venida-linea){position:relative}
+.lt-venida-k{font-family:var(--cap);font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:#2a1e05;font-weight:700}
+.lt-venida-t{font-family:var(--cap);font-weight:700;font-size:clamp(32px,5vw,58px);line-height:1.05;margin-top:10px;color:#fffaf0;text-shadow:0 2px 0 #b8862b,0 6px 24px rgba(0,0,0,.45)}
+.lt-venida-v{margin:18px auto 0;max-width:50ch;font-style:italic;font-size:clamp(16px,1.8vw,20px);color:#fff7e6}
+.lt-venida-v cite,.lt-venida-m cite{display:block;margin-top:4px;font-style:normal;font-family:var(--cap);font-size:12px;letter-spacing:.12em;color:#f6dd8f}
+.lt-venida-m{margin-top:16px;font-family:var(--cap);font-weight:700;font-size:clamp(16px,1.8vw,20px);letter-spacing:.04em;color:#fff3c9}
+@media (prefers-reduced-motion:reduce){.lt-venida-luz{animation:none}}
