@@ -139,7 +139,7 @@
         const evs = t.ids.map(id => EVENTOS.find(e => e.id === id)).filter(Boolean), nC = evs.filter(e => e.clase).length;
         const conImg = evs.find(e => e.img && IMG[e.img]), anios = evs.map(e => e.a).sort((x, y) => x - y);
         return `<a class="era-card tema-en-eras revela" href="#/tema/${t.id}" style="--c:${t.color}">
-          <div class="foto" style="background-image:url('${esc(conImg ? IMG[conImg.img].src : "")}')">${window.escudoEra ? window.escudoEra({ id: t.icono, color: t.color, nombre: t.titulo }, "escudo-mini") : ""}<span class="num">Tema</span></div>
+          <div class="foto" style="background-image:url('${esc(t.img && IMG[t.img] ? IMG[t.img].src : conImg ? IMG[conImg.img].src : "")}')">${window.escudoEra ? window.escudoEra({ id: t.icono, color: t.color, nombre: t.titulo }, "escudo-mini") : ""}<span class="num">Tema</span></div>
           <div class="cuerpo"><h3>${esc(t.titulo)}</h3><div class="rango">${anios[0]} – ${anios[anios.length - 1] >= 2026 ? "hoy" : anios[anios.length - 1]}</div>
           <div class="cuenta">${evs.length} hitos · <b>${nC} de notas de clase</b></div></div></a>`; };
       const inicioTema = t => Math.min(...t.ids.map(id => (EVENTOS.find(e => e.id === id) || { a: 9999 }).a));
