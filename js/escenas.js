@@ -73,9 +73,16 @@
       <g class="es-hoja"><rect x="690" y="380" width="220" height="290" fill="#efe2bf"/>
         <text x="800" y="440" text-anchor="middle" font-family="Cinzel,serif" font-size="30" font-weight="700" fill="#3a2a10">95 TESIS</text>
         <g stroke="#9b8a63" stroke-width="5">${[480, 510, 540, 570, 600, 630].map(y => `<line x1="715" y1="${y}" x2="885" y2="${y}"/>`).join("")}</g>
-        <circle cx="800" cy="392" r="7" fill="#3a2a10"/></g>
-      <g class="es-martillo"><rect x="840" y="300" width="22" height="170" rx="6" fill="#6b4a26" transform="rotate(-35 851 385)"/>
-        <rect x="792" y="268" width="96" height="42" rx="6" fill="#55595e" transform="rotate(-35 840 289)"/></g>
+        </g><g class="es-clavo"><rect x="808" y="389" width="16" height="6" rx="2" fill="#4a4d52"/><rect x="796" y="384" width="12" height="16" rx="3" fill="#2b2d31"/></g>
+      <g class="es-martillo">
+        <rect x="826" y="384" width="236" height="16" rx="7" fill="#7a5228"/>
+        <rect x="826" y="384" width="236" height="5" rx="2" fill="#9a6c3a" opacity=".7"/>
+        <rect x="1040" y="382" width="26" height="20" rx="6" fill="#4a3018"/>
+        <path d="M806 362 h34 a6 6 0 0 1 6 6 v48 a6 6 0 0 1 -6 6 h-34 z" fill="#5d6268"/>
+        <rect x="806" y="362" width="40" height="9" rx="3" fill="#8a9097"/>
+        <rect x="798" y="370" width="10" height="44" rx="3" fill="#43474c"/>
+      </g>
+      <g class="es-chispas" fill="#ffd36b">${[[0,-26],[-14,-20],[16,-18],[-22,-4],[22,-6]].map(([dx,dy]) => `<circle cx="${800 + dx}" cy="${392 + dy}" r="3"/>`).join("")}</g>
       <rect class="es-golpe" width="1600" height="900" fill="#fff3c9"/>
     </svg>`,
     // Las Cruzadas: jinetes al galope

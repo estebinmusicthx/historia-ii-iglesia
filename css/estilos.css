@@ -778,3 +778,16 @@ body{background-image:radial-gradient(ellipse at 50% 0%,rgba(216,180,90,.10),tra
 .desp-juegos>summary{font-size:clamp(20px,2vw,26px)}
 .desp-juegos>summary span small{display:block;font-family:var(--serif);font-weight:400;font-style:italic;font-size:15px;letter-spacing:0;color:var(--ink3);margin-top:2px}
 .desp-juegos .juegos{margin-top:6px}
+
+/* Martillo rehecho: gira desde el extremo del mango y golpea el clavo */
+.es-martillo{transform-box:view-box;transform-origin:1062px 392px;transform:rotate(38deg);animation:es-martillazo .8s cubic-bezier(.5,0,.2,1) 3 .5s;filter:drop-shadow(0 8px 10px rgba(0,0,0,.45))}
+@keyframes es-martillazo{0%{transform:rotate(38deg)}50%{transform:rotate(48deg)}72%{transform:rotate(0deg)}80%{transform:rotate(5deg)}100%{transform:rotate(38deg)}}
+.es-golpe{animation:es-golpe2 .8s ease-out 3 .5s}
+@keyframes es-golpe2{0%,70%{opacity:0}73%{opacity:.22}100%{opacity:0}}
+.es-hoja{animation:pt-entra .6s .1s ease forwards,es-hoja-tiembla .8s ease-out 3 .5s}
+@keyframes es-hoja-tiembla{0%,70%{transform:none}73%{transform:translate(-3px,1px)}78%{transform:translate(2px,0)}84%{transform:none}}
+.es-clavo{transform-box:view-box;animation:es-clavo 2.4s steps(1) .5s forwards}
+@keyframes es-clavo{0%{transform:none}30%{transform:translateX(-4px)}63%{transform:translateX(-8px)}96%,100%{transform:translateX(-11px)}}
+.es-chispas circle{opacity:0;transform-box:fill-box;animation:es-chispa .8s ease-out 3 .5s}
+@keyframes es-chispa{0%,70%{opacity:0;transform:scale(.3)}73%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.6) translateY(-10px)}}
+@media (prefers-reduced-motion:reduce){.es-martillo{animation:none;transform:rotate(20deg)}.es-chispas circle,.es-clavo,.es-hoja{animation:none}}
