@@ -81,7 +81,7 @@
     $main.innerHTML = `
       <section class="hero"><div class="k">${esc(window.CURSO.escuela)}</div>
         <h1>Historia II<span>${esc(window.CURSO.subtitulo)}</span></h1>
-        <p class="curso">Trabajo realizado en la materia <b>${esc(window.CURSO.titulo)}</b>, de la ${esc(window.CURSO.escuela)}.<br>Docente: <b>${esc(window.CURSO.docente)}</b> · Más referencia: ${ext(window.CURSO.url, "sitio del curso")} <small>(acceso con cuenta institucional)</small></p></section>
+        <p class="curso">Trabajo realizado en la materia <b>${esc(window.CURSO.titulo)}</b><br>${esc(window.CURSO.escuela)}.<br>Docente: <b>${esc(window.CURSO.docente)}</b><br>${ext(window.CURSO.url, "Sitio del curso")} <small>(acceso con cuenta institucional)</small></p></section>
       <h2 class="ley-t">Material de la línea de tiempo basado en</h2>
       <section class="leyenda" aria-label="Material de la línea de tiempo">
         <div class="ley" style="--b:var(--clase-borde);--c:var(--clase)"><b>Notas de clase</b>Transcripción de las notas tomadas en las lecciones dictadas en clase, con la referencia de su página.</div>
