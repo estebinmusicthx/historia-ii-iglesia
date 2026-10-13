@@ -180,13 +180,13 @@ figure.foto-hito figcaption a{color:var(--ink2)}
 /* reformada + repaso */
 .seccion-t{font-size:clamp(20px,2vw,26px);margin:34px 0 12px;color:var(--oro2)}
 .repaso{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
-.carta{perspective:900px;min-height:170px}
-.carta button{position:relative;width:100%;height:100%;min-height:170px;transform-style:preserve-3d;transition:transform .6s;text-align:left}
-.carta.girada button{transform:rotateY(180deg)}
+.carta{perspective:900px;display:flex;flex-direction:column}
+.carta .j-voltear{display:block;position:relative;width:100%;height:100%;min-height:170px;transform-style:preserve-3d;transition:transform .6s;text-align:left}
+.carta.girada .j-voltear{transform:rotateY(180deg)}
 .cara{position:absolute;inset:0;backface-visibility:hidden;border-radius:12px;padding:16px;border:1px solid var(--linea);background:var(--panel);display:flex;flex-direction:column;justify-content:space-between}
 .cara.atras{transform:rotateY(180deg);background:var(--clase-bg);border-color:var(--clase-borde)}
 .cara small{font-family:var(--cap);font-size:11px;letter-spacing:.12em;color:var(--ink3);text-transform:uppercase}
-@media (prefers-reduced-motion:reduce){.carta button{transition:none}}
+@media (prefers-reduced-motion:reduce){.carta .j-voltear{transition:none}}
 
 .nav-eras{display:flex;justify-content:space-between;gap:12px;margin-top:40px}
 .nav-eras a{flex:1;text-decoration:none;border:1px solid var(--linea);border-radius:12px;padding:12px 14px;background:var(--bg2);color:var(--ink)}
