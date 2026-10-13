@@ -1,6 +1,6 @@
 # Historia II - Iglesia medieval, reformada y moderna (Materia Presencial)
 
-Trabajo realizado en la materia **Historia II - Iglesia medieval, reformada y moderna (Materia Presencial)**, Escuela BEREA — El Lugar de Su Presencia. Docente: Andrés Fonseca Ibáñez. Más referencia: https://sites.google.com/supresencia.com/historia2 (acceso con cuenta institucional).
+Trabajo realizado en la materia **Historia II - Iglesia medieval, reformada y moderna (Materia Presencial)**, Escuela Bíblica BEREA — El Lugar de Su Presencia. Docente: Andrés Fonseca Ibáñez. Más referencia: https://sites.google.com/supresencia.com/historia2 (acceso con cuenta institucional).
 
 Línea del tiempo de estudio. Va desde la Iglesia antigua (contexto breve) hasta hoy, con un enfoque especial en la Iglesia evangélica en Colombia.
 
@@ -17,7 +17,7 @@ Línea del tiempo de estudio. Va desde la Iglesia antigua (contexto breve) hasta
 - `data/imagenes.js`: imágenes de Wikimedia Commons con autor, licencia y enlace.
 
 ## Licencias
-- **Contenido reservado a El Lugar de Su Presencia — Escuela BEREA.**
+- **Contenido reservado a El Lugar de Su Presencia — Escuela Bíblica BEREA.**
 - Las imágenes son de Wikimedia Commons (dominio público, CC0, CC BY o CC BY-SA) y conservan la licencia de sus autores. El crédito de cada una aparece junto a la imagen y en la página "Fuentes".
 - Las fuentes complementarias se citan y enlazan; pertenecen a sus respectivos autores.
 - Los versículos solo se enlazan a BibleGateway (RVR1960); el texto bíblico no se reproduce.

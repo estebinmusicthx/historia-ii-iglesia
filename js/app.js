@@ -39,7 +39,7 @@
           <div><h3>${esc(e.t)}</h3><div class="marcas">${chipsOrigen(e)}${(e.tags || []).filter(t => ETIQ[t]).map(t => `<span class="chip">${ETIQ[t]}</span>`).join("")}</div></div></div>
         <div class="t-cuerpo${fig ? "" : " sin-foto"}">
           <div class="t-textos">
-            ${e.clase ? `<div class="bloque b-clase"><div class="et">Notas de clase <small>Historia II · Escuela BEREA${e.nota ? " · " + esc(e.nota) : ""}</small></div><p>${fmt(e.clase)}</p></div>` : ""}
+            ${e.clase ? `<div class="bloque b-clase"><div class="et">Notas de clase <small>Historia II · Escuela Bíblica BEREA${e.nota ? " · " + esc(e.nota) : ""}</small></div><p>${fmt(e.clase)}</p></div>` : ""}
             ${e.prec ? `<div class="bloque b-prec"><div class="et">Precisión histórica <small>la nota se mantiene; esto la corrige o aclara</small></div><p>${esc(e.prec)}</p></div>` : ""}
             ${e.comp ? `<div class="bloque b-comp"><div class="et">Complemento <small>no está en las notas · ver fuentes</small></div><p>${fmt(e.comp)}</p></div>` : ""}
             ${(e.vers || []).length ? `<div class="vers"><b>Biblia:</b> ${e.vers.map(versiculo).join(" ")}</div>` : ""}
@@ -177,7 +177,7 @@
       </ul>
       <h2>Licencias</h2>
       <ul>
-        <li><b>Contenido reservado a El Lugar de Su Presencia — Escuela BEREA.</b> Los resúmenes son redacción propia; las fuentes complementarias se citan y enlazan, no se copian, y pertenecen a sus respectivos autores.</li>
+        <li><b>Contenido reservado a El Lugar de Su Presencia — Escuela Bíblica BEREA.</b> Los resúmenes son redacción propia; las fuentes complementarias se citan y enlazan, no se copian, y pertenecen a sus respectivos autores.</li>
         <li>Imágenes: Wikimedia Commons, solo dominio público, CC0, CC BY o CC BY-SA; conservan la licencia de sus autores. Abajo están el autor, la licencia y el enlace de cada una.</li>
         <li>Biblia: los versículos se enlazan a BibleGateway (Reina-Valera 1960, © Sociedades Bíblicas en América Latina); no se reproduce el texto bíblico salvo frases breves citadas con su referencia.</li>
         <li>Tipografías Cinzel y EB Garamond (Google Fonts, licencia SIL Open Font License).</li>

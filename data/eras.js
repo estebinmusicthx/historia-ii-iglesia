@@ -2,7 +2,7 @@
 window.CURSO = {
   titulo: "Historia II - Iglesia medieval, reformada y moderna (Materia Presencial)",
   subtitulo: "Iglesia medieval, reformada y moderna (Materia Presencial)",
-  escuela: "Escuela BEREA — El Lugar de Su Presencia",
+  escuela: "Escuela Bíblica BEREA — El Lugar de Su Presencia",
   docente: "Andrés Fonseca Ibáñez",
   url: "https://sites.google.com/supresencia.com/historia2",
   creemos: "https://supresencia.com/que-creemos",
