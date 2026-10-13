@@ -447,7 +447,8 @@ details.desp[open]{padding-bottom:14px}
 .sp-cols b{display:block;font-size:16px}
 .sp-cols small{display:block;color:var(--ink3);font-size:14px;line-height:1.35}
 .sp-f{font-family:var(--cap);font-weight:700;font-size:13px;color:var(--sp);min-width:62px}
-.sp-todo{display:inline-block;margin-top:12px;font-size:15px}
+.sp-todo{display:inline-block;margin-top:12px;font-family:var(--cap);font-size:13px;letter-spacing:.06em;padding:8px 16px;border-radius:999px;border:2px solid var(--sp2);color:var(--sp);background:var(--panel)}
+.sp-todo:hover{background:var(--sp2);color:#2a1e05}
 .hito.sp .tarjeta{border:2px solid var(--sp2);box-shadow:0 0 0 4px color-mix(in srgb,var(--sp2) 18%,transparent),var(--sombra)}
 .hito.sp::before{border-color:var(--sp2);background:var(--sp2)}
 .sp-banda{background:linear-gradient(90deg,var(--sp2),color-mix(in srgb,var(--sp2) 55%,var(--panel)));color:#2a1e05;font-size:14px;padding:6px 16px}
@@ -488,3 +489,9 @@ details.desp[open]{padding-bottom:14px}
 .abrir-todo button[aria-pressed="true"]{background:var(--oro)!important;color:var(--bg)!important;box-shadow:0 4px 12px color-mix(in srgb,var(--oro) 40%,transparent)}
 .abrir-todo button::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;border:2px solid currentColor;margin-right:6px;vertical-align:middle}
 .abrir-todo button[aria-pressed="true"]::before{background:currentColor}
+
+.lt-estrella{width:100%;font:inherit;cursor:pointer}
+.sp-panel{position:relative;z-index:2;max-width:980px;margin:-14px auto 30px;animation:sp-abre .35s ease}
+.sp-panel .sp-portada{margin:0}
+.sp-hito{display:block;text-align:center;margin-top:10px;font-size:15px}
+@keyframes sp-abre{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}

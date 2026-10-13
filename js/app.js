@@ -144,11 +144,6 @@
         <div class="ley" style="--b:var(--prec-borde);--c:var(--prec)"><b>Precisión</b>Aclaración con su fuente cuando un dato de las notas difiere de la historia documentada. La nota se conserva.</div>
         <div class="ley" style="--b:var(--comp-borde);--c:var(--comp)"><b>Investigación</b>Información que amplía las notas, tomada de fuentes abiertas, enlazadas y verificadas.</div>
       </section>
-      ${(() => { const EVI = Object.fromEntries(EVENTOS.map(e => [e.id, e])); const fila = x => { const e = EVI[x.id]; return e ? `<li><a href="#/era/${e.era}/${e.id}"><span class="sp-f">${esc(e.f)}</span><span><b>${esc(e.t)}</b><small>${esc(x.porque)}</small></span></a></li>` : ""; };
-        return `<section class="sp-portada" aria-label="El Lugar de Su Presencia en esta historia">
-        <div class="sp-cab"><div class="sp-sello">✦</div><div><h2>El Lugar de Su Presencia en esta historia</h2><p>Este trabajo es para la Escuela Bíblica BEREA. Aquí están los hitos de la propia iglesia y aquellos donde nace o se recupera lo que ella confiesa (${ext(window.CURSO.creemos, "Qué creemos")}).</p></div></div>
-        <div class="sp-cols"><div><h3>Su historia</h3><ol>${SP.historia.map(fila).join("")}</ol></div><div><h3>Raíces de su fe</h3><ol>${SP.fe.map(fila).join("")}</ol></div></div>
-        <a class="sp-todo" href="#/linea" data-tema="supresencia">Ver todos en la línea completa →</a></section>`; })()}
       <section class="regla"><h2>De Pentecostés a hoy</h2>
         <div class="regla-barra">${bloques.map(b => `<a href="${b.r}" title="${b.t} (${b.d}–${b.h === MAX ? "hoy" : b.h})" aria-label="${b.t}" style="width:${pct(b.h) - pct(b.d)}%;background:${b.c}"></a>`).join("")}</div>
         <div class="regla-marcas">${marcas.map(m => `<span style="left:${pct(m)}%">${m === MAX ? "hoy" : m}</span>`).join("")}</div>
@@ -395,6 +390,12 @@
     completar();
   }
 
+  function spSeccion() { const EVI = Object.fromEntries(EVENTOS.map(e => [e.id, e])); const fila = x => { const e = EVI[x.id]; return e ? `<li><a href="#/era/${e.era}/${e.id}"><span class="sp-f">${esc(e.f)}</span><span><b>${esc(e.t)}</b><small>${esc(x.porque)}</small></span></a></li>` : ""; };
+        return `<section class="sp-portada" aria-label="El Lugar de Su Presencia en esta historia">
+        <div class="sp-cab"><div class="sp-sello">✦</div><div><h2>El Lugar de Su Presencia en esta historia</h2><p>Este trabajo es para la Escuela Bíblica BEREA. Aquí están los hitos de la propia iglesia y aquellos donde nace o se recupera lo que ella confiesa (${ext(window.CURSO.creemos, "Qué creemos")}).</p></div></div>
+        <div class="sp-cols"><div><h3>Su historia</h3><ol>${SP.historia.map(fila).join("")}</ol></div><div><h3>Raíces de su fe</h3><ol>${SP.fe.map(fila).join("")}</ol></div></div>
+        <button type="button" class="sp-todo">Filtrar la línea por estos hitos ↓</button></section>`; }
+
   let temaInicial = null;
   document.addEventListener("click", ev => { const a = ev.target.closest("[data-tema]"); if (a) temaInicial = a.dataset.tema; });
   function vistaLinea() {
@@ -426,12 +427,13 @@
         if (s !== siglo) { siglo = s; html += `<div class="lt-siglo"><span>Siglo ${romano(s)}</span></div>`; }
         const im = e.img && IMG[e.img];
         if (e.id === "lugar-presencia") {
-          html += `<a class="lt-estrella revela" href="#/era/${e.era}/${e.id}">
+          html += `<button type="button" class="lt-estrella revela" aria-expanded="false" aria-controls="sp-panel">
             <span class="lt-estrella-sello" aria-hidden="true">✦</span>
             <span class="lt-estrella-k">${esc(e.f)} · Bogotá</span>
             <span class="lt-estrella-t">El Lugar de Su Presencia</span>
             <span class="lt-estrella-p">Andrés y Rocío Corson inician la iglesia en una sala prestada; crece con la adoración de Su Presencia y llega a varias ciudades y países.</span>
-            <span class="lt-estrella-ir">Ver el hito →</span></a>`;
+            <span class="lt-estrella-ir">Ver su lugar en esta historia ▾</span></button>
+            <div id="sp-panel" class="sp-panel" hidden>${spSeccion()}<a class="sp-hito" href="#/era/${e.era}/${e.id}">Abrir el hito de El Lugar de Su Presencia →</a></div>`;
           return;
         }
         html += `<a class="lt-item revela ${lado++ % 2 ? "der" : "izq"}${SPX[e.id] ? " sp" : ""}" href="#/era/${e.era}/${e.id}" style="--c:${era.color}">
@@ -441,6 +443,14 @@
             <span class="lt-meta"><span class="lt-era">${esc(era.nombre)}</span>${chipsOrigen(e)}</span></span></span></a>`;
       });
       $l.innerHTML = html;
+      const $est = $l.querySelector(".lt-estrella");
+      if ($est) {
+        const $pan = $l.querySelector("#sp-panel");
+        $est.addEventListener("click", () => { const abrir = $pan.hidden; $pan.hidden = !abrir; $est.setAttribute("aria-expanded", String(abrir));
+          $est.querySelector(".lt-estrella-ir").textContent = abrir ? "Cerrar ▴" : "Ver su lugar en esta historia ▾"; if (abrir) $pan.scrollIntoView({ block: "nearest", behavior: "smooth" }); });
+        const $sb = $pan.querySelector(".sp-todo");
+        if ($sb) $sb.addEventListener("click", () => { const b = $main.querySelector('#f-tag .f-ops button[data-v="supresencia"]'); if (b) b.click(); $main.querySelector(".filtros").scrollIntoView({ behavior: "smooth" }); });
+      }
       revelar();
     }
     $main.querySelector(".buscar").addEventListener("input", ev => { estado.q = ev.target.value; pintar(); });
