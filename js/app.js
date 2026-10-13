@@ -11,15 +11,54 @@
 
   const ETIQ = { colombia: "Colombia", avivamiento: "Avivamientos", martir: "Mártires", mision: "Misiones", biblia: "Biblia", persona: "Personas", concilio: "Concilios", iglesias: "Iglesias grandes", reflexion: "Reflexión" };
 
-  /* ---------- Versículos → BibleGateway (RVR1960, solo enlace) ---------- */
-  const LIBROS = { "Hch": "Hechos", "Gá": "Gálatas", "Jn": "Juan", "1 Jn": "1 Juan", "Ro": "Romanos", "Éx": "Éxodo", "Ez": "Ezequiel", "Hab": "Habacuc", "Ef": "Efesios", "Col": "Colosenses", "1 Ti": "1 Timoteo", "2 Ti": "2 Timoteo", "Tit": "Tito", "Heb": "Hebreos", "Fil": "Filipenses", "Sal": "Salmos", "Ap": "Apocalipsis", "Mt": "Mateo", "1 Co": "1 Corintios" };
-  function versiculo(ref) {
-    const m = ref.match(/^((?:\d )?[A-Za-zÁÉÍÓÚáéíóú]+)\s+(.+)$/);
-    const libro = m && LIBROS[m[1]] ? LIBROS[m[1]] : null;
-    const q = libro ? `${libro} ${m[2].replace(/\s*–\s*/g, "-")}` : ref;
-    return ext(`https://www.biblegateway.com/passage/?search=${encodeURIComponent(q)}&version=RVR1960`, esc(ref));
+  /* ---------- Biblia: ventana con el pasaje (Reina-Valera 1909, dominio público) ---------- */
+  // [nombre, número de libro]
+  const LIBROS = { "Gn": ["Génesis", 1], "Éx": ["Éxodo", 2], "Sal": ["Salmos", 19], "Ez": ["Ezequiel", 26], "Hab": ["Habacuc", 35], "Zac": ["Zacarías", 38],
+    "Mt": ["Mateo", 40], "Jn": ["Juan", 43], "Hch": ["Hechos", 44], "Ro": ["Romanos", 45], "1 Co": ["1 Corintios", 46], "Gá": ["Gálatas", 48], "Ef": ["Efesios", 49],
+    "Fil": ["Filipenses", 50], "Col": ["Colosenses", 51], "1 Ti": ["1 Timoteo", 54], "2 Ti": ["2 Timoteo", 55], "Tit": ["Tito", 56], "Heb": ["Hebreos", 58],
+    "1 P": ["1 Pedro", 60], "1 Jn": ["1 Juan", 62], "Ap": ["Apocalipsis", 66] };
+  const RE_REF = /^((?:\d )?[A-Za-zÁÉÍÓÚáéíóú]+)\s+(\d+)(?::(\d+)(?:-(\d+))?)?(?:\s*[–-]\s*(\d+))?$/;
+  function parseRef(ref) {
+    const m = ref.trim().match(RE_REF); if (!m || !LIBROS[m[1]]) return null;
+    const [nombre, n] = LIBROS[m[1]], c1 = +m[2], c2 = m[5] && !m[3] ? +m[5] : c1;
+    return { nombre, n, c1, c2, v1: m[3] ? +m[3] : null, v2: m[4] ? +m[4] : (m[3] ? +m[3] : null),
+      texto: `${nombre} ${m[2]}${m[3] ? ":" + m[3] + (m[4] ? "-" + m[4] : "") : ""}${c2 !== c1 ? "–" + c2 : ""}` };
   }
-  window.__versiculoURL = versiculo; // usado por la herramienta de verificación
+  const urlRVR1960 = r => `https://www.biblegateway.com/passage/?search=${encodeURIComponent(r.texto.replace("–", "-"))}&version=RVR1960`;
+  function versiculo(ref) {
+    return parseRef(ref) ? `<button type="button" class="vers-btn" data-ref="${esc(ref)}">${esc(ref)}</button>` : esc(ref);
+  }
+  // Convierte en botones las citas dentro de un texto: "(Ef 5:23; Col 1:18)".
+  const RE_CITA = new RegExp(String.raw`(^|[\s(;])(` + Object.keys(LIBROS).sort((a, b) => b.length - a.length).map(k => k.replace(" ", String.raw`\s`)).join("|") + String.raw`)\s(\d+(?::\d+(?:-\d+)?)?)`, "g");
+  const citas = t => esc(t).replace(RE_CITA, (m, pre, l, r) => pre + versiculo(l.replace(/\s/, " ") + " " + r));
+
+  const cacheCap = {};
+  const capitulo = (n, c) => cacheCap[n + "/" + c] || (cacheCap[n + "/" + c] = fetch(`https://api.getbible.net/v2/valera/${n}/${c}.json`).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }));
+  let $dlg = null;
+  function abrirBiblia(ref) {
+    const r = parseRef(ref); if (!r) return;
+    if (!$dlg) {
+      $dlg = document.createElement("dialog"); $dlg.className = "biblia";
+      $dlg.innerHTML = `<div class="b-cab"><div><h2></h2><small>Reina-Valera 1909 · dominio público</small></div><button type="button" class="b-cerrar" aria-label="Cerrar">✕</button></div>
+        <div class="b-texto" tabindex="0"></div><div class="b-pie"></div>`;
+      document.body.appendChild($dlg);
+      $dlg.querySelector(".b-cerrar").addEventListener("click", () => $dlg.close());
+      $dlg.addEventListener("click", ev => { if (ev.target === $dlg) $dlg.close(); });
+    }
+    $dlg.querySelector("h2").textContent = r.texto;
+    const $t = $dlg.querySelector(".b-texto"); $t.innerHTML = "<p class='b-cargando'>Cargando pasaje…</p>";
+    $dlg.querySelector(".b-pie").innerHTML = `Texto: Reina-Valera 1909 (dominio público), vía ${ext("https://getbible.net/", "getbible.net")} · ${ext(urlRVR1960(r), "Leer en RVR1960 (BibleGateway)")}`;
+    if (!$dlg.open) $dlg.showModal();
+    const caps = []; for (let c = r.c1; c <= r.c2; c++) caps.push(c);
+    Promise.all(caps.map(c => capitulo(r.n, c))).then(datos => {
+      $t.innerHTML = datos.map((d, k) => {
+        const vs = d.verses.filter(v => r.v1 == null || (v.verse >= r.v1 && v.verse <= r.v2));
+        return (caps.length > 1 ? `<h3>Capítulo ${caps[k]}</h3>` : "") + `<p>${vs.map(v => `<sup>${v.verse}</sup>${esc(v.text.trim())}`).join(" ")}</p>`;
+      }).join("");
+      $t.scrollTop = 0;
+    }).catch(() => { $t.innerHTML = `<p>No se pudo cargar el pasaje en este momento. ${ext(urlRVR1960(r), "Ábralo en BibleGateway")}.</p>`; });
+  }
+  document.addEventListener("click", ev => { const b = ev.target.closest(".vers-btn"); if (b) abrirBiblia(b.dataset.ref); });
 
   /* ---------- Piezas ---------- */
   function figura(clave) {
@@ -84,7 +123,7 @@
     });
     $main.innerHTML = `
       <section class="hero"><div class="k">${esc(window.CURSO.escuela)}</div>
-        <h1>Historia II<span>${esc(window.CURSO.subtitulo)}</span></h1></section>
+        <h1>Historia II<span>${esc(window.CURSO.subtitulo.replace(" (Materia Presencial)", ""))}</span><small class="modalidad">(Materia Presencial)</small></h1></section>
       <h2 class="ley-t">Material de consulta de la línea de tiempo con base en:</h2>
       <section class="leyenda" aria-label="Material de la línea de tiempo">
         <div class="ley" style="--b:var(--clase-borde);--c:var(--clase)"><b>Notas de clase</b>Transcripción fiel de lo tomado en cada lección, con la referencia de la página del cuaderno.</div>
@@ -116,16 +155,14 @@
       </section>
       <section class="linea" id="linea">${evs.map(tarjeta).join("")}</section>
       <h2 class="seccion-t">Reflexión de fe</h2>
-      <div class="bloque b-ref"><div class="et">Desde la fe de El Lugar de Su Presencia <small>${ext(window.CURSO.creemos, "ver «Qué creemos»")}</small></div><p>${esc(era.fe)}</p></div>
+      <div class="bloque b-ref"><div class="et">Desde la fe de El Lugar de Su Presencia <small>${ext(window.CURSO.creemos, "ver «Qué creemos»")}</small></div><p>${citas(era.fe)}</p></div>
       <h2 class="seccion-t">Repaso</h2>
-      <div class="repaso">${era.repaso.map((q, k) => `<div class="carta"><button type="button" aria-label="Pregunta ${k + 1}: ${esc(q.p)}. Toque para ver la respuesta.">
-        <span class="cara"><span>${esc(q.p)}</span><small>Toque para ver la respuesta</small></span>
-        <span class="cara atras"><span>${esc(q.r)}</span><small>Respuesta</small></span></button></div>`).join("")}</div>
+      <section class="juegos" id="juegos" aria-label="Juegos de repaso"></section>
       <nav class="nav-eras" aria-label="Eras vecinas">
         ${ant ? `<a href="#/era/${ant.id}"><small>← Anterior</small>${esc(ant.nombre)}</a>` : "<span></span>"}
         ${sig ? `<a class="sig" href="#/era/${sig.id}"><small>Siguiente →</small>${esc(sig.nombre)}</a>` : "<span></span>"}
       </nav>`;
-    $main.querySelectorAll(".carta button").forEach(b => b.addEventListener("click", () => b.parentElement.classList.toggle("girada")));
+    juegos($main.querySelector("#juegos"), era, evs);
     $main.querySelector("#solo-clase").addEventListener("change", ev => {
       $main.querySelectorAll(".hito.solo-comp").forEach(h => h.classList.toggle("oculto", ev.target.checked));
     });
@@ -143,6 +180,177 @@
     });
     $main.querySelectorAll(".abrir-todo button").forEach(b => b.addEventListener("click", () => $main.querySelectorAll(".hito").forEach(h => abrir(h, b.dataset.todo === "1"))));
     if (hitoId) requestAnimationFrame(() => { const h = document.getElementById("h-" + hitoId); if (h) { abrir(h, true); h.classList.add("visible"); h.scrollIntoView({ block: "start" }); } });
+  }
+
+  /* ---------- Juegos de repaso ---------- */
+  const barajar = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const NO_CLAVE = new Set(["Iglesia", "Imperio", "Concilio", "Cruzada", "Reforma", "Edicto", "Batalla", "Gran", "Santo", "Sacro", "Romano", "Las", "Los", "Una", "Del", "Para", "Como"]);
+  const escRe = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const MAX_INTENTOS = 3;
+
+  function juegos($j, era, evs) {
+    const enClase = evs.filter(e => e.clase);
+    const base = enClase.length >= 6 ? enClase : evs; // prioriza lo visto en clase
+    let puntos = 0, total = 0;
+    const clave = "nota-" + era.id;
+    let mejor = null; try { mejor = JSON.parse(localStorage.getItem(clave)); } catch (e) {}
+    $j.innerHTML = `
+      <div class="j-zona">
+        <div class="j-tabs" role="tablist">
+          <button type="button" role="tab" data-j="completar" aria-selected="true">Completar</button>
+          <button type="button" role="tab" data-j="vf" aria-selected="false">¿Verdadero o falso?</button>
+          <button type="button" role="tab" data-j="cuando" aria-selected="false">¿Cuándo fue?</button>
+          <button type="button" role="tab" data-j="ordenar" aria-selected="false">Ordenar</button>
+          <button type="button" role="tab" data-j="preguntas" aria-selected="false">Preguntas</button>
+        </div>
+        <div class="j-panel" aria-live="polite"></div>
+      </div>
+      <aside class="j-nota" aria-label="Nota del repaso">
+        <small>Su nota</small>
+        <div class="j-num">—</div>
+        <div class="j-escala">sobre 5,0</div>
+        <div class="j-barra"><span></span></div>
+        <div class="j-det">0 preguntas respondidas</div>
+        <div class="j-msg">Responda para ver su nota.</div>
+        <div class="j-regla">Primer intento: 1 punto · segundo: ½ · tercero: ¼</div>
+        <div class="j-mejor"></div>
+        <button type="button" class="j-reiniciar">Reiniciar nota</button>
+      </aside>`;
+    const $p = $j.querySelector(".j-panel"), $n = $j.querySelector(".j-nota");
+    const fmtN = n => n.toFixed(1).replace(".", ",");
+    function pintarNota() {
+      const nota = total ? 5 * puntos / total : null;
+      $n.querySelector(".j-num").textContent = nota == null ? "—" : fmtN(nota);
+      $n.querySelector(".j-barra span").style.width = (total ? 100 * puntos / total : 0) + "%";
+      $n.querySelector(".j-det").textContent = `${total} ${total === 1 ? "pregunta respondida" : "preguntas respondidas"}`;
+      $n.querySelector(".j-msg").textContent = nota == null ? "Responda para ver su nota." : nota >= 4.5 ? "¡Excelente!" : nota >= 3.5 ? "Muy bien, siga así." : nota >= 3 ? "Aprobado: repase los hitos que falló." : "A repasar: consulte los hitos sugeridos.";
+      $n.className = "j-nota" + (nota == null ? "" : nota >= 3.5 ? " alta" : nota >= 3 ? " media" : " baja");
+      if (total >= 5 && nota != null && (!mejor || nota > mejor.nota)) { mejor = { nota }; try { localStorage.setItem(clave, JSON.stringify(mejor)); } catch (e) {} }
+      $n.querySelector(".j-mejor").textContent = mejor ? `Mejor nota en esta era: ${fmtN(mejor.nota)}` : "";
+    }
+    const anotar = p => { total++; puntos += p; pintarNota(); };
+    $n.querySelector(".j-reiniciar").addEventListener("click", () => { puntos = 0; total = 0; pintarNota(); });
+    pintarNota();
+
+    const consultar = e => `Consulte la era <b>${esc(eraPorId[e.era].nombre)}</b>, hito ${`<a href="#/era/${e.era}/${e.id}">${esc(e.f)} · ${esc(e.t)}</a>`}.`;
+
+    // Pregunta de opción múltiple con hasta 3 intentos.
+    function opcion(it, e, onAcierto) {
+      let intentos = 0;
+      const maxI = Math.min(MAX_INTENTOS, it.querySelectorAll(".j-ops button").length - 1);
+      const $fb = it.querySelector(".j-fb");
+      it.querySelectorAll(".j-ops button").forEach(b => b.addEventListener("click", () => {
+        if (it.classList.contains("hecho") || b.disabled) return;
+        intentos++;
+        if (b.dataset.v === it.dataset.r) {
+          b.classList.add("si"); it.classList.add("hecho", "bien");
+          it.querySelectorAll(".j-ops button").forEach(x => x.disabled = true);
+          $fb.innerHTML = intentos === 1 ? "¡Correcto!" : `¡Correcto, al intento ${intentos}!`;
+          anotar(intentos === 1 ? 1 : intentos === 2 ? .5 : .25);
+          if (onAcierto) onAcierto();
+        } else if (intentos >= maxI) {
+          b.classList.add("no"); it.classList.add("hecho", "mal");
+          it.querySelectorAll(".j-ops button").forEach(x => { x.disabled = true; if (x.dataset.v === it.dataset.r) x.classList.add("si"); });
+          $fb.innerHTML = `La respuesta correcta es <b>${esc(it.dataset.r)}</b>. ${consultar(e)}`;
+          anotar(0);
+          if (onAcierto) onAcierto();
+        } else {
+          b.classList.add("no"); b.disabled = true;
+          $fb.innerHTML = `No es correcto. Le quedan ${maxI - intentos} ${maxI - intentos === 1 ? "intento" : "intentos"}. Pista: ${consultar(e)}`;
+        }
+      }));
+    }
+    const otra = fn => `<button type="button" class="j-otra" data-otra="${fn}">Otra ronda</button>`;
+    const enlazarOtra = fn => $p.querySelector(".j-otra").addEventListener("click", fn);
+
+    // 1. Completar: falta una palabra clave del título del hito.
+    function completar() {
+      const palabras = e => e.t.split(/\s+/).map(w => w.replace(/[(),:;'"«»¿?¡!.]/g, ""));
+      const esClave = (w, k) => k > 0 && w.length >= 4 && /^[A-ZÁÉÍÓÚÑ]/.test(w) && !NO_CLAVE.has(w);
+      const pool = [...new Set(evs.flatMap(e => palabras(e).filter(esClave)))];
+      const items = barajar(base.filter(e => palabras(e).some(esClave))).slice(0, 5);
+      if (pool.length < 4 || !items.length) { $p.innerHTML = "<p>No hay suficientes datos para este juego en esta era.</p>"; return; }
+      $p.innerHTML = `<p class="j-ayuda">Elija la palabra que completa cada hito. Tiene hasta 3 intentos.</p>` + items.map(e => {
+        const ws = palabras(e), cand = ws.filter(esClave), resp = cand[Math.floor(Math.random() * cand.length)];
+        const frase = esc(e.t).replace(new RegExp("(^|[^\\wÁÉÍÓÚáéíóúÑñ])" + escRe(esc(resp)) + "(?![\\wÁÉÍÓÚáéíóúÑñ])"), '$1<span class="j-hueco">______</span>');
+        const ops = barajar([resp, ...barajar(pool.filter(w => w !== resp && !ws.includes(w))).slice(0, 3)]);
+        return `<div class="j-item" data-id="${e.id}" data-r="${esc(resp)}"><div class="j-q"><span class="j-f">${esc(e.f)}</span> ${frase}</div>
+          <div class="j-ops">${ops.map(o => `<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div><div class="j-fb"></div></div>`;
+      }).join("") + otra("completar");
+      $p.querySelectorAll(".j-item").forEach(it => { const e = evs.find(x => x.id === it.dataset.id); opcion(it, e, () => { const h = it.querySelector(".j-hueco"); if (h) h.textContent = it.dataset.r; }); });
+      enlazarOtra(completar);
+    }
+    // 2. Verdadero o falso sobre la fecha de un hito.
+    function vf() {
+      const fechas = [...new Set(evs.map(x => x.f).filter(f => /\d/.test(f)))];
+      const items = barajar(base.filter(e => /\d/.test(e.f))).slice(0, 6).map(e => {
+        const verdad = Math.random() < .5 || fechas.length < 2;
+        const f = verdad ? e.f : barajar(fechas.filter(x => x !== e.f))[0];
+        return { e, f, verdad };
+      });
+      $p.innerHTML = `<p class="j-ayuda">¿La fecha corresponde al hito? Responda verdadero o falso.</p>` + items.map(({ e, f, verdad }) =>
+        `<div class="j-item" data-id="${e.id}" data-r="${verdad ? "Verdadero" : "Falso"}"><div class="j-q"><b>${esc(e.t)}</b> ocurrió en <span class="j-f">${esc(f)}</span>.</div>
+          <div class="j-ops"><button type="button" data-v="Verdadero">Verdadero</button><button type="button" data-v="Falso">Falso</button></div><div class="j-fb"></div></div>`).join("") + otra("vf");
+      $p.querySelectorAll(".j-item").forEach((it, k) => {
+        const { e } = items[k];
+        it.querySelectorAll(".j-ops button").forEach(b => b.addEventListener("click", () => {
+          if (it.classList.contains("hecho")) return;
+          const bien = b.dataset.v === it.dataset.r;
+          it.classList.add("hecho", bien ? "bien" : "mal"); b.classList.add(bien ? "si" : "no");
+          it.querySelectorAll(".j-ops button").forEach(x => x.disabled = true);
+          it.querySelector(".j-fb").innerHTML = bien ? "¡Correcto!" : `Es <b>${it.dataset.r.toLowerCase()}</b>: la fecha correcta es ${esc(e.f)}. ${consultar(e)}`;
+          anotar(bien ? 1 : 0);
+        }));
+      });
+      enlazarOtra(vf);
+    }
+    // 3. ¿Cuándo fue? Elegir la fecha correcta.
+    function cuando() {
+      const items = barajar(base).slice(0, 5);
+      $p.innerHTML = `<p class="j-ayuda">¿En qué fecha ocurrió cada hito? Tiene hasta 3 intentos.</p>` + items.map(e => {
+        const ops = barajar([e.f, ...barajar([...new Set(evs.map(x => x.f).filter(f => f !== e.f && /\d/.test(f)))]).slice(0, 3)]);
+        return `<div class="j-item" data-id="${e.id}" data-r="${esc(e.f)}"><div class="j-q">${esc(e.t)}</div>
+          <div class="j-ops">${ops.map(o => `<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div><div class="j-fb"></div></div>`;
+      }).join("") + otra("cuando");
+      $p.querySelectorAll(".j-item").forEach(it => opcion(it, evs.find(x => x.id === it.dataset.id)));
+      enlazarOtra(cuando);
+    }
+    // 4. Ordenar: tocar los hitos del más antiguo al más reciente.
+    function ordenar() {
+      const elegidos = [], usados = new Set();
+      for (const e of barajar(base)) { if (!usados.has(e.a)) { usados.add(e.a); elegidos.push(e); } if (elegidos.length === 5) break; }
+      const correcto = elegidos.slice().sort((a, b) => a.a - b.a).map(e => e.id);
+      const sel = [];
+      $p.innerHTML = `<p class="j-ayuda">Toque los hitos en orden, del más antiguo al más reciente.</p>
+        <div class="j-orden">${barajar(elegidos).map(e => `<button type="button" data-id="${e.id}"><span class="j-pos"></span>${esc(e.t)}</button>`).join("")}</div>
+        <div class="j-fb"></div>` + otra("ordenar");
+      $p.querySelectorAll(".j-orden button").forEach(b => b.addEventListener("click", () => {
+        if (b.disabled) return; sel.push(b.dataset.id); b.disabled = true; b.querySelector(".j-pos").textContent = sel.length;
+        if (sel.length < correcto.length) return;
+        const malos = [];
+        sel.forEach((id, k) => { const bb = $p.querySelector(`.j-orden button[data-id="${id}"]`), bien = id === correcto[k]; bb.classList.add(bien ? "si" : "no"); if (!bien) malos.push(id); anotar(bien ? 1 : 0); });
+        $p.querySelector(".j-fb").innerHTML = `<b>${correcto.length - malos.length} de ${correcto.length} en su lugar.</b><ol class="j-correcto">` +
+          correcto.map(id => { const e = evs.find(x => x.id === id); return `<li${malos.includes(id) ? ' class="j-fallo"' : ""}><a href="#/era/${e.era}/${e.id}">${esc(e.f)} · ${esc(e.t)}</a></li>`; }).join("") + "</ol>" +
+          (malos.length ? "Revise los hitos marcados para ubicarlos mejor en el tiempo." : "¡Orden perfecto!");
+      }));
+      enlazarOtra(ordenar);
+    }
+    // 5. Preguntas abiertas: piense, voltee y califíquese.
+    function preguntas() {
+      $p.innerHTML = `<p class="j-ayuda">Piense la respuesta, voltee la tarjeta y califíquese con honestidad.</p><div class="repaso">${era.repaso.map((q, k) => `<div class="carta"><button type="button" class="j-voltear" aria-label="Pregunta ${k + 1}: ${esc(q.p)}. Toque para ver la respuesta.">
+        <span class="cara"><span>${esc(q.p)}</span><small>Toque para ver la respuesta</small></span>
+        <span class="cara atras"><span>${esc(q.r)}</span><small>Respuesta</small></span></button>
+        <div class="j-auto"><button type="button" data-v="1">✓ La sabía</button><button type="button" data-v="0">✗ No la sabía</button></div></div>`).join("")}</div>`;
+      $p.querySelectorAll(".carta").forEach(c => {
+        c.querySelector(".j-voltear").addEventListener("click", () => c.classList.toggle("girada"));
+        c.querySelectorAll(".j-auto button").forEach(b => b.addEventListener("click", () => { if (c.classList.contains("calificada")) return; c.classList.add("calificada", b.dataset.v === "1" ? "bien" : "mal", "girada"); anotar(b.dataset.v === "1" ? 1 : 0); }));
+      });
+    }
+    const J = { completar, vf, cuando, ordenar, preguntas };
+    $j.querySelectorAll(".j-tabs button").forEach(t => t.addEventListener("click", () => {
+      $j.querySelectorAll(".j-tabs button").forEach(x => x.setAttribute("aria-selected", String(x === t))); J[t.dataset.j]();
+    }));
+    completar();
   }
 
   function vistaLinea() {
@@ -195,7 +403,7 @@
       <ul>
         <li><b>Contenido reservado a El Lugar de Su Presencia — Escuela Bíblica BEREA.</b> Los resúmenes son redacción propia; las fuentes complementarias se citan y enlazan, no se copian, y pertenecen a sus respectivos autores.</li>
         <li>Imágenes: Wikimedia Commons, solo dominio público, CC0, CC BY o CC BY-SA; conservan la licencia de sus autores. Abajo están el autor, la licencia y el enlace de cada una.</li>
-        <li>Biblia: los versículos se enlazan a BibleGateway (Reina-Valera 1960, © Sociedades Bíblicas en América Latina); no se reproduce el texto bíblico salvo frases breves citadas con su referencia.</li>
+        <li>Biblia: al hacer clic en una cita se abre el pasaje en la Reina-Valera 1909 (dominio público), servido por ${ext("https://getbible.net/", "getbible.net")}; cada ventana enlaza también a la Reina-Valera 1960 en BibleGateway (© Sociedades Bíblicas en América Latina), cuyo texto no se reproduce.</li>
         <li>Tipografías Cinzel y EB Garamond (Google Fonts, licencia SIL Open Font License).</li>
       </ul>
       <h2>Fuentes de los complementos (${todas.size})</h2>

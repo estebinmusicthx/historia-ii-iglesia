@@ -232,3 +232,62 @@ figure.foto-hito figcaption a{color:var(--ink2)}
 /* ===== Pie ===== */
 .pie{border-top:1px solid var(--linea);padding:24px 16px 70px;text-align:center;color:var(--ink3);font-size:15px}
 .pie p{max-width:80ch;margin:4px auto}
+
+/* ===== Ventana de la Biblia ===== */
+.vers-btn{font:inherit;color:var(--oro2);text-decoration:underline;text-underline-offset:2px;padding:0 2px;margin-right:6px;cursor:pointer;white-space:nowrap}
+.vers-btn:hover{color:var(--oro)}
+dialog.biblia{border:1px solid var(--linea);border-radius:16px;background:var(--panel);color:var(--ink);padding:0;width:min(720px,calc(100% - 32px));max-height:min(80vh,760px);box-shadow:0 30px 80px rgba(0,0,0,.5)}
+dialog.biblia[open]{display:flex;flex-direction:column}
+dialog.biblia::backdrop{background:rgba(10,8,5,.6);backdrop-filter:blur(3px)}
+.b-cab{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:16px 20px 12px;border-bottom:1px solid var(--linea);background:var(--bg2)}
+.b-cab h2{font-size:22px;color:var(--oro2)}
+.b-cab small{color:var(--ink3);font-size:14px}
+.b-cerrar{width:36px;height:36px;border-radius:50%;border:1px solid var(--linea);color:var(--ink2);flex-shrink:0}
+.b-texto{padding:16px 22px;overflow-y:auto;font-size:19px;line-height:1.75}
+.b-texto h3{font-size:15px;letter-spacing:.1em;color:var(--ink3);margin:10px 0 4px}
+.b-texto sup{font-family:var(--cap);font-size:.62em;color:var(--oro);margin:0 3px 0 6px}
+.b-cargando{color:var(--ink3);font-style:italic}
+.b-pie{padding:10px 20px 14px;border-top:1px solid var(--linea);font-size:14px;color:var(--ink3)}
+
+/* ===== Juegos de repaso ===== */
+.juegos{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:18px;align-items:start}
+@media (max-width:820px){.juegos{grid-template-columns:1fr}.j-nota{order:-1;position:static!important}}
+.j-zona{background:var(--panel);border:1px solid var(--linea);border-radius:14px;padding:14px 16px;box-shadow:var(--sombra);min-width:0}
+.j-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.j-tabs button{font-family:var(--cap);font-size:13px;letter-spacing:.04em;padding:7px 14px;border-radius:999px;border:1px solid var(--linea);color:var(--ink2)}
+.j-tabs button[aria-selected="true"]{background:var(--era);border-color:var(--era);color:#fff}
+.j-ayuda{color:var(--ink3);font-style:italic;font-size:16px;margin-bottom:8px}
+.j-item{border-top:1px solid var(--linea);padding:12px 0}
+.j-q{font-size:18px;margin-bottom:8px}
+.j-f{font-family:var(--cap);font-size:13px;color:var(--era);margin-right:4px}
+.j-hueco{display:inline-block;min-width:90px;border-bottom:2px dashed var(--oro);color:var(--oro2);font-weight:600;text-align:center}
+.j-ops{display:flex;gap:8px;flex-wrap:wrap}
+.j-ops button,.j-orden button{border:1px solid var(--linea);background:var(--bg2);border-radius:10px;padding:7px 12px;font-size:16px;text-align:left;transition:background .2s,border-color .2s,transform .15s}
+.j-ops button:hover:not(:disabled),.j-orden button:hover:not(:disabled){border-color:var(--oro);transform:translateY(-1px)}
+.j-ops button.si,.j-orden button.si{background:#2f7a4a;border-color:#2f7a4a;color:#fff}
+.j-ops button.no,.j-orden button.no{background:#a53b2c;border-color:#a53b2c;color:#fff;opacity:.85}
+.j-ops button:disabled:not(.si):not(.no){opacity:.5}
+.j-fb{font-size:15px;margin-top:8px;color:var(--ink2);min-height:1px}
+.j-item.bien .j-fb{color:#2f7a4a}
+.j-otra,.j-reiniciar{margin-top:12px;font-family:var(--cap);font-size:12px;letter-spacing:.06em;padding:7px 14px;border-radius:999px;border:1px solid var(--oro);color:var(--oro2)}
+.j-orden{display:flex;flex-direction:column;gap:8px}
+.j-orden button{display:flex;gap:10px;align-items:center}
+.j-pos{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;border:1px solid var(--linea);font-family:var(--cap);font-size:13px;flex-shrink:0}
+.j-correcto{margin:6px 0 6px 22px}
+.j-correcto .j-fallo a{color:#a53b2c;font-weight:600}
+.j-auto{display:flex;gap:6px;margin-top:6px}
+.j-auto button{flex:1;font-size:14px;padding:5px;border-radius:8px;border:1px solid var(--linea);color:var(--ink2)}
+.carta.calificada.bien .j-auto button[data-v="1"]{background:#2f7a4a;color:#fff;border-color:#2f7a4a}
+.carta.calificada.mal .j-auto button[data-v="0"]{background:#a53b2c;color:#fff;border-color:#a53b2c}
+.j-nota{position:sticky;top:80px;background:var(--panel);border:1px solid var(--linea);border-top:5px solid var(--era);border-radius:14px;padding:16px;text-align:center;box-shadow:var(--sombra)}
+.j-nota small{font-family:var(--cap);letter-spacing:.2em;text-transform:uppercase;color:var(--ink3);font-size:12px}
+.j-num{font-family:var(--cap);font-weight:700;font-size:56px;line-height:1.1;color:var(--ink)}
+.j-nota.alta .j-num{color:#2f7a4a}.j-nota.media .j-num{color:#b8862b}.j-nota.baja .j-num{color:#a53b2c}
+.j-escala{color:var(--ink3);font-size:14px}
+.j-barra{height:8px;border-radius:4px;background:var(--linea);margin:10px 0 6px;overflow:hidden}
+.j-barra span{display:block;height:100%;background:var(--era);transition:width .4s}
+.j-det{font-size:15px;color:var(--ink2)}
+.j-msg{font-size:15px;margin-top:4px;font-style:italic}
+.j-regla{font-size:12px;color:var(--ink3);margin-top:8px}
+.j-mejor{font-size:13px;color:var(--ink3);margin-top:6px}
+.hero h1 .modalidad{display:block;font-family:var(--cap);font-size:.2em;letter-spacing:.18em;color:var(--ink3);font-weight:500;margin-top:.6em;text-transform:uppercase}
