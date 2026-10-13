@@ -420,6 +420,15 @@
         const era = eraPorId[e.era], s = Math.max(1, Math.ceil(e.a / 100));
         if (s !== siglo) { siglo = s; html += `<div class="lt-siglo"><span>Siglo ${romano(s)}</span></div>`; }
         const im = e.img && IMG[e.img];
+        if (e.id === "lugar-presencia") {
+          html += `<a class="lt-estrella revela" href="#/era/${e.era}/${e.id}">
+            <span class="lt-estrella-sello" aria-hidden="true">✦</span>
+            <span class="lt-estrella-k">${esc(e.f)} · Bogotá</span>
+            <span class="lt-estrella-t">El Lugar de Su Presencia</span>
+            <span class="lt-estrella-p">Andrés y Rocío Corson inician la iglesia en una sala prestada; crece con la adoración de Su Presencia y llega a varias ciudades y países.</span>
+            <span class="lt-estrella-ir">Ver el hito →</span></a>`;
+          return;
+        }
         html += `<a class="lt-item revela ${lado++ % 2 ? "der" : "izq"}${SPX[e.id] ? " sp" : ""}" href="#/era/${e.era}/${e.id}" style="--c:${era.color}">
           <span class="lt-punto" aria-hidden="true"></span>
           <span class="lt-tarjeta">${im ? `<img loading="lazy" src="${esc(im.src)}" alt="">` : ""}
