@@ -84,9 +84,9 @@
         <p class="curso">Trabajo realizado en la materia <b>${esc(window.CURSO.titulo)}</b><br>${esc(window.CURSO.escuela)}.<br>Docente: <b>${esc(window.CURSO.docente)}</b><br>${ext(window.CURSO.url, "Sitio del curso")} <small>(acceso con cuenta institucional)</small></p></section>
       <h2 class="ley-t">Material de la línea de tiempo basado en</h2>
       <section class="leyenda" aria-label="Material de la línea de tiempo">
-        <div class="ley" style="--b:var(--clase-borde);--c:var(--clase)"><b>Notas de clase</b>Transcripción de las notas tomadas en las lecciones dictadas en clase, con la referencia de su página.</div>
-        <div class="ley" style="--b:var(--prec-borde);--c:var(--prec)"><b>Precisión</b>Cuando alguna nota difiere de la historia documentada, se hace la aclaración con su fuente.</div>
-        <div class="ley" style="--b:var(--comp-borde);--c:var(--comp)"><b>Complemento</b>Adiciones necesarias, con fuentes abiertas enlazadas y verificadas.</div>
+        <div class="ley" style="--b:var(--clase-borde);--c:var(--clase)"><b>Notas de clase</b>Transcripción fiel de lo tomado en cada lección, con la referencia de la página del cuaderno.</div>
+        <div class="ley" style="--b:var(--prec-borde);--c:var(--prec)"><b>Precisión</b>Aclaración con su fuente cuando un dato de las notas difiere de la historia documentada. La nota se conserva.</div>
+        <div class="ley" style="--b:var(--comp-borde);--c:var(--comp)"><b>Complemento</b>Información que amplía las notas, tomada de fuentes abiertas, enlazadas y verificadas.</div>
       </section>
       <section class="regla"><h2>De Pentecostés a hoy</h2>
         <div class="regla-barra">${bloques.map(b => `<a href="${b.r}" title="${b.t} (${b.d}–${b.h === MAX ? "hoy" : b.h})" aria-label="${b.t}" style="width:${pct(b.h) - pct(b.d)}%;background:${b.c}"></a>`).join("")}</div>
