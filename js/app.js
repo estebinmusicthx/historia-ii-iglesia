@@ -79,14 +79,15 @@
       }).join("") + `</div>`;
     });
     $main.innerHTML = `
-      <section class="hero"><div class="k">${esc(window.CURSO.titulo)}</div>
-        <h1>Historia de la Iglesia<span>${esc(window.CURSO.subtitulo)}</span></h1>
+      <section class="hero"><div class="k">${esc(window.CURSO.escuela)}</div>
+        <h1>Historia II<span>${esc(window.CURSO.subtitulo)}</span></h1>
         <p>${esc(window.CURSO.nota)}</p>
-        <p class="curso">Trabajo realizado en la materia <b>${esc(window.CURSO.titulo)}: ${esc(window.CURSO.subtitulo)}</b>, de la ${esc(window.CURSO.escuela)}.<br>Docente: <b>${esc(window.CURSO.docente)}</b> · Más referencia: ${ext(window.CURSO.url, "sitio del curso")} <small>(acceso con cuenta institucional)</small></p></section>
-      <section class="leyenda" aria-label="Cómo leer esta línea del tiempo">
-        <div class="ley" style="--b:var(--clase-borde);--c:var(--clase)"><b>Notas de clase</b>Es el material que manda. Se transcribe tal como se tomó en clase, con su página.</div>
-        <div class="ley" style="--b:var(--prec-borde);--c:var(--prec)"><b>Precisión</b>Cuando la historia difiere de la nota, se aclara aquí con su fuente, y se sigue con la nota.</div>
-        <div class="ley" style="--b:var(--comp-borde);--c:var(--comp)"><b>Complemento</b>Lo que no está en las notas, con fuentes abiertas enlazadas y verificadas.</div>
+        <p class="curso">Trabajo realizado en la materia <b>${esc(window.CURSO.titulo)}</b>, de la ${esc(window.CURSO.escuela)}.<br>Docente: <b>${esc(window.CURSO.docente)}</b> · Más referencia: ${ext(window.CURSO.url, "sitio del curso")} <small>(acceso con cuenta institucional)</small></p></section>
+      <h2 class="ley-t">Material de la línea de tiempo basado en</h2>
+      <section class="leyenda" aria-label="Material de la línea de tiempo">
+        <div class="ley" style="--b:var(--clase-borde);--c:var(--clase)"><b>Notas de clase</b>Transcripción de las notas tomadas en las lecciones dictadas en clase, con la referencia de su página.</div>
+        <div class="ley" style="--b:var(--prec-borde);--c:var(--prec)"><b>Precisión</b>Cuando alguna nota difiere de la historia documentada, se hace la aclaración con su fuente.</div>
+        <div class="ley" style="--b:var(--comp-borde);--c:var(--comp)"><b>Complemento</b>Adiciones necesarias, con fuentes abiertas enlazadas y verificadas.</div>
       </section>
       <section class="regla"><h2>De Pentecostés a hoy</h2>
         <div class="regla-barra">${bloques.map(b => `<a href="${b.r}" title="${b.t} (${b.d}–${b.h === MAX ? "hoy" : b.h})" aria-label="${b.t}" style="width:${pct(b.h) - pct(b.d)}%;background:${b.c}"></a>`).join("")}</div>
@@ -111,8 +112,8 @@
         <label class="filtro-era"><input type="checkbox" id="solo-clase"> Ver solo los hitos que están en las notas de clase</label>
       </section>
       <section class="linea" id="linea">${evs.map(tarjeta).join("")}</section>
-      <h2 class="seccion-t">Lectura reformada</h2>
-      <div class="bloque b-ref"><div class="et">Perspectiva protestante reformada</div><p>${esc(era.reformada)}</p></div>
+      <h2 class="seccion-t">Reflexión de fe</h2>
+      <div class="bloque b-ref"><div class="et">Desde la fe de El Lugar de Su Presencia <small>${ext(window.CURSO.creemos, "ver «Qué creemos»")}</small></div><p>${esc(era.fe)}</p></div>
       <h2 class="seccion-t">Repaso</h2>
       <div class="repaso">${era.repaso.map((q, k) => `<div class="carta"><button type="button" aria-label="Pregunta ${k + 1}: ${esc(q.p)}. Toque para ver la respuesta.">
         <span class="cara"><span>${esc(q.p)}</span><small>Toque para ver la respuesta</small></span>
@@ -169,16 +170,16 @@
       <h1>Fuentes y créditos</h1>
       <h2>Cómo se construyó</h2>
       <ul>
-        <li><b>Curso:</b> Historia II (Presencial): Iglesia medieval, reformada y moderna. ${esc(window.CURSO.escuela)}. Docente: ${esc(window.CURSO.docente)}. Más referencia: ${ext(window.CURSO.url, "sitio del curso")} (acceso con cuenta institucional).</li>
+        <li><b>Curso:</b> ${esc(window.CURSO.titulo)}. ${esc(window.CURSO.escuela)}. Docente: ${esc(window.CURSO.docente)}. Más referencia: ${ext(window.CURSO.url, "sitio del curso")} (acceso con cuenta institucional).</li>
         <li><b>Material mandante:</b> las notas de clase tomadas en ese curso. Se transcribieron tal como fueron tomadas; cada hito indica la tanda y la página de las notas. ${nClase} de ${EVENTOS.length} hitos vienen de las notas.</li>
         <li><b>Precisiones (${nPrec}):</b> cuando una fecha o un dato de las notas no coincide con la historia documentada, la nota se conserva y se añade la corrección con su fuente.</li>
         <li><b>Complementos:</b> lo que no está en las notas se tomó de fuentes abiertas (Wikipedia, archivos históricos, prensa y estudios académicos). Cada complemento se verificó contra su fuente y cada enlace se comprobó.</li>
-        <li><b>Perspectiva:</b> las secciones "Lectura reformada" son una interpretación desde la tradición protestante reformada, con respeto por las demás tradiciones; no son dato histórico ni posición oficial del curso o de la escuela.</li>
+        <li><b>Perspectiva:</b> la de El Lugar de Su Presencia, iglesia evangélica de Bogotá: la Biblia como Palabra de Dios y autoridad, un solo Dios en tres personas, salvación por arrepentimiento y fe en Jesucristo, llenura del Espíritu Santo y dones del Espíritu activos hoy (${ext(window.CURSO.creemos, "Qué creemos")}). Las secciones "Reflexión de fe" son aplicación devocional; los hechos históricos van con su fuente.</li>
       </ul>
       <h2>Licencias</h2>
       <ul>
-        <li>Textos de este sitio: <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.es" target="_blank" rel="noopener">CC BY-SA 4.0</a>. Los resúmenes son redacción propia; las fuentes se citan y enlazan, no se copian.</li>
-        <li>Imágenes: Wikimedia Commons, solo dominio público, CC0, CC BY o CC BY-SA. Abajo están el autor, la licencia y el enlace de cada una.</li>
+        <li><b>Contenido reservado a El Lugar de Su Presencia — Escuela BEREA.</b> Los resúmenes son redacción propia; las fuentes complementarias se citan y enlazan, no se copian, y pertenecen a sus respectivos autores.</li>
+        <li>Imágenes: Wikimedia Commons, solo dominio público, CC0, CC BY o CC BY-SA; conservan la licencia de sus autores. Abajo están el autor, la licencia y el enlace de cada una.</li>
         <li>Biblia: los versículos se enlazan a BibleGateway (Reina-Valera 1960, © Sociedades Bíblicas en América Latina); no se reproduce el texto bíblico salvo frases breves citadas con su referencia.</li>
         <li>Tipografías Cinzel y EB Garamond (Google Fonts, licencia SIL Open Font License).</li>
       </ul>
@@ -230,7 +231,7 @@
     if (!(p[0] === "era" && p[2])) window.scrollTo(0, 0);
     revelar();
     const era = p[0] === "era" && eraPorId[p[1]];
-    document.title = era ? `${era.nombre} · Historia II` : "Historia II · Iglesia medieval, reformada y moderna";
+    document.title = era ? `${era.nombre} · Historia II` : "Historia II - Iglesia medieval, reformada y moderna (Materia Presencial)";
   }
   window.addEventListener("hashchange", ruta);
 

@@ -67,6 +67,7 @@ main{max-width:1180px;margin:0 auto;padding:0 16px 80px;outline:none}
 .hero .curso{font-style:normal;font-size:16px;line-height:1.55;max-width:66ch;margin-top:16px;padding-top:14px;border-top:1px solid var(--linea)}
 .hero .curso small{color:var(--ink3)}
 
+.ley-t{font-size:15px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink3);text-align:center;margin-top:18px;font-weight:500}
 .leyenda{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px 0 34px}
 .ley{border:1px solid var(--linea);border-left:4px solid var(--b);background:var(--bg2);border-radius:10px;padding:12px 14px;font-size:16px}
 .ley b{font-family:var(--cap);font-size:13px;letter-spacing:.08em;display:block;color:var(--c);margin-bottom:2px}
