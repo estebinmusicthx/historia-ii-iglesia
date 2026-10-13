@@ -99,6 +99,16 @@
   }
   const rango = era => `${era.desde} – ${era.id === "moderna" || era.id === "colombia" ? "hoy" : era.hasta}`;
 
+  /* ---------- Navegación: volver y ruta ---------- */
+  let rutaAnterior = null;
+  const migas = partes => `<nav class="migas" aria-label="Ruta de navegación">
+    <button type="button" class="volver" data-volver>← Volver</button>
+    <ol><li><a href="#/">Inicio</a></li>${partes.map((p, i) => `<li>${p[1] && i < partes.length - 1 ? `<a href="${p[1]}">${esc(p[0])}</a>` : `<span aria-current="page">${esc(p[0])}</span>`}</li>`).join("")}</ol></nav>`;
+  document.addEventListener("click", ev => {
+    if (!ev.target.closest("[data-volver]")) return;
+    if (rutaAnterior !== null) history.back(); else location.hash = "#/";
+  });
+
   /* ---------- Vistas ---------- */
   function vistaInicio() {
     const MIN = 33, MAX = 2026;
@@ -143,7 +153,7 @@
     document.documentElement.style.setProperty("--era", era.color);
     const i = ERAS.indexOf(era), ant = ERAS[i - 1], sig = ERAS[i + 1];
     const evs = EVENTOS.filter(e => e.era === id);
-    $main.innerHTML = `
+    $main.innerHTML = migas([[era.grupo, "#/"], [`${era.n}: ${era.nombre}`]]) + `
       <section class="era-cab"><div class="era-tit">${window.escudoEra ? window.escudoEra(era, "escudo") : ""}<div><div class="k">${esc(era.n)}</div><h1>${esc(era.nombre)}</h1>
         <div class="rango">${rango(era)}</div><div class="grupo-n">${esc(era.grupo)}</div></div></div>
         <div class="resumenes">
@@ -373,7 +383,7 @@
 
   function vistaLinea() {
     const estado = { q: "", era: "", tag: "", soloClase: false };
-    $main.innerHTML = `<div class="doc"><h1>Línea completa</h1><p>Todos los hitos en orden cronológico. Busque por palabra o filtre por era y tema.</p></div>
+    $main.innerHTML = migas([["Línea completa"]]) + `<div class="doc"><h1>Línea completa</h1><p>Todos los hitos en orden cronológico. Busque por palabra o filtre por era y tema.</p></div>
       <div class="filtros">
         <input class="buscar" type="search" placeholder="Buscar: Lutero, Nicea, Bogotá, avivamiento…" aria-label="Buscar en la línea del tiempo">
         <div class="chips" id="f-era" role="group" aria-label="Filtrar por era"><button type="button" aria-pressed="true" data-v="">Todas las eras</button>${ERAS.map(e => `<button type="button" aria-pressed="false" data-v="${e.id}">${esc(e.n === "Etapa 1" || e.n.startsWith("Etapa") ? e.n + ": " + e.nombre : e.nombre)}</button>`).join("")}</div>
@@ -405,7 +415,7 @@
     const G = (window.GLOSARIO || []).slice().sort((a, b) => a.t.localeCompare(b.t, "es"));
     const EVI = Object.fromEntries(EVENTOS.map(e => [e.id, e]));
     const letras = [...new Set(G.map(g => g.t[0].toUpperCase()))];
-    $main.innerHTML = `<div class="doc"><h1>Conceptos clave</h1><p>Glosario entregado con el material del curso. Cada concepto enlaza al hito donde se trata en la línea del tiempo.</p></div>
+    $main.innerHTML = migas([["Glosario"]]) + `<div class="doc"><h1>Conceptos clave</h1><p>Glosario entregado con el material del curso. Cada concepto enlaza al hito donde se trata en la línea del tiempo.</p></div>
       <div class="filtros"><input class="buscar" type="search" placeholder="Buscar un concepto…" aria-label="Buscar en el glosario">
         <div class="chips">${letras.map(l => `<button type="button" data-l="${l}">${l}</button>`).join("")}</div></div>
       <dl class="glosario">${G.map(g => { const e = g.h && EVI[g.h]; return `<div class="g-item" id="g-${esc(g.t[0].toUpperCase())}" data-txt="${esc((g.t + " " + g.d).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase())}">
@@ -425,7 +435,7 @@
     const usadas = new Set(EVENTOS.map(e => e.img).filter(Boolean));
     const imgs = Object.entries(IMG).filter(([k, v]) => v && usadas.has(k));
     const nClase = EVENTOS.filter(e => e.clase).length, nPrec = EVENTOS.filter(e => e.prec).length;
-    $main.innerHTML = `<div class="doc">
+    $main.innerHTML = migas([["Fuentes y créditos"]]) + `<div class="doc">
       <h1>Fuentes y créditos</h1>
       <h2>Cómo se construyó</h2>
       <ul>
@@ -509,7 +519,7 @@
     const era = p[0] === "era" && eraPorId[p[1]];
     document.title = era ? `${era.nombre} · Historia II` : "Historia II - Iglesia medieval, reformada y moderna (Materia Presencial)";
   }
-  window.addEventListener("hashchange", ruta);
+  window.addEventListener("hashchange", ev => { rutaAnterior = ev.oldURL; ruta(); });
 
   /* ---------- Tema ---------- */
   const raiz = document.documentElement;
@@ -519,6 +529,12 @@
     raiz.dataset.theme = oscuro ? "light" : "dark";
     try { localStorage.setItem("tema", raiz.dataset.theme); } catch (e) {}
   });
+
+  const $subir = document.createElement("button");
+  $subir.type = "button"; $subir.className = "subir"; $subir.setAttribute("aria-label", "Subir al inicio de la página"); $subir.textContent = "↑";
+  document.body.appendChild($subir);
+  $subir.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+  window.addEventListener("scroll", () => $subir.classList.toggle("visible", scrollY > 700), { passive: true });
 
   ruta();
 })();

@@ -375,3 +375,14 @@ details.desp[open]{padding-bottom:14px}
 .filtro-lamina{position:sticky;top:64px;z-index:12;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0 0;padding:10px 14px;border-radius:12px;background:var(--era);color:#fff;box-shadow:var(--sombra)}
 .filtro-lamina button{font-family:var(--cap);font-size:12px;letter-spacing:.06em;padding:5px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.7);color:#fff}
 .seccion-sub{color:var(--ink3);font-style:italic;margin:-6px 0 12px}
+
+/* ===== Navegación ===== */
+.migas{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 0 0;font-size:15px}
+.migas .volver{font-family:var(--cap);font-size:13px;letter-spacing:.06em;padding:6px 14px;border-radius:999px;border:1px solid var(--oro);color:var(--oro2);background:var(--panel)}
+.migas .volver:hover{background:var(--oro);color:var(--bg)}
+.migas ol{list-style:none;display:flex;flex-wrap:wrap;gap:4px;color:var(--ink3)}
+.migas li+li::before{content:"›";margin-right:4px;color:var(--ink3)}
+.migas a{color:var(--ink2)}
+.migas [aria-current]{color:var(--ink)}
+.subir{position:fixed;right:16px;bottom:72px;z-index:26;width:46px;height:46px;border-radius:50%;background:var(--oro);color:var(--bg);font-size:22px;box-shadow:var(--sombra);opacity:0;pointer-events:none;transform:translateY(10px);transition:opacity .25s,transform .25s}
+.subir.visible{opacity:1;pointer-events:auto;transform:none}
