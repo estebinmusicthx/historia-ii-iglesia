@@ -14,7 +14,7 @@
   EVENTOS.forEach(e => { if (SPX[e.id] && !(e.tags || []).includes("supresencia")) e.tags = ["supresencia"].concat(e.tags || []); });
   const TEMAS = window.TEMAS || [];
   TEMAS.forEach(t => t.ids.forEach(id => { const e = EVENTOS.find(x => x.id === id); if (e && !(e.tags || []).includes("t-" + t.id)) e.tags = (e.tags || []).concat("t-" + t.id); }));
-  const ETIQ = { "t-musulmanes": "Los musulmanes", "t-lutero": "Martín Lutero", "t-calvinismo": "El calvinismo", "t-arminianismo": "El arminianismo", "t-corrientes": "Las nuevas corrientes", supresencia: "El Lugar de Su Presencia", colombia: "Colombia", avivamiento: "Avivamientos", martir: "Mártires", mision: "Misiones", biblia: "Biblia", persona: "Personas", concilio: "Concilios", iglesias: "Iglesias grandes", reflexion: "Reflexión" };
+  const ETIQ = { "t-musulmanes": "Los musulmanes", "t-lutero": "Martín Lutero", "t-calvinismo": "El calvinismo", "t-arminianismo": "El arminianismo", "t-corrientes": "Las nuevas corrientes", supresencia: "El Lugar de Su Presencia", colombia: "Colombia", eeuu: "Estados Unidos", avivamiento: "Avivamientos", martir: "Mártires", mision: "Misiones", biblia: "Biblia", persona: "Personas", concilio: "Concilios", iglesias: "Iglesias grandes", reflexion: "Reflexión" };
 
   /* ---------- Biblia: ventana con el pasaje (Reina-Valera 1909, dominio público) ---------- */
   // [nombre, número de libro]
@@ -440,6 +440,9 @@
       r.forEach(e => {
         const era = eraPorId[e.era], s = Math.max(1, Math.ceil(e.a / 100));
         if (s !== siglo) { siglo = s; html += `<div class="lt-siglo"><span>Siglo ${romano(s)}</span></div>`; }
+        if (e.id === "mayflower" && !estado.era && !estado.tag && !q) html += `<button type="button" class="lt-tema lt-hilo revela" data-hilo="eeuu" style="--c:#2e5e8e">
+            <span class="lt-tema-t">Estados Unidos: de las colonias a su influencia en el mundo</span><span class="lt-tema-p">De los puritanos del Mayflower (1620) a los Grandes Despertares, el metodismo americano, el movimiento de santidad y la calle Azusa; después, sus misioneros llegan a América Latina y a Colombia.</span>
+            <span class="lt-tema-ir">Ver solo este recorrido · ${EVENTOS.filter(x => (x.tags || []).includes("eeuu")).length} hitos →</span></button>`;
         const tm = TEMAS.find(t => t.ancla === e.id);
         if (tm && !estado.era && !q) { const n = tm.ids.filter(id => EVENTOS.some(x => x.id === id)).length;
           html += `<a class="lt-tema revela" href="#/tema/${tm.id}" style="--c:${tm.color}">${window.escudoEra ? window.escudoEra({ id: tm.icono, color: tm.color, nombre: tm.titulo }, "escudo-tema") : ""}
@@ -495,6 +498,7 @@
         d.querySelector("summary b").textContent = b.dataset.n; d.open = false; cb(b.dataset.v); pintar(); });
     }
     menu("#f-era", v => estado.era = v);
+    if (!$main.dataset.escuchaHilo) $main.dataset.escuchaHilo = "1", $main.addEventListener("click", ev => { const h = ev.target.closest("[data-hilo]"); if (!h) return; const b = $main.querySelector(`#f-tag .f-ops button[data-v="${CSS.escape(h.dataset.hilo)}"]`); if (b) b.click(); setTimeout(() => { const f = $main.querySelector(".filtros"); if (f) f.scrollIntoView({ behavior: "smooth" }); }, 60); });
     menu("#f-tag", v => { estado.soloClase = v === "__clase"; estado.tag = v === "__clase" ? "" : v; });
     if (temaInicial) { const b = $main.querySelector(`#f-tag .f-ops button[data-v="${CSS.escape(temaInicial)}"]`); if (b) b.click(); temaInicial = null; }
     // cerrar un menú al abrir el otro
