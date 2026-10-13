@@ -521,7 +521,7 @@
         <li>Imágenes: Wikimedia Commons, solo dominio público, CC0, CC BY o CC BY-SA; conservan la licencia de sus autores. Abajo están el autor, la licencia y el enlace de cada una.</li>
         <li>Biblia: al hacer clic en una cita se abre el pasaje en la Reina-Valera 1909 (dominio público), servido por ${ext("https://getbible.net/", "getbible.net")}; cada ventana enlaza también a la Reina-Valera 1960 en BibleGateway (© Sociedades Bíblicas en América Latina), cuyo texto no se reproduce.</li>
         <li>Mapas: datos geográficos de ${ext("https://www.naturalearthdata.com/", "Natural Earth")} (dominio público), vía world-atlas; dibujados con las librerías d3-geo y topojson-client (licencia ISC). Las rutas son aproximadas y resumen hitos ya verificados.</li>
-        <li>Tipografías Cinzel y EB Garamond (Google Fonts, licencia SIL Open Font License).</li>
+        <li>Tipografías Cinzel, EB Garamond e IM Fell English (Google Fonts, licencia SIL Open Font License). El fondo muestra versículos de la Vulgata latina (dominio público).</li>
       </ul>
       <h2>Bibliografía del curso</h2>
       <p>Obras indicadas en la materia. Tienen derechos de sus autores y editoriales: se citan como referencia y no se reproducen.</p>
@@ -595,6 +595,20 @@
     document.title = era ? `${era.nombre} · Historia II` : "Historia II - Iglesia medieval, reformada y moderna (Materia Presencial)";
   }
   window.addEventListener("hashchange", ev => { rutaAnterior = ev.oldURL; ruta(); });
+
+  /* ---------- Fondo: versículos de la Vulgata latina (dominio público), desvanecidos ---------- */
+  (function fondoLatin() {
+    const V = ["In principio erat Verbum, et Verbum erat apud Deum, et Deus erat Verbum.", "Iustus autem ex fide vivit.",
+      "Sic enim Deus dilexit mundum, ut Filium suum unigenitum daret.", "Ego sum via, et veritas, et vita.", "Verbum autem Domini manet in aeternum.",
+      "Iesus Christus heri, et hodie: ipse et in saecula.", "Et repleti sunt omnes Spiritu Sancto.", "Consummatum est.",
+      "Et velum templi scissum est in duas partes a summo usque deorsum.", "Gratia enim estis salvati per fidem.",
+      "Dominus regit me, et nihil mihi deerit.", "Lucerna pedibus meis verbum tuum."];
+    const f = document.createElement("div"); f.className = "fondo-latin"; f.setAttribute("aria-hidden", "true");
+    let html = "";
+    for (let i = 0; i < 46; i++) { const t = V[i % V.length], z = [22, 28, 34, 26, 40][i % 5], x = (i * 37) % 60 - 10;
+      html += `<p style="font-size:${z}px;margin-left:${x}%;--r:${((i % 3) - 1) * .6}deg">${t}</p>`; }
+    f.innerHTML = html; document.body.prepend(f);
+  })();
 
   /* ---------- Tema ---------- */
   const raiz = document.documentElement;

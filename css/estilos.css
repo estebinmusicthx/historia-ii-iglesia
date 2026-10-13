@@ -658,3 +658,13 @@ body.con-portada{overflow:hidden}
 .hero-ver:hover{transform:translateY(-2px);color:#2a1e05}
 @media (max-width:640px){.hero-collage{grid-template-columns:repeat(4,1fr);grid-auto-rows:110px}}
 @media (prefers-reduced-motion:reduce){.hero-collage span,.hero-luz{animation:none}}
+
+/* ===== Fondo crema con versículos latinos de época ===== */
+.fondo-latin{position:fixed;inset:-10% -5%;z-index:-1;pointer-events:none;overflow:hidden;display:flex;flex-direction:column;justify-content:space-around;
+  font-family:"IM Fell English","EB Garamond",serif;font-style:italic;color:#5a3f17;opacity:.075;line-height:1.25;
+  -webkit-mask-image:radial-gradient(ellipse at 50% 40%,#000 25%,rgba(0,0,0,.45) 60%,transparent 92%);mask-image:radial-gradient(ellipse at 50% 40%,#000 25%,rgba(0,0,0,.45) 60%,transparent 92%)}
+.fondo-latin p{white-space:nowrap;transform:rotate(var(--r));letter-spacing:.02em}
+.fondo-latin p:nth-child(3n){font-family:"IM Fell English","EB Garamond",serif;font-style:normal;opacity:.7}
+body{background-image:radial-gradient(ellipse at 50% 0%,rgba(216,180,90,.10),transparent 60%),radial-gradient(ellipse at 100% 100%,rgba(140,100,40,.08),transparent 55%)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .fondo-latin{color:#efd38f;opacity:.05}}
+:root[data-theme="dark"] .fondo-latin{color:#efd38f;opacity:.05}
