@@ -11,7 +11,7 @@ window.CURSO = {
 
 window.ERAS = [
   {
-    id: "prologo", n: "Prólogo", nombre: "La Iglesia antes de la Edad Media", desde: 33, hasta: 476, color: "#9a6b3f", grupo: "Antecedentes",
+    id: "prologo", img: "era_prologo", n: "Prólogo", nombre: "La Iglesia antes de la Edad Media", desde: 33, hasta: 476, color: "#9a6b3f", grupo: "Antecedentes",
     clase: "Constantino, primer emperador cristiano; el obispo como figura de autoridad; Nicea (325) y la división del Imperio (395).",
     comp: "Contexto breve: de Pentecostés a la caída de Roma, para entender de dónde viene la Iglesia medieval.",
     fe: "La Iglesia nació con el derramamiento del Espíritu Santo en Pentecostés (Hch 2). La fe en un solo Dios que existe en tres personas, Padre, Hijo y Espíritu Santo, confesada en Nicea, es la misma que confiesa hoy la Iglesia.",
@@ -22,7 +22,7 @@ window.ERAS = [
     ]
   },
   {
-    id: "papado", n: "Etapa 1", nombre: "Desarrollo del Papado", desde: 476, hasta: 1417, color: "#8c2f39", grupo: "Iglesia Medieval (476 – 1453)",
+    id: "papado", img: "era_papado", n: "Etapa 1", nombre: "Desarrollo del Papado", desde: 476, hasta: 1417, color: "#8c2f39", grupo: "Iglesia Medieval (476 – 1453)",
     clase: "476–1073: desarrollo, consolidación y decadencia del poder papal. El papado prima en Occidente, no en Oriente. Subetapas: culminación no es desaparición; ya no tenía el poder de antes.",
     comp: "Fechas usuales de las subetapas: desarrollo (476–1073), culminación (1073–1303) y decadencia (1303–1417).",
     fe: "Cristo es la cabeza de la Iglesia (Ef 5:23; Col 1:18) y el único que restaura nuestra relación con Dios (1 Ti 2:5). Ninguna estructura humana ocupa ese lugar.",
@@ -33,7 +33,7 @@ window.ERAS = [
     ]
   },
   {
-    id: "islam", n: "Etapa 2", nombre: "Surgimiento del Islam y el poder musulmán", desde: 570, hasta: 750, color: "#2f6f62", grupo: "Iglesia Medieval (476 – 1453)",
+    id: "islam", img: "era_islam", n: "Etapa 2", nombre: "Surgimiento del Islam y el poder musulmán", desde: 570, hasta: 750, color: "#2f6f62", grupo: "Iglesia Medieval (476 – 1453)",
     clase: "570–750: surgimiento del Islam en la Península Arábiga. Fe + política = divide todo. Cinco consecuencias, entre ellas preparar el contexto de las Cruzadas.",
     comp: "Fechas de la Hégira (622), la toma de Jerusalén (638) y el califato Omeya (661–750).",
     fe: "La sinceridad religiosa no garantiza la verdad (Jn 16:2; Hch 26:9). El Evangelio no se impone con la espada: avanza por el amor y por el poder del Espíritu Santo (Zac 4:6).",
@@ -44,7 +44,7 @@ window.ERAS = [
     ]
   },
   {
-    id: "imperio", n: "Etapa 3", nombre: "El Sacro Imperio Romano", desde: 700, hasta: 962, color: "#4b5a8a", grupo: "Iglesia Medieval (476 – 1453)",
+    id: "imperio", img: "era_imperio", n: "Etapa 3", nombre: "El Sacro Imperio Romano", desde: 700, hasta: 962, color: "#4b5a8a", grupo: "Iglesia Medieval (476 – 1453)",
     clase: "Después de 476 Europa queda dividida en muchos reinos. Carlomagno, rey de los francos, conquista Europa Occidental y el papa León III lo corona emperador el 25/12/800.",
     comp: "Tratado de Verdún (843) y coronación de Otón I (962), origen del Sacro Imperio Romano Germánico.",
     fe: "Cuando la fe se mezcla con el poder político, la Iglesia se desvía de su llamado. El reino de Cristo no es de este mundo (Jn 18:36).",
@@ -55,7 +55,7 @@ window.ERAS = [
     ]
   },
   {
-    id: "cruzadas", n: "Etapa 4", nombre: "Las Cruzadas", desde: 1095, hasta: 1291, color: "#a3482a", grupo: "Iglesia Medieval (476 – 1453)",
+    id: "cruzadas", img: "era_cruzadas", n: "Etapa 4", nombre: "Las Cruzadas", desde: 1095, hasta: 1291, color: "#a3482a", grupo: "Iglesia Medieval (476 – 1453)",
     clase: "Cruzada: supuesta propagación del Evangelio (fachada); querían reconquistar territorio. De la II a la VIII Cruzada, la mayoría fracasos; la IV fue el mayor fracaso moral.",
     comp: "La I Cruzada (1095–1099) y la caída de Acre (1291), que no están en las notas.",
     fe: "Ningún pago ni obra humana compra el perdón: se recibe por el arrepentimiento y la fe en Jesucristo (Hch 3:19; Ef 2:8-9). La promesa de perdón a los cruzados anticipa el problema de las indulgencias.",
@@ -66,7 +66,7 @@ window.ERAS = [
     ]
   },
   {
-    id: "monacato", n: "Etapa 5", nombre: "Monacato, arte y literatura medieval", desde: 251, hasta: 1351, color: "#5f7a3a", grupo: "Iglesia Medieval (476 – 1453)",
+    id: "monacato", img: "era_monacato", n: "Etapa 5", nombre: "Monacato, arte y literatura medieval", desde: 251, hasta: 1351, color: "#5f7a3a", grupo: "Iglesia Medieval (476 – 1453)",
     clase: "Precursores: Antonio Abad (251) y Pacomio (292). Ante una Iglesia mundanalizada, el monacato sostuvo la Iglesia, evangelizó, preservó la Biblia y fundó bibliotecas y universidades.",
     comp: "Benito de Nursia, Cluny, el arte románico y gótico, la escolástica y Dante.",
     fe: "Dios preservó su Palabra a lo largo de los siglos. La santidad no es solo para un grupo apartado: todo creyente está llamado a una vida santa y fructífera, llena del Espíritu Santo (1 P 1:15-16; Ef 5:18).",
@@ -77,7 +77,7 @@ window.ERAS = [
     ]
   },
   {
-    id: "precursores", n: "Etapa 6", nombre: "La reforma religiosa y la caída de Constantinopla", desde: 1170, hasta: 1453, color: "#7a3f7a", grupo: "Iglesia Medieval (476 – 1453)",
+    id: "precursores", img: "era_precursores", n: "Etapa 6", nombre: "La reforma religiosa y la caída de Constantinopla", desde: 1170, hasta: 1453, color: "#7a3f7a", grupo: "Iglesia Medieval (476 – 1453)",
     clase: "Cinco movimientos o personas prepararon el camino para lo que Lutero iba a hacer: cátaros, valdenses, Wiclif, Hus y Savonarola. No eran 'protestantes', pero tenían cosas en común. En 1453 cae Constantinopla y acaba la Edad Media.",
     comp: "Fechas exactas de las muertes de Hus (1415) y Savonarola (1498), y una precisión sobre los cátaros.",
     fe: "Valdenses, Wiclif y Hus pusieron la Biblia por encima de la jerarquía y la llevaron a la lengua del pueblo: la autoridad es la Palabra de Dios (2 Ti 3:16). Los cátaros, en cambio, eran dualistas y rechazaban gran parte del Antiguo Testamento.",
@@ -88,7 +88,7 @@ window.ERAS = [
     ]
   },
   {
-    id: "reforma", n: "Iglesia Reformada", nombre: "La Reforma", desde: 1453, hasta: 1648, color: "#b8862b", grupo: "Iglesia Reformada (1453 – 1648)",
+    id: "reforma", img: "era_reforma", n: "Iglesia Reformada", nombre: "La Reforma", desde: 1453, hasta: 1648, color: "#b8862b", grupo: "Iglesia Reformada (1453 – 1648)",
     clase: "Iglesia Reformada 1453–1648. Renacimiento, humanismo, imprenta y educación prepararon el camino para Lutero. Lutero, Zuinglio, Calvino, Knox; la Reforma por países; la Contrarreforma y Trento; Arminio y Dort; los puritanos.",
     comp: "Fechas y precisiones: Espira 1529 (origen del nombre 'protestante'), Biblia del Oso 1569, Westminster 1646–1647, Westfalia 1648.",
     fe: "La Reforma recuperó verdades que siguen en el centro de la fe: la Biblia como Palabra de Dios y autoridad para la Iglesia, y la salvación por gracia mediante la fe en Jesucristo (Ro 1:17; Ef 2:8-9).",
@@ -100,7 +100,7 @@ window.ERAS = [
     ]
   },
   {
-    id: "moderna", n: "Iglesia moderna", nombre: "Despertares, avivamientos y misiones", desde: 1648, hasta: 2026, color: "#2e6e9e", grupo: "Iglesia moderna (1648 – hoy)",
+    id: "moderna", img: "era_moderna", n: "Iglesia moderna", nombre: "Despertares, avivamientos y misiones", desde: 1648, hasta: 2026, color: "#2e6e9e", grupo: "Iglesia moderna (1648 – hoy)",
     clase: "Metodismo (Wesley, Whitefield), Primer y Segundo Gran Despertar, Finney, Movimiento de Santidad, Keswick y los inicios del pentecostalismo (Parham, Agnes Ozman, 1901).",
     comp: "Avivamientos del siglo XX y XXI y hechos mundiales hasta hoy (las notas de clase llegan hasta 1901).",
     fe: "Los despertares, el Movimiento de Santidad y el pentecostalismo pusieron de nuevo el énfasis en la conversión personal, la vida santa, la llenura del Espíritu Santo y los dones del Espíritu activos en los creyentes (Hch 1:8; 1 Co 12). Toda experiencia se examina a la luz de la Palabra y por su fruto (1 Jn 4:1; Mt 7:16).",
@@ -111,7 +111,7 @@ window.ERAS = [
     ]
   },
   {
-    id: "colombia", n: "Enfoque", nombre: "La Iglesia evangélica en Colombia", desde: 1825, hasta: 2026, color: "#c9a227", grupo: "Iglesia moderna (1648 – hoy)",
+    id: "colombia", img: "colombia_mapa", n: "Enfoque", nombre: "La Iglesia evangélica en Colombia", desde: 1825, hasta: 2026, color: "#c9a227", grupo: "Iglesia moderna (1648 – hoy)",
     clase: "",
     comp: "Raíces, denominaciones, persecución, libertad religiosa, crecimiento de las iglesias grandes y quienes dieron su vida. Basado en fuentes de prensa y académicas.",
     fe: "El crecimiento de la Iglesia en Colombia costó la vida de pastores y misioneros. La Iglesia existe para adorar a Dios, servir a su comunidad y anunciar a Cristo; su fruto se ve en vidas transformadas y en la fidelidad a la Palabra (Hch 17:11; Gá 5:22-23).",

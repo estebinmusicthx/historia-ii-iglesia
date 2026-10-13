@@ -3,7 +3,7 @@
   "use strict";
   const ERAS = window.ERAS || [], EVENTOS = (window.EVENTOS || []).slice().sort((a, b) => a.a - b.a), IMG = window.IMAGENES || {};
   const $main = document.getElementById("contenido");
-  const eraPorId = Object.fromEntries(ERAS.map(e => [e.id, e]));
+  const eraPorId = Object.assign(Object.create(null), Object.fromEntries(ERAS.map(e => [e.id, e])));
   const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   // Separa en renglones las enumeraciones de las notas ("1. … 2. …", "1) … 2) …").
   const fmt = s => esc(s).replace(/(^|[\s.;:])(\d{1,2})([.)])\s(?=[A-ZÁÉÍÓÚ¿¡&])/g, (m, a, n, p, i) => (i === 0 ? "" : a.trim() + "\n") + n + p + " ");
@@ -38,7 +38,7 @@
   const citas = t => esc(t).replace(RE_CITA, (m, pre, l, r) => pre + versiculo(l.replace(/\s/, " ") + " " + r));
 
   const cacheCap = {};
-  const capitulo = (n, c) => cacheCap[n + "/" + c] || (cacheCap[n + "/" + c] = fetch(`https://api.getbible.net/v2/valera/${n}/${c}.json`).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }));
+  const capitulo = (n, c) => cacheCap[n + "/" + c] || (cacheCap[n + "/" + c] = fetch(`https://api.getbible.net/v2/valera/${encodeURIComponent(n)}/${encodeURIComponent(c)}.json`, { credentials: "omit", referrerPolicy: "no-referrer" }).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }));
   let $dlg = null;
   function abrirBiblia(ref) {
     const r = parseRef(ref); if (!r) return;
@@ -57,8 +57,8 @@
     const caps = []; for (let c = r.c1; c <= r.c2; c++) caps.push(c);
     Promise.all(caps.map(c => capitulo(r.n, c))).then(datos => {
       $t.innerHTML = datos.map((d, k) => {
-        const vs = d.verses.filter(v => r.v1 == null || (v.verse >= r.v1 && v.verse <= r.v2));
-        return (caps.length > 1 ? `<h3>Capítulo ${caps[k]}</h3>` : "") + `<p>${vs.map(v => `<sup>${v.verse}</sup>${esc(v.text.trim())}`).join(" ")}</p>`;
+        const vs = (Array.isArray(d && d.verses) ? d.verses : []).filter(v => r.v1 == null || (v.verse >= r.v1 && v.verse <= r.v2));
+        return (caps.length > 1 ? `<h3>Capítulo ${caps[k]}</h3>` : "") + `<p>${vs.map(v => `<sup>${esc(v.verse)}</sup>${esc(String(v.text || "").trim())}`).join(" ")}</p>`;
       }).join("");
       $t.scrollTop = 0;
     }).catch(() => { $t.innerHTML = `<p>No se pudo cargar el pasaje en este momento. ${ext(urlRVR1960(r), "Ábralo en BibleGateway")}.</p>`; });
@@ -100,6 +100,7 @@
   }
 
   function imagenEra(era) {
+    if (era.img && IMG[era.img]) return IMG[era.img].src;
     const ev = EVENTOS.find(e => e.era === era.id && e.img && IMG[e.img]);
     return ev ? IMG[ev.img].src : "";
   }
@@ -165,7 +166,7 @@
   }
 
   function vistaEra(id, hitoId) {
-    const era = eraPorId[id];
+    const era = typeof id === "string" ? eraPorId[id] : null;
     if (!era) return vistaNoEncontrada();
     document.documentElement.style.setProperty("--era", era.color);
     const i = ERAS.indexOf(era), ant = ERAS[i - 1], sig = ERAS[i + 1];
@@ -495,7 +496,7 @@
     }
     menu("#f-era", v => estado.era = v);
     menu("#f-tag", v => { estado.soloClase = v === "__clase"; estado.tag = v === "__clase" ? "" : v; });
-    if (temaInicial) { const b = $main.querySelector(`#f-tag .f-ops button[data-v="${temaInicial}"]`); if (b) b.click(); temaInicial = null; }
+    if (temaInicial) { const b = $main.querySelector(`#f-tag .f-ops button[data-v="${CSS.escape(temaInicial)}"]`); if (b) b.click(); temaInicial = null; }
     // cerrar un menú al abrir el otro
     $main.querySelectorAll(".f-menu").forEach(d => d.addEventListener("toggle", () => { if (d.open) $main.querySelectorAll(".f-menu").forEach(o => { if (o !== d) o.open = false; }); }));
     pintar();
@@ -550,7 +551,7 @@
   function vistaFuentes() {
     const todas = new Map();
     EVENTOS.forEach(e => (e.fuentes || []).forEach(([n, u]) => { if (!todas.has(u)) todas.set(u, { n, ids: [] }); todas.get(u).ids.push(e); }));
-    const usadas = new Set(EVENTOS.map(e => e.img).filter(Boolean));
+    const usadas = new Set(EVENTOS.map(e => e.img).concat(ERAS.map(e => e.img), TEMAS.map(t => t.img)).filter(Boolean));
     const imgs = Object.entries(IMG).filter(([k, v]) => v && usadas.has(k));
     const nClase = EVENTOS.filter(e => e.clase).length, nPrec = EVENTOS.filter(e => e.prec).length;
     $main.innerHTML = migas([["Fuentes y créditos"]]) + `<div class="doc">
@@ -627,6 +628,7 @@
   /* ---------- Enrutador ---------- */
   function ruta() {
     const p = (location.hash || "#/").slice(2).split("/");
+    if ($dlg && $dlg.open) $dlg.close();
     document.getElementById("regla-fija").classList.remove("activa");
     document.documentElement.style.removeProperty("--era");
     let actual = "inicio";

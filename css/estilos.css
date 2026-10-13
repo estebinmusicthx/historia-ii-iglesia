@@ -791,3 +791,11 @@ body{background-image:radial-gradient(ellipse at 50% 0%,rgba(216,180,90,.10),tra
 .es-chispas circle{opacity:0;transform-box:fill-box;animation:es-chispa .8s ease-out 3 .5s}
 @keyframes es-chispa{0%,70%{opacity:0;transform:scale(.3)}73%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.6) translateY(-10px)}}
 @media (prefers-reduced-motion:reduce){.es-martillo{animation:none;transform:rotate(20deg)}.es-chispas circle,.es-clavo,.es-hoja{animation:none}}
+
+/* Puntos de la barra de la animación: clicables para ir a cada escena */
+.rc-camino .rc-punto{all:unset;display:flex;flex-direction:column;align-items:center;cursor:pointer;padding:4px 6px;border-radius:8px}
+.rc-camino .rc-punto:hover span,.rc-camino .rc-punto:focus-visible span{transform:scale(1.5);border-color:#fff3c9;box-shadow:0 0 10px rgba(216,180,90,.8)}
+.rc-camino .rc-punto:hover small,.rc-camino .rc-punto:focus-visible small{color:#fff3c9}
+.rc-camino .rc-punto:focus-visible{outline:2px solid #d8b45a;outline-offset:2px}
+.rc-camino .rc-punto span{transition:background .4s,border-color .4s,transform .2s,box-shadow .2s}
+.rc-camino.oculto-camino{pointer-events:none}

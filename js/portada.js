@@ -42,7 +42,7 @@
       <div class="rc-intro grande">Lo que costó que el mensaje<br>llegara hasta ti…</div>
       <div class="rc-escena"><div class="rc-anio"></div><div class="rc-lugar"></div><p class="rc-texto"></p></div>
       <div class="rc-camino oculto-camino"><div class="rc-linea"><span class="rc-luz"></span></div>
-        <ol>${ESCENAS.map((e, i) => `<li style="left:${(i / (ESCENAS.length - 1)) * 100}%"><span></span><small>${esc(e[0] || e[1])}</small></li>`).join("")}</ol></div>
+        <ol>${ESCENAS.map((e, i) => `<li style="left:${(i / (ESCENAS.length - 1)) * 100}%"><button type="button" class="rc-punto" data-i="${i}" title="Ir a: ${esc(e[1])}${e[0] ? " (" + esc(e[0]) + ")" : ""}" aria-label="Ir a la escena ${esc(e[1])}"><span></span><small>${esc(e[0] || e[1])}</small></button></li>`).join("")}</ol></div>
       <button type="button" class="rc-saltar">Saltar ⏭</button>`;
     document.body.appendChild($r);
     document.body.classList.add("con-portada");
@@ -70,11 +70,18 @@
       }, 350);
       t = setTimeout(siguiente, k === ESCENAS.length - 1 ? 5600 : (ESCENAS[k][4] === "velo" ? 4600 : ESCENAS[k][4] === "cruz" ? 4000 : ESCENAS[k][4] ? 3400 : 2400));
     }
+    // Clic en un punto de la barra: salta a esa escena (hacia atrás o adelante) y sigue desde ahí.
+    let intro = setTimeout(() => {}, 0);
+    $r.querySelector(".rc-camino ol").addEventListener("click", ev => {
+      const b = ev.target.closest(".rc-punto"); if (!b || fin) return;
+      clearTimeout(t); clearTimeout(intro); $r.querySelector(".rc-intro").classList.remove("grande");
+      k = Number(b.dataset.i) - 1; siguiente();
+    });
     $r.querySelector(".rc-saltar").addEventListener("click", terminar);
     document.addEventListener("keydown", function k2(ev) { if (ev.key === "Escape") { document.removeEventListener("keydown", k2); terminar(); } });
     // 1) título grande en el centro  2) se encoge y sube  3) rayo sobre la cruz  4) aparece la línea de tiempo
     setTimeout(() => $r.querySelector(".rc-intro").classList.remove("grande"), 2600);
-    setTimeout(siguiente, 3600);
+    intro = setTimeout(() => { if (k < 0) siguiente(); }, 3600);
     setTimeout(() => $r.querySelector(".rc-camino").classList.remove("oculto-camino"), 3600 + 350 + 1500);
   }
 
