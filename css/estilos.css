@@ -772,3 +772,9 @@ body{background-image:radial-gradient(ellipse at 50% 0%,rgba(216,180,90,.10),tra
 .lt-tema-t{font-family:var(--cap);font-weight:700;font-size:clamp(22px,2.8vw,30px);color:var(--c);line-height:1.1}
 .lt-tema-p{font-size:16px;color:var(--ink2);max-width:58ch}
 .lt-tema-ir{font-family:var(--cap);font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:5px 14px;border-radius:999px;background:var(--c);color:#fff;margin-top:4px}
+
+/* Comprueba tus conocimientos: desplegable */
+.desp-juegos{margin-top:34px}
+.desp-juegos>summary{font-size:clamp(20px,2vw,26px)}
+.desp-juegos>summary span small{display:block;font-family:var(--serif);font-weight:400;font-style:italic;font-size:15px;letter-spacing:0;color:var(--ink3);margin-top:2px}
+.desp-juegos .juegos{margin-top:6px}
