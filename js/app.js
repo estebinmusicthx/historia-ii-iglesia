@@ -383,33 +383,55 @@
 
   function vistaLinea() {
     const estado = { q: "", era: "", tag: "", soloClase: false };
-    $main.innerHTML = migas([["Línea completa"]]) + `<div class="doc"><h1>Línea completa</h1><p>Todos los hitos en orden cronológico. Busque por palabra o filtre por era y tema.</p></div>
+    const romano = n => { const v = [[1000, "M"], [900, "CM"], [500, "D"], [400, "CD"], [100, "C"], [90, "XC"], [50, "L"], [40, "XL"], [10, "X"], [9, "IX"], [5, "V"], [4, "IV"], [1, "I"]]; let r = ""; for (const [a, s] of v) while (n >= a) { r += s; n -= a; } return r; };
+    const nombreEra = e => e.n.startsWith("Etapa") ? e.n + ": " + e.nombre : e.nombre;
+    $main.innerHTML = migas([["Línea completa"]]) + `<div class="doc"><h1>Línea completa</h1><p>Todos los hitos en orden cronológico, de Pentecostés a hoy. Busque por palabra o use los filtros.</p></div>
       <div class="filtros">
         <input class="buscar" type="search" placeholder="Buscar: Lutero, Nicea, Bogotá, avivamiento…" aria-label="Buscar en la línea del tiempo">
-        <div class="chips" id="f-era" role="group" aria-label="Filtrar por era"><button type="button" aria-pressed="true" data-v="">Todas las eras</button>${ERAS.map(e => `<button type="button" aria-pressed="false" data-v="${e.id}">${esc(e.n === "Etapa 1" || e.n.startsWith("Etapa") ? e.n + ": " + e.nombre : e.nombre)}</button>`).join("")}</div>
-        <div class="chips" id="f-tag" role="group" aria-label="Filtrar por tema"><button type="button" aria-pressed="true" data-v="">Todos los temas</button>${Object.entries(ETIQ).map(([k, v]) => `<button type="button" aria-pressed="false" data-v="${k}">${v}</button>`).join("")}<button type="button" aria-pressed="false" data-v="__clase">Solo notas de clase</button></div>
-        <div class="contador" aria-live="polite"></div>
-      </div><ul class="lista"></ul>`;
-    const $l = $main.querySelector(".lista"), $c = $main.querySelector(".contador");
+        <div class="f-desp">
+          <details class="f-menu" id="f-era"><summary>Era: <b>Todas</b></summary>
+            <div class="f-ops"><button type="button" aria-pressed="true" data-v="" data-n="Todas">Todas las eras</button>${ERAS.map(e => `<button type="button" aria-pressed="false" data-v="${e.id}" data-n="${esc(e.nombre)}" style="--c:${e.color}"><i></i>${esc(nombreEra(e))}</button>`).join("")}</div></details>
+          <details class="f-menu" id="f-tag"><summary>Tema: <b>Todos</b></summary>
+            <div class="f-ops"><button type="button" aria-pressed="true" data-v="" data-n="Todos">Todos los temas</button>${Object.entries(ETIQ).map(([k, v]) => `<button type="button" aria-pressed="false" data-v="${k}" data-n="${v}">${v}</button>`).join("")}<button type="button" aria-pressed="false" data-v="__clase" data-n="Solo notas de clase">Solo notas de clase</button></div></details>
+          <span class="contador" aria-live="polite"></span>
+        </div>
+      </div><div class="lt"></div>`;
+    const $l = $main.querySelector(".lt"), $c = $main.querySelector(".contador");
     const norm = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
     function pintar() {
       const q = norm(estado.q);
       const r = EVENTOS.filter(e => (!estado.era || e.era === estado.era) && (!estado.tag || (e.tags || []).includes(estado.tag)) && (!estado.soloClase || e.clase) &&
         (!q || norm([e.t, e.f, e.clase, e.comp, e.prec].join(" ")).includes(q)));
       $c.textContent = `${r.length} de ${EVENTOS.length} hitos`;
-      $l.innerHTML = r.map(e => { const era = eraPorId[e.era]; return `<li style="--c:${era.color}"><span class="f">${esc(e.f)}</span><div>
-        <a href="#/era/${e.era}/${e.id}">${esc(e.t)}</a><div class="meta">${esc(era.nombre)} · ${chipsOrigen(e)}</div></div></li>`; }).join("") || "<li><span></span><div>No hay resultados.</div></li>";
+      if (!r.length) { $l.innerHTML = `<p class="lt-vacio">No hay resultados.</p>`; return; }
+      let html = "", siglo = null, lado = 0;
+      r.forEach(e => {
+        const era = eraPorId[e.era], s = Math.max(1, Math.ceil(e.a / 100));
+        if (s !== siglo) { siglo = s; html += `<div class="lt-siglo"><span>Siglo ${romano(s)}</span></div>`; }
+        const im = e.img && IMG[e.img];
+        html += `<a class="lt-item revela ${lado++ % 2 ? "der" : "izq"}" href="#/era/${e.era}/${e.id}" style="--c:${era.color}">
+          <span class="lt-punto" aria-hidden="true"></span>
+          <span class="lt-tarjeta">${im ? `<img loading="lazy" src="${esc(im.src)}" alt="">` : ""}
+            <span class="lt-txt"><span class="lt-f">${esc(e.f)}</span><span class="lt-t">${esc(e.t)}</span>
+            <span class="lt-meta"><span class="lt-era">${esc(era.nombre)}</span>${chipsOrigen(e)}</span></span></span></a>`;
+      });
+      $l.innerHTML = html;
+      revelar();
     }
     $main.querySelector(".buscar").addEventListener("input", ev => { estado.q = ev.target.value; pintar(); });
-    function grupoChips(sel, cb) {
-      const g = $main.querySelector(sel);
-      g.addEventListener("click", ev => { const b = ev.target.closest("button"); if (!b) return;
-        g.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); cb(b.dataset.v); pintar(); });
+    function menu(sel, cb) {
+      const d = $main.querySelector(sel);
+      d.addEventListener("click", ev => { const b = ev.target.closest(".f-ops button"); if (!b) return;
+        d.querySelectorAll(".f-ops button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+        d.querySelector("summary b").textContent = b.dataset.n; d.open = false; cb(b.dataset.v); pintar(); });
     }
-    grupoChips("#f-era", v => estado.era = v);
-    grupoChips("#f-tag", v => { estado.soloClase = v === "__clase"; estado.tag = v === "__clase" ? "" : v; });
+    menu("#f-era", v => estado.era = v);
+    menu("#f-tag", v => { estado.soloClase = v === "__clase"; estado.tag = v === "__clase" ? "" : v; });
+    // cerrar un menú al abrir el otro
+    $main.querySelectorAll(".f-menu").forEach(d => d.addEventListener("toggle", () => { if (d.open) $main.querySelectorAll(".f-menu").forEach(o => { if (o !== d) o.open = false; }); }));
     pintar();
   }
+
 
   function vistaGlosario() {
     const G = (window.GLOSARIO || []).slice().sort((a, b) => a.t.localeCompare(b.t, "es"));
