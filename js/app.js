@@ -116,7 +116,7 @@
       grupos += `<div class="grupo"><h2>${esc(g)}</h2></div><div class="eras">` + ERAS.filter(e => e.grupo === g).map(era => {
         const evs = EVENTOS.filter(e => e.era === era.id), nC = evs.filter(e => e.clase).length;
         return `<a class="era-card revela" href="#/era/${era.id}" style="--c:${era.color}">
-          <div class="foto" style="background-image:url('${esc(imagenEra(era))}')"><span class="num">${esc(era.n)}</span></div>
+          <div class="foto" style="background-image:url('${esc(imagenEra(era))}')">${window.escudoEra ? window.escudoEra(era, "escudo-mini") : ""}<span class="num">${esc(era.n)}</span></div>
           <div class="cuerpo"><h3>${esc(era.nombre)}</h3><div class="rango">${rango(era)}</div>
           <div class="cuenta">${evs.length} hitos · <b>${nC ? nC + " de notas de clase" : "Aportes de investigación"}</b></div></div></a>`;
       }).join("") + `</div>`;
@@ -144,8 +144,8 @@
     const i = ERAS.indexOf(era), ant = ERAS[i - 1], sig = ERAS[i + 1];
     const evs = EVENTOS.filter(e => e.era === id);
     $main.innerHTML = `
-      <section class="era-cab"><div class="k">${esc(era.n)}</div><h1>${esc(era.nombre)}</h1>
-        <div class="rango">${rango(era)}</div><div class="grupo-n">${esc(era.grupo)}</div>
+      <section class="era-cab"><div class="era-tit">${window.escudoEra ? window.escudoEra(era, "escudo") : ""}<div><div class="k">${esc(era.n)}</div><h1>${esc(era.nombre)}</h1>
+        <div class="rango">${rango(era)}</div><div class="grupo-n">${esc(era.grupo)}</div></div></div>
         <div class="resumenes">
           ${era.clase ? `<div class="bloque b-clase"><div class="et">Notas de clase <small>resumen de la etapa</small></div><p>${esc(era.clase)}</p></div>` : `<div class="bloque b-clase"><div class="et">Aportes de investigación</div><p>Este enfoque no hace parte de las notas de clase: es un aporte de investigación, con cada dato referenciado a su fuente.</p></div>`}
           <div class="bloque b-comp"><div class="et">Complemento</div><p>${esc(era.comp)}</p></div>

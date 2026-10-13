@@ -359,3 +359,11 @@ details.desp>summary::after{content:"▾";color:var(--ink3);transition:transform
 details.desp[open]>summary::after{transform:rotate(180deg)}
 details.desp[open]{padding-bottom:14px}
 .desp-ctl{margin:6px 0 4px}
+
+/* ===== Escudos ===== */
+.era-tit{display:flex;align-items:center;gap:20px}
+.escudo{width:clamp(70px,9vw,104px);height:auto;flex-shrink:0;filter:drop-shadow(0 8px 14px rgba(0,0,0,.28))}
+@media (prefers-reduced-motion:no-preference){.escudo{animation:escudo-in .7s ease both}}
+@keyframes escudo-in{from{opacity:0;transform:translateY(-8px) scale(.9)}to{opacity:1;transform:none}}
+.escudo-mini{position:absolute;right:10px;bottom:-14px;z-index:2;width:44px;height:auto;filter:drop-shadow(0 4px 8px rgba(0,0,0,.35))}
+.era-card .foto{overflow:visible}
