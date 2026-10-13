@@ -39,9 +39,9 @@
     const $r = document.createElement("section");
     $r.className = "recorrido"; $r.setAttribute("aria-label", "Lo que costó que el mensaje llegara");
     $r.innerHTML = `<div class="rc-fondo"></div><div class="rc-svg"></div><div class="rc-velo"></div>
-      <div class="rc-intro">Lo que costó que el mensaje llegara</div>
+      <div class="rc-intro grande">Lo que costó que el mensaje<br>llegara hasta ti…</div>
       <div class="rc-escena"><div class="rc-anio"></div><div class="rc-lugar"></div><p class="rc-texto"></p></div>
-      <div class="rc-camino"><div class="rc-linea"><span class="rc-luz"></span></div>
+      <div class="rc-camino oculto-camino"><div class="rc-linea"><span class="rc-luz"></span></div>
         <ol>${ESCENAS.map((e, i) => `<li style="left:${(i / (ESCENAS.length - 1)) * 100}%"><span></span><small>${esc(e[0] || e[1])}</small></li>`).join("")}</ol></div>
       <button type="button" class="rc-saltar">Saltar ⏭</button>`;
     document.body.appendChild($r);
@@ -68,7 +68,10 @@
     }
     $r.querySelector(".rc-saltar").addEventListener("click", terminar);
     document.addEventListener("keydown", function k2(ev) { if (ev.key === "Escape") { document.removeEventListener("keydown", k2); terminar(); } });
-    setTimeout(siguiente, 1600);
+    // 1) título grande en el centro  2) se encoge y sube  3) rayo sobre la cruz  4) aparece la línea de tiempo
+    setTimeout(() => $r.querySelector(".rc-intro").classList.remove("grande"), 2600);
+    setTimeout(siguiente, 3600);
+    setTimeout(() => $r.querySelector(".rc-camino").classList.remove("oculto-camino"), 3600 + 350 + 1500);
   }
 
   function pintar() {

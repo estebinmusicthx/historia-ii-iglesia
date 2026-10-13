@@ -560,7 +560,7 @@ body.con-portada{overflow:hidden}
 .rc-svg svg{width:100%;height:100%;display:block}
 .recorrido.con-svg .rc-fondo{opacity:0}
 .recorrido.con-svg .rc-velo{background:radial-gradient(ellipse at center,rgba(13,10,7,0) 30%,rgba(13,10,7,.55) 85%)}
-.recorrido.con-svg .rc-escena{justify-content:flex-start;padding-top:14vh}
+.recorrido.con-svg .rc-escena{justify-content:flex-start;padding-top:19vh}
 .es-destello{opacity:0;animation:es-flash 3.2s .2s infinite}
 @keyframes es-flash{0%,8%,14%,100%{opacity:0}4%{opacity:.55}11%{opacity:.85}}
 .es-rayo{stroke-dasharray:900;stroke-dashoffset:900;opacity:0;animation:es-rayo 3.2s .2s infinite;filter:drop-shadow(0 0 10px #c8d0ff)}
@@ -629,3 +629,10 @@ body.con-portada{overflow:hidden}
 @keyframes es-rasga{to{stroke-dashoffset:0}}
 @keyframes es-rasga-fin{to{opacity:0}}
 @media (prefers-reduced-motion:reduce){.es-rayo-cruz,.es-cruz-brillo,.es-rayo-velo,.es-destello-velo,.es-rasgadura{animation:none!important}}
+
+/* Apertura: título grande que sube; la línea aparece después del rayo */
+.rc-intro{animation:none;top:6vh;transform:translateY(0);font-size:clamp(12px,1.5vw,16px);line-height:1.5;transition:top 1.2s cubic-bezier(.6,0,.2,1),transform 1.2s cubic-bezier(.6,0,.2,1),font-size 1.2s cubic-bezier(.6,0,.2,1),letter-spacing 1.2s,color 1.2s;z-index:3}
+.rc-intro.grande{top:50%;transform:translateY(-50%);font-size:clamp(28px,5vw,64px);letter-spacing:.08em;color:#f6dd8f;text-shadow:0 6px 30px rgba(0,0,0,.8);animation:rc-intro-in 1.4s ease both}
+@keyframes rc-intro-in{from{opacity:0;filter:blur(8px)}to{opacity:1;filter:none}}
+.rc-camino{transition:opacity 1s ease,transform 1s ease}
+.rc-camino.oculto-camino{opacity:0;transform:translateY(20px)}
