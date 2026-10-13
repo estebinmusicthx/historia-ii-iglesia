@@ -14,7 +14,7 @@
   ];
   const MOMENTOS = ["pentecostes", "nicea", "caida-roma", "coronacion-800", "cisma-1054", "cruzada-1", "benito", "hus", "constantinopla-1453", "biblia-gutenberg", "tesis", "worms", "calvino", "biblia-oso", "westfalia", "aldersgate", "azusa", "pratt", "lugar-presencia"];
 
-  // Lo que costó que el mensaje llegara: escenas tomadas de hitos verificados de la línea.
+  // Lo que costó que las buenas nuevas llegaran: escenas tomadas de hitos verificados de la línea.
   const ESCENAS = [
     ["c. 30", "Jerusalén · Gólgota", "«Consumado es.» (Juan 19:30)", null, "cruz"],
     ["", "El templo", "«El velo del templo se rompió en dos, de alto á bajo.» (Mateo 27:51)", null, "velo"],
@@ -37,9 +37,9 @@
   function recorrido(alTerminar) {
     const IMG = window.IMAGENES || {};
     const $r = document.createElement("section");
-    $r.className = "recorrido"; $r.setAttribute("aria-label", "Lo que costó que el mensaje llegara");
+    $r.className = "recorrido"; $r.setAttribute("aria-label", "Lo que costó que las buenas nuevas llegaran");
     $r.innerHTML = `<div class="rc-fondo"></div><div class="rc-svg"></div><div class="rc-velo"></div>
-      <div class="rc-intro grande">Lo que costó que el mensaje<br>llegara hasta ti…</div>
+      <div class="rc-intro grande">Lo que costó que las buenas nuevas<br>llegaran hasta ti…</div>
       <div class="rc-escena"><div class="rc-anio"></div><div class="rc-lugar"></div><p class="rc-texto"></p></div>
       <div class="rc-camino oculto-camino"><div class="rc-linea"><span class="rc-luz"></span></div>
         <ol>${ESCENAS.map((e, i) => `<li style="left:${(i / (ESCENAS.length - 1)) * 100}%"><button type="button" class="rc-punto" data-i="${i}" title="Ir a: ${esc(e[1])}${e[0] ? " (" + esc(e[0]) + ")" : ""}" aria-label="Ir a la escena ${esc(e[1])}"><span></span><small>${esc(e[0] || e[1])}</small></button></li>`).join("")}</ol></div>
