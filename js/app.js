@@ -154,6 +154,7 @@
           <span class="abrir-todo"><button type="button" data-todo="1">Abrir todos</button><button type="button" data-todo="0">Cerrar todos</button></span></div>
       </section>
       ${(window.LAMINAS || {})[id] ? `<section class="lamina" id="lamina" aria-label="Lámina interactiva"></section>` : ""}
+      <div class="filtro-lamina oculto" role="status"><span></span><button type="button">Quitar filtro ✕</button></div>
       <section class="linea" id="linea">${evs.map(tarjeta).join("")}</section>
       <h2 class="seccion-t">Reflexión de fe</h2>
       <div class="bloque b-ref"><div class="et">Desde la fe de El Lugar de Su Presencia <small>${ext(window.CURSO.creemos, "ver «Qué creemos»")}</small></div><p>${citas(era.fe)}</p></div>
@@ -166,6 +167,16 @@
         ${sig ? `<a class="sig" href="#/era/${sig.id}"><small>Siguiente →</small>${esc(sig.nombre)}</a>` : "<span></span>"}
       </nav>`;
     juegos($main.querySelector("#juegos"), era, evs);
+    const $fl = $main.querySelector(".filtro-lamina");
+    if ($main._filtroLamina) $main.removeEventListener("lamina-filtro", $main._filtroLamina);
+    $main._filtroLamina = ev => {
+      const ids = ev.detail.ids;
+      $main.querySelectorAll(".hito").forEach(h => { const dentro = !ids || ids.includes(h.id.slice(2)); h.classList.toggle("fuera-filtro", !dentro); if (ids && dentro) { const c = h.querySelector(".t-cuerpo"); c.hidden = false; h.querySelector(".t-abrir").setAttribute("aria-expanded", "true"); h.classList.add("abierto", "visible"); } });
+      $fl.classList.toggle("oculto", !ids);
+      if (ids) $fl.querySelector("span").innerHTML = `Mostrando ${ids.length} ${ids.length === 1 ? "hito" : "hitos"} de: <b>${esc(ev.detail.nombre)}</b>`;
+    };
+    $main.addEventListener("lamina-filtro", $main._filtroLamina);
+    $fl.querySelector("button").addEventListener("click", () => { const l = $main.querySelector("#lamina"); if (l) l.dispatchEvent(new Event("lamina-quitar")); });
     if ($main.querySelector("#lamina") && window.pintarLamina) window.pintarLamina($main.querySelector("#lamina"), id);
     $main.querySelector("#solo-clase").addEventListener("change", ev => {
       $main.querySelectorAll(".hito.solo-comp").forEach(h => h.classList.toggle("oculto", ev.target.checked));

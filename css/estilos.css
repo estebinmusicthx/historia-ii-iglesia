@@ -367,3 +367,10 @@ details.desp[open]{padding-bottom:14px}
 @keyframes escudo-in{from{opacity:0;transform:translateY(-8px) scale(.9)}to{opacity:1;transform:none}}
 .escudo-mini{position:absolute;right:10px;bottom:-14px;z-index:2;width:44px;height:auto;filter:drop-shadow(0 4px 8px rgba(0,0,0,.35))}
 .era-card .foto{overflow:visible}
+.lam-ruta.tenue{opacity:.4;stroke-width:2.4}
+.lam-sel button[aria-pressed="true"]{background:var(--era);border-color:var(--era);color:#fff}
+.lam-sel button[aria-pressed="true"] small{color:#ffe9d6}
+.lam-ayuda{background:var(--clase-bg);border-color:var(--clase-borde)}
+.hito.fuera-filtro{display:none}
+.filtro-lamina{position:sticky;top:64px;z-index:12;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0 0;padding:10px 14px;border-radius:12px;background:var(--era);color:#fff;box-shadow:var(--sombra)}
+.filtro-lamina button{font-family:var(--cap);font-size:12px;letter-spacing:.06em;padding:5px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.7);color:#fff}

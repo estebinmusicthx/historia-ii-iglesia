@@ -13,7 +13,7 @@
     const C = Object.assign({ intro: "", quien: "Protagonistas", obj: "Objetivo", res: "Resultado" }, L.cajas || {});
     $cont.innerHTML = `
       <div class="lam-cab"><div><h2>${esc(L.titulo)}</h2><p>${esc(L.sub)}</p></div>
-        <div class="lam-sel" role="tablist" aria-label="Elegir">${L.items.map((it, k) => `<button type="button" role="tab" aria-selected="${k === 0}" data-k="${k}"><b>${esc(it.n)}</b><small>${esc(it.anios)}</small></button>`).join("")}</div></div>
+        <div class="lam-sel" role="group" aria-label="Elegir (toque de nuevo para quitar)">${L.items.map((it, k) => `<button type="button" aria-pressed="false" data-k="${k}"><b>${esc(it.n)}</b><small>${esc(it.anios)}</small></button>`).join("")}</div></div>
       <div class="lam-cuerpo">
         <div class="lam-izq"></div>
         <figure class="lam-mapa"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Mapa de ${esc(L.titulo)}"><g class="lam-tierra"></g><g class="lam-fronteras"></g><g class="lam-lineas"></g><g class="lam-etq"></g><g class="lam-rutas"></g><g class="lam-ciudades"></g></svg>
@@ -44,9 +44,27 @@
     const resumen = t => { t = String(t || ""); return t.length > 230 ? t.slice(0, 230).replace(/\s+\S*$/, "") + "…" : t; };
     const EST = { exito: ["Logró su objetivo", "ok"], parcial: ["Resultado parcial", "medio"], fracaso: ["Fracaso", "mal"] };
 
+    const hitosDe = it => [...new Set([it.hito].concat(it.rel || [], (it.pasos || []).map(p => p[3])).filter(h => h && EV[h]))];
+    function filtrar(ids, nombre) { $cont.dispatchEvent(new CustomEvent("lamina-filtro", { bubbles: true, detail: { ids, nombre } })); }
+    function general() {
+      $cont.querySelectorAll(".lam-sel button").forEach(b => b.setAttribute("aria-pressed", "false"));
+      $cont.querySelector(".lam-izq").innerHTML = `<div class="lam-caja"><h3>${esc(L.titulo)}</h3><p>${esc(L.sub)}</p></div>`;
+      $cont.querySelector(".lam-der").innerHTML = `<div class="lam-caja lam-ayuda"><h4>Cómo usarla</h4><p>Toque una opción de arriba: el mapa muestra su detalle y abajo quedan solo sus hitos. Tóquela de nuevo para volver a ver todo.</p></div>`;
+      svg.querySelector(".lam-etq").innerHTML = "";
+      const g = svg.querySelector(".lam-rutas"); g.innerHTML = "";
+      L.items.forEach(it => (it.rutas || []).forEach(r => { const p = document.createElementNS("http://www.w3.org/2000/svg", "path"); p.setAttribute("d", curva(r.p.map(P))); p.setAttribute("class", "lam-ruta tenue"); p.style.stroke = r.c; g.appendChild(p); }));
+      const ids = [...new Set(L.items.flatMap(it => (it.rutas || []).flatMap(r => r.p).concat((it.pasos || []).map(s => s[1])).concat(it.puntos || [])))];
+      svg.querySelector(".lam-ciudades").innerHTML = ids.map(id => { const [x, y] = P(id); return `<g class="lam-c" data-id="${id}" transform="translate(${x},${y})"><circle r="4"/><text x="8" y="-8">${esc(LUG[id][0])}</text></g>`; }).join("");
+      $cont.querySelector(".lam-pasos").innerHTML = L.items.map((it, k) => `<li><button type="button" class="lam-ir-item" data-k="${k}"><span class="lam-n">${k + 1}</span><b>${esc(it.anios)}</b>${esc(it.titulo || (L.prefijo ? it.n + " " + L.prefijo : it.n))}</button></li>`).join("");
+      $cont.querySelectorAll(".lam-ir-item").forEach(b => b.addEventListener("click", () => elegir(+b.dataset.k)));
+      filtrar(null);
+    }
+    let actual = null;
+    function elegir(k) { if (actual === k) { actual = null; general(); } else { actual = k; mostrar(k); } }
     function mostrar(k) {
       const it = L.items[k], ev = EV[it.hito];
-      $cont.querySelectorAll(".lam-sel button").forEach((b, i) => b.setAttribute("aria-selected", String(i === k)));
+      $cont.querySelectorAll(".lam-sel button").forEach((b, i) => b.setAttribute("aria-pressed", String(i === k)));
+      filtrar(hitosDe(it), it.titulo || (L.prefijo ? it.n + " " + L.prefijo : it.n));
       const est = EST[it.estado];
       $cont.querySelector(".lam-izq").innerHTML = `
         <div class="lam-caja"><h3>${esc(it.titulo || (L.prefijo ? it.n + " " + L.prefijo : it.n))} <small>${esc(it.anios)}</small></h3><p>${esc(it.convoca || "")}</p></div>
@@ -77,7 +95,8 @@
       svg.querySelectorAll(".lam-c").forEach(c => c.classList.toggle("activa", c.dataset.id === id));
       $cont.querySelectorAll(".lam-pasos button").forEach(b => b.classList.toggle("activa", b.dataset.id === id));
     }
-    $cont.querySelectorAll(".lam-sel button").forEach(b => b.addEventListener("click", () => mostrar(+b.dataset.k)));
-    mostrar(0);
+    $cont.querySelectorAll(".lam-sel button").forEach(b => b.addEventListener("click", () => elegir(+b.dataset.k)));
+    $cont.addEventListener("lamina-quitar", () => { actual = null; general(); });
+    general();
   };
 })();
