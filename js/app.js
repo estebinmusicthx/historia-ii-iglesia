@@ -67,13 +67,13 @@
     return `<figure class="foto-hito"><img loading="lazy" src="${esc(im.src)}" alt="${esc(im.titulo)}">
       <figcaption>${esc(im.titulo)}${im.anio ? " (" + esc(im.anio) + ")" : ""}. ${esc(im.autor)} · ${esc(im.licencia)} · ${ext(im.pagina, "Wikimedia Commons")}</figcaption></figure>`;
   }
-  const chipsOrigen = e => [e.clase ? '<span class="chip c-clase">Notas de clase</span>' : "", e.prec ? '<span class="chip c-prec">Precisión</span>' : "", e.comp ? '<span class="chip c-comp">Complemento</span>' : ""].join("");
+  const chipsOrigen = e => [e.clase ? '<span class="chip c-clase">Notas de clase</span>' : "", e.prec ? '<span class="chip c-prec">Precisión</span>' : "", e.comp ? '<span class="chip c-comp">Investigación</span>' : ""].join("");
   // En la tarjeta, los chips de origen son botones que resaltan su bloque.
-  const botonesOrigen = e => [e.clase ? '<button type="button" class="chip c-clase" data-bloque="b-clase" aria-pressed="false">Notas de clase</button>' : "", e.prec ? '<button type="button" class="chip c-prec" data-bloque="b-prec" aria-pressed="false">Precisión</button>' : "", e.comp ? '<button type="button" class="chip c-comp" data-bloque="b-comp" aria-pressed="false">Complemento</button>' : ""].join("");
+  const botonesOrigen = e => [e.clase ? '<button type="button" class="chip c-clase" data-bloque="b-clase" aria-pressed="false">Notas de clase</button>' : "", e.prec ? '<button type="button" class="chip c-prec" data-bloque="b-prec" aria-pressed="false">Precisión</button>' : "", e.comp ? '<button type="button" class="chip c-comp" data-bloque="b-comp" aria-pressed="false">Investigación</button>' : ""].join("");
 
   function tarjeta(e) {
     const fig = figura(e.img);
-    const fuentes = (e.fuentes || []).length ? `<div class="fuentes-hito"><b>Fuentes del complemento:</b><ol>${e.fuentes.map(([n, u]) => `<li>${ext(u, esc(n))}</li>`).join("")}</ol></div>` : "";
+    const fuentes = (e.fuentes || []).length ? `<div class="fuentes-hito"><b>Fuentes de la investigación:</b><ol>${e.fuentes.map(([n, u]) => `<li>${ext(u, esc(n))}</li>`).join("")}</ol></div>` : "";
     return `<article class="hito revela${e.clase ? "" : " solo-comp"}" id="h-${esc(e.id)}">
       <div class="tarjeta">
         <div class="t-cab">
@@ -84,7 +84,7 @@
           <div class="t-textos">
             ${e.clase ? `<div class="bloque b-clase"><div class="et">Notas de clase <small>Historia II · Escuela Bíblica BEREA${e.nota ? " · " + esc(e.nota) : ""}</small></div><p>${fmt(e.clase)}</p></div>` : ""}
             ${e.prec ? `<div class="bloque b-prec"><div class="et">Precisión histórica <small>la nota se mantiene; esto la corrige o aclara</small></div><p>${esc(e.prec)}</p></div>` : ""}
-            ${e.comp ? `<div class="bloque b-comp"><div class="et">Complemento <small>no está en las notas · ver fuentes</small></div><p>${fmt(e.comp)}</p></div>` : ""}
+            ${e.comp ? `<div class="bloque b-comp"><div class="et">Investigación <small>no está en las notas · ver fuentes</small></div><p>${fmt(e.comp)}</p></div>` : ""}
             ${(e.vers || []).length ? `<div class="vers"><b>Biblia:</b> ${e.vers.map(versiculo).join(" ")}</div>` : ""}
             ${fuentes}
           </div>
@@ -138,7 +138,7 @@
       <section class="leyenda" aria-label="Material de la línea de tiempo">
         <div class="ley" style="--b:var(--clase-borde);--c:var(--clase)"><b>Notas de clase</b>Transcripción fiel de lo tomado en cada lección, con la referencia de la página del cuaderno.</div>
         <div class="ley" style="--b:var(--prec-borde);--c:var(--prec)"><b>Precisión</b>Aclaración con su fuente cuando un dato de las notas difiere de la historia documentada. La nota se conserva.</div>
-        <div class="ley" style="--b:var(--comp-borde);--c:var(--comp)"><b>Complemento</b>Información que amplía las notas, tomada de fuentes abiertas, enlazadas y verificadas.</div>
+        <div class="ley" style="--b:var(--comp-borde);--c:var(--comp)"><b>Investigación</b>Información que amplía las notas, tomada de fuentes abiertas, enlazadas y verificadas.</div>
       </section>
       <section class="regla"><h2>De Pentecostés a hoy</h2>
         <div class="regla-barra">${bloques.map(b => `<a href="${b.r}" title="${b.t} (${b.d}–${b.h === MAX ? "hoy" : b.h})" aria-label="${b.t}" style="width:${pct(b.h) - pct(b.d)}%;background:${b.c}"></a>`).join("")}</div>
@@ -158,7 +158,7 @@
         <div class="rango">${rango(era)}</div><div class="grupo-n">${esc(era.grupo)}</div></div></div>
         <div class="resumenes">
           ${era.clase ? `<div class="bloque b-clase"><div class="et">Notas de clase <small>resumen de la etapa</small></div><p>${esc(era.clase)}</p></div>` : `<div class="bloque b-clase"><div class="et">Aportes de investigación</div><p>Este enfoque no hace parte de las notas de clase: es un aporte de investigación, con cada dato referenciado a su fuente.</p></div>`}
-          <div class="bloque b-comp"><div class="et">Complemento</div><p>${esc(era.comp)}</p></div>
+          <div class="bloque b-comp"><div class="et">Investigación</div><p>${esc(era.comp)}</p></div>
         </div>
         <div class="controles-era"><label class="filtro-era"><input type="checkbox" id="solo-clase"> Ver solo los hitos que están en las notas de clase</label>
           <span class="abrir-todo"><button type="button" data-todo="1">Abrir todos</button><button type="button" data-todo="0">Cerrar todos</button></span></div>
@@ -442,7 +442,7 @@
         <li><b>Curso:</b> ${esc(window.CURSO.titulo)}. ${esc(window.CURSO.escuela)}. Docente: ${esc(window.CURSO.docente)}. Más referencia: ${ext(window.CURSO.url, "sitio del curso")} (acceso con cuenta institucional).</li>
         <li><b>Material mandante:</b> las notas de clase tomadas en ese curso. Se transcribieron tal como fueron tomadas; cada hito indica la tanda y la página de las notas. ${nClase} de ${EVENTOS.length} hitos vienen de las notas.</li>
         <li><b>Precisiones (${nPrec}):</b> cuando una fecha o un dato de las notas no coincide con la historia documentada, la nota se conserva y se añade la corrección con su fuente.</li>
-        <li><b>Complementos:</b> lo que no está en las notas se tomó de fuentes abiertas (Wikipedia, archivos históricos, prensa y estudios académicos). Cada complemento se verificó contra su fuente y cada enlace se comprobó.</li>
+        <li><b>Investigación:</b> lo que no está en las notas se tomó de fuentes abiertas (Wikipedia, archivos históricos, prensa y estudios académicos). Cada dato de investigación se verificó contra su fuente y cada enlace se comprobó.</li>
         <li><b>Perspectiva:</b> la de El Lugar de Su Presencia, iglesia evangélica de Bogotá: la Biblia como Palabra de Dios y autoridad, un solo Dios en tres personas, salvación por arrepentimiento y fe en Jesucristo, llenura del Espíritu Santo y dones del Espíritu activos hoy (${ext(window.CURSO.creemos, "Qué creemos")}). Las secciones "Reflexión de fe" son aplicación devocional; los hechos históricos van con su fuente.</li>
       </ul>
       <h2>Licencias</h2>
@@ -456,7 +456,7 @@
       <h2>Bibliografía del curso</h2>
       <p>Obras indicadas en la materia. Tienen derechos de sus autores y editoriales: se citan como referencia y no se reproducen.</p>
       <ul class="biblio-lista">${(window.BIBLIOGRAFIA || []).map(b => `<li>${esc(b.ref)} <small>— ${esc(b.alcance)}${b.nota ? " " + esc(b.nota) : ""}</small></li>`).join("")}</ul>
-      <h2>Fuentes de los complementos (${todas.size})</h2>
+      <h2>Fuentes de la investigación (${todas.size})</h2>
       <ol>${[...todas.entries()].map(([u, v]) => `<li>${ext(u, esc(v.n))} — usada en: ${v.ids.map(e => `<a href="#/era/${e.era}/${e.id}">${esc(e.t)}</a>`).join(", ")}</li>`).join("")}</ol>
       <h2>Créditos de imágenes (${imgs.length})</h2>
       <div class="tabla-wrap"><table class="tabla"><thead><tr><th></th><th>Imagen</th><th>Autor</th><th>Licencia</th><th>Fuente</th></tr></thead><tbody>
